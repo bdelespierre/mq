@@ -1,0 +1,137 @@
+#!/usr/bin/env bash
+#
+# mysql-query - MySQL client wrapper with argument expansion and SQL shorthand
+#
+
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
+
+# Source library functions
+source "$PROJECT_ROOT/lib/mysql-query/transform.sh"
+
+# Global options
+declare -a MYSQL_OPTIONS=()
+FORMAT="tsv"
+
+usage() {
+    cat <<EOF
+Usage: $(basename "$0") [OPTIONS] [--] [ARGUMENT]...
+
+MySQL client wrapper with argument expansion and SQL shorthand helpers.
+When last argument is +, display query result vertically (equivalent of \G).
+
+Options:
+    -h, --help                 Show this help message and exit
+    -o, --option NAME=[VALUE]  Set MySQL client option (see mysql --help)
+    -f, --format NAME          Output format: table, vertical, html, xml, or tsv (default)
+
+Arguments:
+    :VALUE             Shorthand for %string VALUE
+    %s, %string VALUE  Treat value as a string
+    %j, %json VALUE    Treat value as a JSON path
+
+    %a, %all    Alias of *
+    %c, %count  Alias of count(*)
+    %r, %rand   Alias of rand()
+        %eq     Alias of =
+        %ne     Alias of <> or !=
+        %gt     Alias of >
+        %gte    Alias of >=
+        %lt     Alias of <
+        %lte    Alias of <=
+
+Examples:
+    $(basename "$0") -o database=mydb select %count from users where birthdate %gt :2000-01-01
+    PAGER=less $(basename "$0") select %a from users where email=:john.doe@example.com +
+
+EOF
+}
+
+# Apply format to MySQL options array
+apply_format() {
+    case "$FORMAT" in
+        table)    MYSQL_OPTIONS+=("--table") ;;
+        vertical) MYSQL_OPTIONS+=("--vertical") ;;
+        html)     MYSQL_OPTIONS+=("--html") ;;
+        xml)      MYSQL_OPTIONS+=("--xml") ;;
+        tsv)      MYSQL_OPTIONS+=("--silent") ;;
+        *)
+            echo "Invalid format: $FORMAT" >&2
+            return 1
+            ;;
+    esac
+}
+
+# Execute the query
+execute_query() {
+    local sql="$1"
+
+    # Print the query to stderr (dimmed)
+    >&2 echo -e "> \e[2m$sql\e[0m"
+
+    # Execute and pipe through pager
+    mysql "${MYSQL_OPTIONS[@]}" <<< "$sql" | ${PAGER:-cat}
+}
+
+main() {
+    # Parse options with getopt
+    local opts
+    if ! opts=$(getopt -o ho:f: --long help,option:,format: -n "$(basename "$0")" -- "$@"); then
+        >&2 usage
+        exit 1
+    fi
+    eval set -- "$opts"
+
+    while true; do
+        case "$1" in
+            -h|--help)
+                usage
+                exit 0
+                ;;
+            -o|--option)
+                # Handle MySQL options (convert to --name or -n format)
+                if [[ "$2" =~ ^[^=]{2} ]]; then
+                    MYSQL_OPTIONS+=("--$2")
+                else
+                    MYSQL_OPTIONS+=("-$2")
+                fi
+                shift 2
+                ;;
+            -f|--format)
+                FORMAT="$2"
+                shift 2
+                ;;
+            --)
+                shift
+                break
+                ;;
+            *)
+                echo "Unexpected option: $1" >&2
+                exit 1
+                ;;
+        esac
+    done
+
+    # Apply the selected format
+    apply_format || exit 1
+
+    # Check for query arguments
+    if [[ $# -eq 0 ]]; then
+        echo "No query specified" >&2
+        >&2 usage
+        exit 1
+    fi
+
+    # Build the query from arguments
+    local sql vertical_requested=""
+    build_query sql vertical_requested "$@"
+
+    [[ "$vertical_requested" == 1 ]] && MYSQL_OPTIONS+=("--vertical")
+
+    # Execute the query
+    execute_query "$sql"
+}
+
+main "$@"
