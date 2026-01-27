@@ -9,8 +9,8 @@ A Bash-based MySQL/MariaDB client wrapper with argument expansion and SQL shorth
 - Smart [output format](#options-reference): `table` for terminal, `tsv` for pipes (override with `-f`)
 - [Trailing `+`](#argument-shortcuts) for vertical output (like MySQL/MariaDB's `\G`)
 - Automatic query echo to stderr for debugging (suppress with `-q`)
-- [Syntax highlighting](#syntax-highlighting) with grcat (auto-detected)
-- Global and project-local [configuration files](#configuration-file)
+- [Syntax highlighting](#syntax-highlighting-optional) with grcat (auto-detected)
+- Global and project-local [configuration files](#configuration-file-optional)
 
 ## Installation
 
@@ -143,7 +143,7 @@ mq -o port=3307 ...
 mq -o defaults-file=~/.my.cnf ...
 ```
 
-## Configuration File
+## Configuration File (optional)
 
 Configuration files are sourced as bash, loaded in order (later overrides earlier):
 
@@ -181,7 +181,7 @@ MQRC=/path/to/config mq select %a from users
 
 > **Note:** Command-line options always override config file settings.
 
-## Shell Aliases
+## Shell Aliases (optional)
 
 Create aliases in your `~/.bashrc` or `~/.zshrc` to avoid repeating connection options:
 
@@ -208,7 +208,7 @@ After adding aliases, reload your shell configuration:
 source ~/.bashrc  # or source ~/.zshrc
 ```
 
-## Syntax Highlighting
+## Syntax Highlighting (optional)
 
 When [grc](https://github.com/garabik/grc) is installed, mq automatically colorizes output using `grcat mq`. The config file is installed to `/usr/share/grc/mq`.
 
