@@ -58,7 +58,8 @@ export PATH="$PATH:$(pwd)/bin"
 
 </details>
 
-## Uninstallation
+<details>
+<summary>Uninstallation</summary>
 
 ```bash
 sudo make uninstall
@@ -68,6 +69,8 @@ Or if installed with a custom prefix:
 ```bash
 make uninstall PREFIX=~/.local
 ```
+
+</details>
 
 ## Usage
 
