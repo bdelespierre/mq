@@ -2,7 +2,7 @@
 
 setup() {
     PROJECT_ROOT="$(cd "$BATS_TEST_DIRNAME/.." && pwd)"
-    source "$PROJECT_ROOT/lib/mq/transform.sh"
+    source "$PROJECT_ROOT/lib/mq/transform.bash"
 }
 
 # transform_string tests
@@ -208,28 +208,28 @@ setup() {
 
 @test "process_argument: %json without argument returns error" {
     local out="" shift_count=""
-    run bash -c 'source "$1" && process_argument out shift_count %json' -- "$PROJECT_ROOT/lib/mq/transform.sh"
+    run bash -c 'source "$1" && process_argument out shift_count %json' -- "$PROJECT_ROOT/lib/mq/transform.bash"
     [ "$status" -eq 1 ]
     [ "$output" = "error: %json requires an argument" ]
 }
 
 @test "process_argument: %string without argument returns error" {
     local out="" shift_count=""
-    run bash -c 'source "$1" && process_argument out shift_count %string' -- "$PROJECT_ROOT/lib/mq/transform.sh"
+    run bash -c 'source "$1" && process_argument out shift_count %string' -- "$PROJECT_ROOT/lib/mq/transform.bash"
     [ "$status" -eq 1 ]
     [ "$output" = "error: %string requires an argument" ]
 }
 
 @test "process_argument: %j without argument returns error" {
     local out="" shift_count=""
-    run bash -c 'source "$1" && process_argument out shift_count %j' -- "$PROJECT_ROOT/lib/mq/transform.sh"
+    run bash -c 'source "$1" && process_argument out shift_count %j' -- "$PROJECT_ROOT/lib/mq/transform.bash"
     [ "$status" -eq 1 ]
     [ "$output" = "error: %j requires an argument" ]
 }
 
 @test "process_argument: %s without argument returns error" {
     local out="" shift_count=""
-    run bash -c 'source "$1" && process_argument out shift_count %s' -- "$PROJECT_ROOT/lib/mq/transform.sh"
+    run bash -c 'source "$1" && process_argument out shift_count %s' -- "$PROJECT_ROOT/lib/mq/transform.bash"
     [ "$status" -eq 1 ]
     [ "$output" = "error: %s requires an argument" ]
 }
@@ -250,7 +250,7 @@ setup() {
 
 @test "process_argument: %in without values returns error" {
     local out="" shift_count=""
-    run bash -c 'source "$1" && process_argument out shift_count %in from' -- "$PROJECT_ROOT/lib/mq/transform.sh"
+    run bash -c 'source "$1" && process_argument out shift_count %in from' -- "$PROJECT_ROOT/lib/mq/transform.bash"
     [ "$status" -eq 1 ]
     [ "$output" = "error: %in requires at least one :value argument" ]
 }
@@ -315,13 +315,13 @@ setup() {
 }
 
 @test "build_query: trailing %json without argument returns error" {
-    run bash -c 'source "$1" && build_query sql vertical select %json' -- "$PROJECT_ROOT/lib/mq/transform.sh"
+    run bash -c 'source "$1" && build_query sql vertical select %json' -- "$PROJECT_ROOT/lib/mq/transform.bash"
     [ "$status" -eq 1 ]
     [ "$output" = "error: %json requires an argument" ]
 }
 
 @test "build_query: trailing %string without argument returns error" {
-    run bash -c 'source "$1" && build_query sql vertical select %string' -- "$PROJECT_ROOT/lib/mq/transform.sh"
+    run bash -c 'source "$1" && build_query sql vertical select %string' -- "$PROJECT_ROOT/lib/mq/transform.bash"
     [ "$status" -eq 1 ]
     [ "$output" = "error: %string requires an argument" ]
 }
@@ -439,7 +439,7 @@ setup() {
 # Edge case tests: missing arguments
 
 @test "edge case: %in with no values returns error" {
-    run bash -c 'source "$1" && build_query sql vertical select %a from users where id %in' -- "$PROJECT_ROOT/lib/mq/transform.sh"
+    run bash -c 'source "$1" && build_query sql vertical select %a from users where id %in' -- "$PROJECT_ROOT/lib/mq/transform.bash"
     [ "$status" -eq 1 ]
     [[ "$output" == *"error: %in requires"* ]]
 }

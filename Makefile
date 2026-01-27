@@ -13,11 +13,11 @@ install:
 	@mkdir -p $(LIBDIR)/mq
 	@mkdir -p $(GRCDIR)
 	@cp bin/mq $(BINDIR)/mq
-	@cp lib/mq/transform.sh $(LIBDIR)/mq/transform.sh
+	@cp lib/mq/transform.bash $(LIBDIR)/mq/transform.bash
 	@cp share/grc/mq $(GRCDIR)/mq
 	@chmod +x $(BINDIR)/mq
 	@echo "Installed mq to $(BINDIR)"
-	@echo "Installed transform.sh to $(LIBDIR)/mq"
+	@echo "Installed transform.bash to $(LIBDIR)/mq"
 	@echo "Installed grc config to $(GRCDIR)/mq"
 
 uninstall:
