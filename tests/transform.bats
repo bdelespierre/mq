@@ -158,24 +158,6 @@ setup() {
     [ "$output" = "<=" ]
 }
 
-@test "transform_operator: %like becomes LIKE" {
-    run transform_operator "%like"
-    [ "$status" -eq 0 ]
-    [ "$output" = "LIKE" ]
-}
-
-@test "transform_operator: %null becomes IS NULL" {
-    run transform_operator "%null"
-    [ "$status" -eq 0 ]
-    [ "$output" = "IS NULL" ]
-}
-
-@test "transform_operator: %notnull becomes IS NOT NULL" {
-    run transform_operator "%notnull"
-    [ "$status" -eq 0 ]
-    [ "$output" = "IS NOT NULL" ]
-}
-
 @test "transform_operator: unknown operator returns error" {
     run transform_operator "%unknown"
     [ "$status" -eq 1 ]
@@ -273,27 +255,6 @@ setup() {
     [ "$output" = "error: %in requires at least one :value argument" ]
 }
 
-@test "process_argument: %limit sets shift_count=2" {
-    local out="" shift_count=""
-    process_argument out shift_count %limit 10
-    [ "$out" = "LIMIT 10" ]
-    [ "$shift_count" -eq 2 ]
-}
-
-@test "process_argument: %l is alias for %limit" {
-    local out="" shift_count=""
-    process_argument out shift_count %l 5
-    [ "$out" = "LIMIT 5" ]
-    [ "$shift_count" -eq 2 ]
-}
-
-@test "process_argument: %limit without argument returns error" {
-    local out="" shift_count=""
-    run bash -c 'source "$1" && process_argument out shift_count %limit' -- "$PROJECT_ROOT/lib/mysql-query/transform.sh"
-    [ "$status" -eq 1 ]
-    [ "$output" = "error: %limit requires an argument" ]
-}
-
 # build_query tests
 
 @test "build_query: simple select" {
@@ -321,40 +282,16 @@ setup() {
     [ "$sql" = "select count(*) from users where age > '18'" ]
 }
 
-@test "build_query: select with like operator" {
-    local sql="" vertical=""
-    build_query sql vertical select %a from users where name %like :%john%
-    [ "$sql" = "select * from users where name LIKE '%john%'" ]
-}
-
 @test "build_query: select with in operator" {
     local sql="" vertical=""
     build_query sql vertical select %a from users where status %in :active :pending :review
     [ "$sql" = "select * from users where status IN ('active', 'pending', 'review')" ]
 }
 
-@test "build_query: select with null check" {
-    local sql="" vertical=""
-    build_query sql vertical select %a from users where deleted_at %null
-    [ "$sql" = "select * from users where deleted_at IS NULL" ]
-}
-
-@test "build_query: select with not null check" {
-    local sql="" vertical=""
-    build_query sql vertical select %a from users where email %notnull
-    [ "$sql" = "select * from users where email IS NOT NULL" ]
-}
-
 @test "build_query: insert with now()" {
     local sql="" vertical=""
     build_query sql vertical insert into logs set created_at %eq %now
     [ "$sql" = "insert into logs set created_at = now()" ]
-}
-
-@test "build_query: select with limit" {
-    local sql="" vertical=""
-    build_query sql vertical select %a from users %limit 10
-    [ "$sql" = "select * from users LIMIT 10" ]
 }
 
 @test "build_query: select with json path" {
@@ -485,12 +422,6 @@ setup() {
     [ "$output" = "'-42.5'" ]
 }
 
-@test "edge case: limit with zero" {
-    local out="" shift_count=""
-    process_argument out shift_count %limit 0
-    [ "$out" = "LIMIT 0" ]
-}
-
 # Edge case tests: JSON paths
 
 @test "edge case: json with array index" {
@@ -506,12 +437,6 @@ setup() {
 }
 
 # Edge case tests: missing arguments
-
-@test "edge case: %limit without argument returns error" {
-    run bash -c 'source "$1" && build_query sql vertical select %a from users %limit' -- "$PROJECT_ROOT/lib/mysql-query/transform.sh"
-    [ "$status" -eq 1 ]
-    [ "$output" = "error: %limit requires an argument" ]
-}
 
 @test "edge case: %in with no values returns error" {
     run bash -c 'source "$1" && build_query sql vertical select %a from users where id %in' -- "$PROJECT_ROOT/lib/mysql-query/transform.sh"

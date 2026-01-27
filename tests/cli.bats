@@ -74,9 +74,9 @@ setup() {
 }
 
 @test "cli: dry-run with complex query" {
-    run mysql-query -n select %a from users where status %in :active :pending %limit 10
+    run mysql-query -n select %a from users where status %in :active :pending
     [ "$status" -eq 0 ]
-    [ "$output" = "select * from users where status IN ('active', 'pending') LIMIT 10" ]
+    [ "$output" = "select * from users where status IN ('active', 'pending')" ]
 }
 
 # Input file tests

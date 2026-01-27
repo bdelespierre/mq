@@ -45,7 +45,6 @@ Arguments:
     %a, %all           Alias of *
     %c, %count         Alias of COUNT(*)
     %r, %rand          Alias of RAND()
-    %l, %limit VALUE   Alias of LIMIT VALUE
         %now           Alias of NOW()
         %eq            Alias of =
         %ne            Alias of <> or !=
@@ -53,9 +52,6 @@ Arguments:
         %gte           Alias of >=
         %lt            Alias of <
         %lte           Alias of <=
-        %like          Alias of LIKE
-        %null          Alias of IS NULL
-        %notnull       Alias of IS NOT NULL
         %in VALUES     Alias of IN (VALUES)
 
 Examples:
@@ -138,7 +134,7 @@ execute_query() {
     fi
 
     # Execute and pipe through pager
-    mysql "${MYSQL_OPTIONS[@]}" <<< "$sql" | "${PAGER:-cat}"
+    mysql "${MYSQL_OPTIONS[@]}" <<< "$sql" | ${PAGER:-cat}
 }
 
 main() {

@@ -48,26 +48,8 @@ setup() {
     [ "$status" -eq 0 ]
 }
 
-@test "integration: SELECT with LIKE operator" {
-    sql=$(mysql-query -n select 1 where :test %like :%es%)
-    run mysql ${MYSQL_TEST_OPTIONS:-} -e "$sql"
-    [ "$status" -eq 0 ]
-}
-
 @test "integration: SELECT with IN clause" {
     sql=$(mysql-query -n select 1 where :a %in :a :b :c)
-    run mysql ${MYSQL_TEST_OPTIONS:-} -e "$sql"
-    [ "$status" -eq 0 ]
-}
-
-@test "integration: SELECT with IS NULL" {
-    sql=$(mysql-query -n select 1 where null %null)
-    run mysql ${MYSQL_TEST_OPTIONS:-} -e "$sql"
-    [ "$status" -eq 0 ]
-}
-
-@test "integration: SELECT with IS NOT NULL" {
-    sql=$(mysql-query -n select 1 where 1 %notnull)
     run mysql ${MYSQL_TEST_OPTIONS:-} -e "$sql"
     [ "$status" -eq 0 ]
 }
@@ -80,12 +62,6 @@ setup() {
 
 @test "integration: SELECT with RAND()" {
     sql=$(mysql-query -n select %rand as random_value)
-    run mysql ${MYSQL_TEST_OPTIONS:-} -e "$sql"
-    [ "$status" -eq 0 ]
-}
-
-@test "integration: SELECT with LIMIT" {
-    sql=$(mysql-query -n select 1 %limit 1)
     run mysql ${MYSQL_TEST_OPTIONS:-} -e "$sql"
     [ "$status" -eq 0 ]
 }

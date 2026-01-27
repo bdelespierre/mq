@@ -101,16 +101,12 @@ mysql-query -o database=mydb -f table select %a from users
 | `%c` `%count` | `COUNT(*)` |
 | `%r` `%rand` | `RAND()` |
 | `%now` | `NOW()` |
-| `%l N` `%limit N` | `LIMIT N` |
 | `%eq` | `=` |
 | `%ne` | `<>` |
 | `%gt` | `>` |
 | `%gte` | `>=` |
 | `%lt` | `<` |
 | `%lte` | `<=` |
-| `%like` | `LIKE` |
-| `%null` | `IS NULL` |
-| `%notnull` | `IS NOT NULL` |
 | `%in :a :b :c` | `IN ('a', 'b', 'c')` |
 | `+` (trailing) | Vertical output format |
 

@@ -75,16 +75,13 @@ transform_in() {
 # Returns: the SQL operator, or empty string if not an operator
 transform_operator() {
     case "$1" in
-        %eq)      printf '=' ;;
-        %ne)      printf '<>' ;;
-        %gt)      printf '>' ;;
-        %gte)     printf '>=' ;;
-        %lt)      printf '<' ;;
-        %lte)     printf '<=' ;;
-        %like)    printf 'LIKE' ;;
-        %null)    printf 'IS NULL' ;;
-        %notnull) printf 'IS NOT NULL' ;;
-        *)        return 1 ;;
+        %eq)  printf '=' ;;
+        %ne)  printf '<>' ;;
+        %gt)  printf '>' ;;
+        %gte) printf '>=' ;;
+        %lt)  printf '<' ;;
+        %lte) printf '<=' ;;
+        *)    return 1 ;;
     esac
 }
 
@@ -129,7 +126,7 @@ process_argument() {
             _output=$(transform_alias "$arg")
             _output+="$trailing_comma"
             ;;
-        %eq|%ne|%gt|%gte|%lt|%lte|%like|%null|%notnull)
+        %eq|%ne|%gt|%gte|%lt|%lte)
             _output=$(transform_operator "$arg")
             # Operators don't preserve trailing comma (invalid SQL)
             ;;
@@ -150,14 +147,6 @@ process_argument() {
             done
             _output=$(transform_in "${in_values[@]}")
             _shift_count=$((1 + ${#in_values[@]}))
-            ;;
-        %l|%limit)
-            if [[ -z "$2" ]]; then
-                >&2 echo "error: $arg requires an argument"
-                return 1
-            fi
-            _output="LIMIT $2"
-            _shift_count=2
             ;;
         :*)
             # :value -> 'value'
