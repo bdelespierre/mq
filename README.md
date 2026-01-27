@@ -1,4 +1,4 @@
-# mysql-query.bash
+# mq.bash
 
 A Bash-based MySQL client wrapper with argument expansion and SQL shorthand helpers.
 
@@ -17,7 +17,7 @@ Clone the repository:
 
 ```bash
 git clone <repository-url>
-cd mysql-query.bash
+cd mq.bash
 ```
 
 Install using make (installs to `/usr/local`):
@@ -58,25 +58,25 @@ make uninstall PREFIX=~/.local
 
 ```bash
 # Basic query with string shorthand (:value becomes 'value')
-mysql-query -o database=mydb select '*' from users where name=:john
+mq -o database=mydb select '*' from users where name=:john
 
 # Count with comparison operator
-mysql-query -o database=mydb select %count from users where age %gt :18
+mq -o database=mydb select %count from users where age %gt :18
 
 # Select all columns with alias
-mysql-query -o database=mydb select %a from products where price %lte 99.99
+mq -o database=mydb select %a from products where price %lte 99.99
 
 # JSON path extraction
-mysql-query -o database=mydb select %json settings.ui.dark_mode from users
+mq -o database=mydb select %json settings.ui.dark_mode from users
 
 # Vertical output with trailing +
-mysql-query -o database=mydb select %a from users where id=:1 +
+mq -o database=mydb select %a from users where id=:1 +
 
 # Use with pager
-PAGER=less mysql-query -o database=mydb select %a from large_table
+PAGER=less mq -o database=mydb select %a from large_table
 
 # Table format output
-mysql-query -o database=mydb -f table select %a from users
+mq -o database=mydb -f table select %a from users
 ```
 
 ## Options Reference
@@ -116,27 +116,27 @@ Pass MySQL client options with `-o`:
 
 ```bash
 # Connect to specific database
-mysql-query -o database=mydb ...
+mq -o database=mydb ...
 
 # Connect to remote host
-mysql-query -o host=db.example.com -o user=admin -o password=secret ...
+mq -o host=db.example.com -o user=admin -o password=secret ...
 
 # Use specific port
-mysql-query -o port=3307 ...
+mq -o port=3307 ...
 
 # Use defaults file
-mysql-query -o defaults-file=~/.my.cnf ...
+mq -o defaults-file=~/.my.cnf ...
 ```
 
 ## Configuration File
 
 Configuration files are sourced as bash, loaded in order (later overrides earlier):
 
-1. `~/.mysql-queryrc` — Global defaults
-2. `./.mysql-queryrc` — Project-local overrides
-3. `./.mysql-queryrc.dist` — Fallback if `.mysql-queryrc` missing
+1. `~/.mqrc` — Global defaults
+2. `./.mqrc` — Project-local overrides
+3. `./.mqrc.dist` — Fallback if `.mqrc` missing
 
-Example `~/.mysql-queryrc`:
+Example `~/.mqrc`:
 
 ```bash
 # MySQL client options
@@ -153,12 +153,12 @@ FORMAT=table
 QUIET=1
 ```
 
-**Project-local configuration**: Commit `.mysql-queryrc.dist` with shared defaults to version control, add `.mysql-queryrc` to `.gitignore` for local customization.
+**Project-local configuration**: Commit `.mqrc.dist` with shared defaults to version control, add `.mqrc` to `.gitignore` for local customization.
 
-Override the global config file location with the `MYSQL_QUERYRC` environment variable:
+Override the global config file location with the `MQRC` environment variable:
 
 ```bash
-MYSQL_QUERYRC=/path/to/config mysql-query select %a from users
+MQRC=/path/to/config mq select %a from users
 ```
 
 Command-line options always override config file settings. Loaded config files are shown on stderr (use `-q` to suppress).
@@ -169,17 +169,17 @@ Create aliases in your `~/.bashrc` or `~/.zshrc` to avoid repeating connection o
 
 ```bash
 # Basic alias for a specific database
-alias mydb='mysql-query -o database=mydb'
+alias mydb='mq -o database=mydb'
 
 # Usage: mydb select %a from users where id=:1
 
 # Alias with full connection details
-alias proddb='mysql-query -o host=db.example.com -o user=admin -o database=production'
+alias proddb='mq -o host=db.example.com -o user=admin -o database=production'
 
 # Usage: proddb select %count from orders where status=:pending
 
 # Alias using a defaults file
-alias q='mysql-query -o defaults-file=~/.my.cnf -o database=mydb'
+alias q='mq -o defaults-file=~/.my.cnf -o database=mydb'
 
 # Usage: q select %a from users +
 ```

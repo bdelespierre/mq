@@ -1,12 +1,12 @@
-# mysql-query configuration file
+# mq configuration file
 #
 # Config files are loaded in order (later overrides earlier):
-#   1. ~/.mysql-queryrc           Global defaults (copy this file there)
-#   2. ./.mysql-queryrc           Project-local overrides
-#      ./.mysql-queryrc.dist      (fallback if .mysql-queryrc missing)
+#   1. ~/.mqrc                    Global defaults (copy this file there)
+#   2. ./.mqrc                    Project-local overrides
+#      ./.mqrc.dist               (fallback if .mqrc missing)
 #
-# Typical workflow: commit .mysql-queryrc.dist to version control with shared
-# defaults, add .mysql-queryrc to .gitignore for local customization.
+# Typical workflow: commit .mqrc.dist to version control with shared
+# defaults, add .mqrc to .gitignore for local customization.
 #
 # This file is sourced as bash, so you can use any valid bash syntax:
 # conditionals, environment variables, command substitution, etc.

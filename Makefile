@@ -9,15 +9,15 @@ test:
 
 install:
 	@mkdir -p $(BINDIR)
-	@mkdir -p $(LIBDIR)/mysql-query
-	@cp bin/mysql-query $(BINDIR)/mysql-query
-	@cp lib/mysql-query/transform.sh $(LIBDIR)/mysql-query/transform.sh
-	@chmod +x $(BINDIR)/mysql-query
-	@echo "Installed mysql-query to $(BINDIR)"
-	@echo "Installed transform.sh to $(LIBDIR)/mysql-query"
+	@mkdir -p $(LIBDIR)/mq
+	@cp bin/mq $(BINDIR)/mq
+	@cp lib/mq/transform.sh $(LIBDIR)/mq/transform.sh
+	@chmod +x $(BINDIR)/mq
+	@echo "Installed mq to $(BINDIR)"
+	@echo "Installed transform.sh to $(LIBDIR)/mq"
 
 uninstall:
-	@rm -f $(BINDIR)/mysql-query
-	@rm -rf $(LIBDIR)/mysql-query
-	@echo "Removed mysql-query from $(BINDIR)"
-	@echo "Removed $(LIBDIR)/mysql-query"
+	@rm -f $(BINDIR)/mq
+	@rm -rf $(LIBDIR)/mq
+	@echo "Removed mq from $(BINDIR)"
+	@echo "Removed $(LIBDIR)/mq"

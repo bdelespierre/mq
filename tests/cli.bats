@@ -8,31 +8,31 @@ setup() {
 # Help tests
 
 @test "cli: --help shows usage" {
-    run mysql-query --help
+    run mq --help
     [ "$status" -eq 0 ]
     [[ "$output" == *"Usage:"* ]]
 }
 
 @test "cli: -h shows usage" {
-    run mysql-query -h
+    run mq -h
     [ "$status" -eq 0 ]
     [[ "$output" == *"Usage:"* ]]
 }
 
 @test "cli: --help documents --quiet flag" {
-    run mysql-query --help
+    run mq --help
     [ "$status" -eq 0 ]
     [[ "$output" == *"-q, --quiet"* ]]
 }
 
 @test "cli: --help documents --dry-run flag" {
-    run mysql-query --help
+    run mq --help
     [ "$status" -eq 0 ]
     [[ "$output" == *"-n, --dry-run"* ]]
 }
 
 @test "cli: --help documents --input flag" {
-    run mysql-query --help
+    run mq --help
     [ "$status" -eq 0 ]
     [[ "$output" == *"-i, --input"* ]]
 }
@@ -40,7 +40,7 @@ setup() {
 # Option parsing tests (these fail at MySQL connection, but validate parsing)
 
 @test "cli: accepts -q flag" {
-    run mysql-query -q select 1
+    run mq -q select 1
     # Will fail connecting to MySQL, but should not fail on option parsing
     # Exit code 1 is from MySQL connection failure, not getopt
     [[ "$output" != *"invalid option"* ]]
@@ -48,13 +48,13 @@ setup() {
 }
 
 @test "cli: accepts --quiet flag" {
-    run mysql-query --quiet select 1
+    run mq --quiet select 1
     [[ "$output" != *"invalid option"* ]]
     [[ "$output" != *"unrecognized option"* ]]
 }
 
 @test "cli: no query shows error" {
-    run mysql-query
+    run mq
     [ "$status" -eq 1 ]
     [[ "$output" == *"No query specified"* ]]
 }
@@ -62,19 +62,19 @@ setup() {
 # Dry-run tests
 
 @test "cli: -n outputs query without executing" {
-    run mysql-query -n select %a from users
+    run mq -n select %a from users
     [ "$status" -eq 0 ]
     [ "$output" = "select * from users" ]
 }
 
 @test "cli: --dry-run outputs query without executing" {
-    run mysql-query --dry-run select %count from users where age %gt :18
+    run mq --dry-run select %count from users where age %gt :18
     [ "$status" -eq 0 ]
     [ "$output" = "select count(*) from users where age > '18'" ]
 }
 
 @test "cli: dry-run with complex query" {
-    run mysql-query -n select %a from users where status %in :active :pending
+    run mq -n select %a from users where status %in :active :pending
     [ "$status" -eq 0 ]
     [ "$output" = "select * from users where status IN ('active', 'pending')" ]
 }
@@ -84,7 +84,7 @@ setup() {
 @test "cli: -i reads query from file" {
     local tmpfile=$(mktemp)
     echo "SELECT * FROM users" > "$tmpfile"
-    run mysql-query -n -i "$tmpfile"
+    run mq -n -i "$tmpfile"
     rm -f "$tmpfile"
     [ "$status" -eq 0 ]
     [ "$output" = "SELECT * FROM users" ]
@@ -93,20 +93,20 @@ setup() {
 @test "cli: --input reads query from file" {
     local tmpfile=$(mktemp)
     echo "SELECT count(*) FROM orders" > "$tmpfile"
-    run mysql-query -n --input "$tmpfile"
+    run mq -n --input "$tmpfile"
     rm -f "$tmpfile"
     [ "$status" -eq 0 ]
     [ "$output" = "SELECT count(*) FROM orders" ]
 }
 
 @test "cli: -i - reads query from stdin" {
-    run bash -c 'echo "SELECT 1" | mysql-query -n -i -'
+    run bash -c 'echo "SELECT 1" | mq -n -i -'
     [ "$status" -eq 0 ]
     [ "$output" = "SELECT 1" ]
 }
 
 @test "cli: input file not found shows error" {
-    run mysql-query -n -i /nonexistent/file.sql
+    run mq -n -i /nonexistent/file.sql
     [ "$status" -eq 1 ]
     [[ "$output" == *"File not found"* ]]
 }
@@ -118,7 +118,7 @@ SELECT *
 FROM users
 WHERE status = 'active'
 EOF
-    run mysql-query -n -i "$tmpfile"
+    run mq -n -i "$tmpfile"
     rm -f "$tmpfile"
     [ "$status" -eq 0 ]
     [[ "$output" == *"SELECT *"* ]]
@@ -128,9 +128,9 @@ EOF
 # Config file tests
 
 @test "cli: --help documents config file" {
-    run mysql-query --help
+    run mq --help
     [ "$status" -eq 0 ]
-    [[ "$output" == *".mysql-queryrc"* ]]
+    [[ "$output" == *".mqrc"* ]]
 }
 
 @test "cli: loads format from config file" {
@@ -138,7 +138,7 @@ EOF
     echo "FORMAT=table" > "$config"
     # We can't easily test MySQL options without a connection,
     # but we can verify the config is parsed by checking help still works
-    MYSQL_QUERYRC="$config" run mysql-query --help
+    MQRC="$config" run mq --help
     rm -f "$config"
     [ "$status" -eq 0 ]
 }
@@ -146,7 +146,7 @@ EOF
 @test "cli: loads quiet option from config file" {
     local config=$(mktemp)
     echo "QUIET=1" > "$config"
-    MYSQL_QUERYRC="$config" run mysql-query --help
+    MQRC="$config" run mq --help
     rm -f "$config"
     [ "$status" -eq 0 ]
 }
@@ -158,7 +158,7 @@ EOF
 FORMAT=table
 # Another comment
 EOF
-    MYSQL_QUERYRC="$config" run mysql-query --help
+    MQRC="$config" run mq --help
     rm -f "$config"
     [ "$status" -eq 0 ]
 }
@@ -172,7 +172,7 @@ FORMAT=table
 QUIET=1
 
 EOF
-    MYSQL_QUERYRC="$config" run mysql-query --help
+    MQRC="$config" run mq --help
     rm -f "$config"
     [ "$status" -eq 0 ]
 }
@@ -181,13 +181,13 @@ EOF
     local config=$(mktemp)
     echo "FORMAT=table" > "$config"
     # -n (dry-run) should work regardless of config
-    MYSQL_QUERYRC="$config" run mysql-query -q -n select 1
+    MQRC="$config" run mq -q -n select 1
     rm -f "$config"
     [ "$status" -eq 0 ]
     [ "$output" = "select 1" ]
 }
 
 @test "cli: missing config file is silently ignored" {
-    MYSQL_QUERYRC="/nonexistent/config" run mysql-query --help
+    MQRC="/nonexistent/config" run mq --help
     [ "$status" -eq 0 ]
 }

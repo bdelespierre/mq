@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# mysql-query - MySQL client wrapper with argument expansion and SQL shorthand
+# mq - MySQL client wrapper with argument expansion and SQL shorthand
 #
 
 set -euo pipefail
@@ -9,7 +9,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
 
 # Source library functions
-source "$PROJECT_ROOT/lib/mysql-query/transform.sh"
+source "$PROJECT_ROOT/lib/mq/transform.sh"
 
 # Version
 VERSION="1.0.0"
@@ -60,9 +60,9 @@ Examples:
 
 Configuration:
     Options are loaded from (in order, later overrides earlier):
-        1. ~/.mysql-queryrc           Global defaults
-        2. ./.mysql-queryrc           Project-local overrides
-           ./.mysql-queryrc.dist      (fallback if .mysql-queryrc missing)
+        1. ~/.mqrc                     Global defaults
+        2. ./.mqrc                     Project-local overrides
+           ./.mqrc.dist                (fallback if .mqrc missing)
 
     Config files are sourced as bash:
         MYSQL_OPTIONS+=(
@@ -72,14 +72,14 @@ Configuration:
         FORMAT=table
         QUIET=1
 
-    Override global config location with MYSQL_QUERYRC environment variable.
+    Override global config location with MQRC environment variable.
 
 EOF
 }
 
-# Load configuration from ~/.mysql-queryrc and ./.mysql-queryrc
+# Load configuration from ~/.mqrc and ./.mqrc
 load_config() {
-    local config_file="${MYSQL_QUERYRC:-$HOME/.mysql-queryrc}"
+    local config_file="${MQRC:-$HOME/.mqrc}"
 
     # Global config
     if [[ -f "$config_file" ]]; then
@@ -90,10 +90,10 @@ load_config() {
 
     # Project-local config (overrides/augments global)
     local local_config=""
-    if [[ -f ".mysql-queryrc" ]]; then
-        local_config=".mysql-queryrc"
-    elif [[ -f ".mysql-queryrc.dist" ]]; then
-        local_config=".mysql-queryrc.dist"
+    if [[ -f ".mqrc" ]]; then
+        local_config=".mqrc"
+    elif [[ -f ".mqrc.dist" ]]; then
+        local_config=".mqrc.dist"
     fi
 
     if [[ -n "$local_config" ]]; then
@@ -161,7 +161,7 @@ main() {
                 exit 0
                 ;;
             -v|--version)
-                echo "mysql-query $VERSION"
+                echo "mq $VERSION"
                 exit 0
                 ;;
             -o|--option)

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# transform.sh - Argument transformation functions for mysql-query
+# transform.sh - Argument transformation functions for mq
 #
 
 # Transform %json a.b.c to json_unquote(json_extract(a, '$.b.c'))

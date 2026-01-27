@@ -2,7 +2,7 @@
 
 setup() {
     PROJECT_ROOT="$(cd "$BATS_TEST_DIRNAME/.." && pwd)"
-    source "$PROJECT_ROOT/lib/mysql-query/transform.sh"
+    source "$PROJECT_ROOT/lib/mq/transform.sh"
 }
 
 # transform_string tests

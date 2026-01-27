@@ -25,61 +25,61 @@ setup() {
 # Basic syntax validation tests
 
 @test "integration: SELECT with count(*)" {
-    sql=$(mysql-query -n select %count)
+    sql=$(mq -n select %count)
     run mysql ${MYSQL_TEST_OPTIONS:-} -e "$sql"
     [ "$status" -eq 0 ]
 }
 
 @test "integration: SELECT with string literal" {
-    sql=$(mysql-query -n select :hello as greeting)
+    sql=$(mq -n select :hello as greeting)
     run mysql ${MYSQL_TEST_OPTIONS:-} -e "$sql"
     [ "$status" -eq 0 ]
 }
 
 @test "integration: SELECT with escaped quotes" {
-    sql=$(mysql-query -n select ":O'Brien" as name)
+    sql=$(mq -n select ":O'Brien" as name)
     run mysql ${MYSQL_TEST_OPTIONS:-} -e "$sql"
     [ "$status" -eq 0 ]
 }
 
 @test "integration: SELECT with comparison operators" {
-    sql=$(mysql-query -n select 1 where 1 %eq 1)
+    sql=$(mq -n select 1 where 1 %eq 1)
     run mysql ${MYSQL_TEST_OPTIONS:-} -e "$sql"
     [ "$status" -eq 0 ]
 }
 
 @test "integration: SELECT with IN clause" {
-    sql=$(mysql-query -n select 1 where :a %in :a :b :c)
+    sql=$(mq -n select 1 where :a %in :a :b :c)
     run mysql ${MYSQL_TEST_OPTIONS:-} -e "$sql"
     [ "$status" -eq 0 ]
 }
 
 @test "integration: SELECT with NOW()" {
-    sql=$(mysql-query -n select %now as curr_time)
+    sql=$(mq -n select %now as curr_time)
     run mysql ${MYSQL_TEST_OPTIONS:-} -e "$sql"
     [ "$status" -eq 0 ]
 }
 
 @test "integration: SELECT with RAND()" {
-    sql=$(mysql-query -n select %rand as random_value)
+    sql=$(mq -n select %rand as random_value)
     run mysql ${MYSQL_TEST_OPTIONS:-} -e "$sql"
     [ "$status" -eq 0 ]
 }
 
 @test "integration: SELECT with JSON extract" {
-    sql=$(mysql-query -n select %json col from '(select' :'{\"name\":\"test\"}' as 'col)' t)
+    sql=$(mq -n select %json col from '(select' :'{\"name\":\"test\"}' as 'col)' t)
     run mysql ${MYSQL_TEST_OPTIONS:-} -e "$sql"
     [ "$status" -eq 0 ]
 }
 
 @test "integration: SELECT with multiple operators" {
-    sql=$(mysql-query -n select 1 where 1 %gte 0 and 1 %lte 2 and 1 %ne 0)
+    sql=$(mq -n select 1 where 1 %gte 0 and 1 %lte 2 and 1 %ne 0)
     run mysql ${MYSQL_TEST_OPTIONS:-} -e "$sql"
     [ "$status" -eq 0 ]
 }
 
 @test "integration: SELECT with greater/less than" {
-    sql=$(mysql-query -n select 1 where 5 %gt 3 and 3 %lt 5)
+    sql=$(mq -n select 1 where 5 %gt 3 and 3 %lt 5)
     run mysql ${MYSQL_TEST_OPTIONS:-} -e "$sql"
     [ "$status" -eq 0 ]
 }
@@ -87,7 +87,7 @@ setup() {
 # Test that SQL injection attempts are properly escaped
 
 @test "integration: SQL injection via string is escaped" {
-    sql=$(mysql-query -n select ":'; DROP TABLE users; --" as safe)
+    sql=$(mq -n select ":'; DROP TABLE users; --" as safe)
     run mysql ${MYSQL_TEST_OPTIONS:-} -e "$sql"
     [ "$status" -eq 0 ]
     # The query should return the escaped string, not execute DROP TABLE
@@ -95,14 +95,14 @@ setup() {
 }
 
 @test "integration: SQL injection via equality is escaped" {
-    sql=$(mysql-query -n select 1 where 1=":' OR '1'='1")
+    sql=$(mq -n select 1 where 1=":' OR '1'='1")
     run mysql ${MYSQL_TEST_OPTIONS:-} -e "$sql"
     # This should parse correctly (the injection attempt is quoted)
     [ "$status" -eq 0 ]
 }
 
 @test "integration: special characters in IN clause" {
-    sql=$(mysql-query -n select 1 where :test %in ":it's" ":O'Reilly")
+    sql=$(mq -n select 1 where :test %in ":it's" ":O'Reilly")
     run mysql ${MYSQL_TEST_OPTIONS:-} -e "$sql"
     [ "$status" -eq 0 ]
 }
