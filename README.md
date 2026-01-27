@@ -1,10 +1,10 @@
-# mq.bash
+# mq
 
 A Bash-based MySQL/MariaDB client wrapper with argument expansion and SQL shorthand helpers.
 
 ## Features
 
-- Query database directly from bash like: `mq select %all from users > users.tsv`
+- Query database directly from bash like this: `mq select %all from users > users.tsv`
 - SQL shorthand helpers for common patterns (strings, JSON paths, operators)
 - Smart output format: `table` for terminal, `tsv` for pipes (override with `-f`)
 - Trailing `+` for vertical output (like MySQL/MariaDB's `\G`)
