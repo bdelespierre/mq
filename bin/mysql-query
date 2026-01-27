@@ -14,6 +14,9 @@ source "$PROJECT_ROOT/lib/mysql-query/transform.sh"
 # Global options
 declare -a MYSQL_OPTIONS=()
 FORMAT="tsv"
+QUIET=0
+DRY_RUN=0
+INPUT_FILE=""
 
 usage() {
     cat <<EOF
@@ -26,27 +29,81 @@ Options:
     -h, --help                 Show this help message and exit
     -o, --option NAME=[VALUE]  Set MySQL client option (see mysql --help)
     -f, --format NAME          Output format: table, vertical, html, xml, or tsv (default)
+    -q, --quiet                Suppress query echo to stderr
+    -n, --dry-run              Show query without executing
+    -i, --input FILE           Read query from file (use - for stdin)
 
 Arguments:
     :VALUE             Shorthand for %string VALUE
     %s, %string VALUE  Treat value as a string
     %j, %json VALUE    Treat value as a JSON path
+    %l, %limit N       LIMIT N
+        %in :a :b :c   IN ('a', 'b', 'c')
 
-    %a, %all    Alias of *
-    %c, %count  Alias of count(*)
-    %r, %rand   Alias of rand()
-        %eq     Alias of =
-        %ne     Alias of <> or !=
-        %gt     Alias of >
-        %gte    Alias of >=
-        %lt     Alias of <
-        %lte    Alias of <=
+    %a, %all           Alias of *
+    %c, %count         Alias of count(*)
+    %r, %rand          Alias of rand()
+        %now           Alias of now()
+        %eq            Alias of =
+        %ne            Alias of <> or !=
+        %gt            Alias of >
+        %gte           Alias of >=
+        %lt            Alias of <
+        %lte           Alias of <=
+        %like          Alias of LIKE
+        %null          Alias of IS NULL
+        %notnull       Alias of IS NOT NULL
 
 Examples:
     $(basename "$0") -o database=mydb select %count from users where birthdate %gt :2000-01-01
     PAGER=less $(basename "$0") select %a from users where email=:john.doe@example.com +
 
+Configuration:
+    Default options can be set in ~/.mysql-queryrc (one per line):
+        options=--database=mydb --host=localhost --user=myuser
+        format=table
+        quiet=true
+
+    Override config file location with MYSQL_QUERYRC environment variable.
+
 EOF
+}
+
+# Load configuration from ~/.mysql-queryrc
+load_config() {
+    local config_file="${MYSQL_QUERYRC:-$HOME/.mysql-queryrc}"
+
+    [[ -f "$config_file" ]] || return 0
+
+    local line key value
+    while IFS= read -r line || [[ -n "$line" ]]; do
+        # Skip empty lines and comments
+        [[ -z "$line" || "$line" =~ ^[[:space:]]*# ]] && continue
+
+        # Parse key=value
+        key="${line%%=*}"
+        value="${line#*=}"
+
+        # Remove leading/trailing whitespace
+        key="${key#"${key%%[![:space:]]*}"}"
+        key="${key%"${key##*[![:space:]]}"}"
+        value="${value#"${value%%[![:space:]]*}"}"
+        value="${value%"${value##*[![:space:]]}"}"
+
+        case "$key" in
+            format)
+                FORMAT="$value"
+                ;;
+            quiet)
+                [[ "$value" == "true" || "$value" == "1" ]] && QUIET=1
+                ;;
+            options)
+                # Split options string into array (word splitting intentional)
+                # shellcheck disable=SC2086
+                MYSQL_OPTIONS+=($value)
+                ;;
+        esac
+    done < "$config_file"
 }
 
 # Apply format to MySQL options array
@@ -68,17 +125,28 @@ apply_format() {
 execute_query() {
     local sql="$1"
 
-    # Print the query to stderr (dimmed)
-    >&2 echo -e "> \e[2m$sql\e[0m"
+    # Dry-run mode: print query and exit
+    if [[ $DRY_RUN -eq 1 ]]; then
+        echo "$sql"
+        return 0
+    fi
+
+    # Print the query to stderr (dimmed) unless quiet mode
+    if [[ $QUIET -eq 0 ]]; then
+        >&2 echo -e "> \e[2m$sql\e[0m"
+    fi
 
     # Execute and pipe through pager
-    mysql "${MYSQL_OPTIONS[@]}" <<< "$sql" | ${PAGER:-cat}
+    mysql "${MYSQL_OPTIONS[@]}" <<< "$sql" | "${PAGER:-cat}"
 }
 
 main() {
+    # Load config file defaults (can be overridden by CLI options)
+    load_config
+
     # Parse options with getopt
     local opts
-    if ! opts=$(getopt -o ho:f: --long help,option:,format: -n "$(basename "$0")" -- "$@"); then
+    if ! opts=$(getopt -o ho:f:qni: --long help,option:,format:,quiet,dry-run,input: -n "$(basename "$0")" -- "$@"); then
         >&2 usage
         exit 1
     fi
@@ -103,6 +171,18 @@ main() {
                 FORMAT="$2"
                 shift 2
                 ;;
+            -q|--quiet)
+                QUIET=1
+                shift
+                ;;
+            -n|--dry-run)
+                DRY_RUN=1
+                shift
+                ;;
+            -i|--input)
+                INPUT_FILE="$2"
+                shift 2
+                ;;
             --)
                 shift
                 break
@@ -117,18 +197,32 @@ main() {
     # Apply the selected format
     apply_format || exit 1
 
-    # Check for query arguments
-    if [[ $# -eq 0 ]]; then
-        echo "No query specified" >&2
-        >&2 usage
-        exit 1
+    local sql=""
+
+    # Read query from input file or stdin
+    if [[ -n "$INPUT_FILE" ]]; then
+        if [[ "$INPUT_FILE" == "-" ]]; then
+            sql=$(cat)
+        elif [[ -f "$INPUT_FILE" ]]; then
+            sql=$(cat "$INPUT_FILE")
+        else
+            echo "File not found: $INPUT_FILE" >&2
+            exit 1
+        fi
+    else
+        # Check for query arguments
+        if [[ $# -eq 0 ]]; then
+            echo "No query specified" >&2
+            >&2 usage
+            exit 1
+        fi
+
+        # Build the query from arguments
+        local vertical_requested=""
+        build_query sql vertical_requested "$@"
+
+        [[ "$vertical_requested" == 1 ]] && MYSQL_OPTIONS+=("--vertical")
     fi
-
-    # Build the query from arguments
-    local sql vertical_requested=""
-    build_query sql vertical_requested "$@"
-
-    [[ "$vertical_requested" == 1 ]] && MYSQL_OPTIONS+=("--vertical")
 
     # Execute the query
     execute_query "$sql"
