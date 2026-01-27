@@ -4,7 +4,7 @@ A Bash-based MySQL/MariaDB client wrapper with argument expansion and SQL shorth
 
 ## Features
 
-- Query database directly from bash like this: `mq select %all from users > users.tsv`
+- Query database directly from Bash/Zsh: `mq select %all from users > users.tsv`
 - SQL shorthand helpers for common patterns (strings, JSON paths, operators)
 - Smart output format: `table` for terminal, `tsv` for pipes (override with `-f`)
 - Trailing `+` for vertical output (like MySQL/MariaDB's `\G`)
@@ -14,10 +14,22 @@ A Bash-based MySQL/MariaDB client wrapper with argument expansion and SQL shorth
 
 ## Installation
 
-Clone the repository:
+### Quick Install
 
 ```bash
-git clone <repository-url>
+curl -fsSL https://raw.githubusercontent.com/bdelespierre/mq/master/install.sh | bash
+```
+
+This installs to `~/.local/bin`. Set `MQ_INSTALL_DIR` to change the location:
+```bash
+curl -fsSL https://raw.githubusercontent.com/bdelespierre/mq/master/install.sh | MQ_INSTALL_DIR=/usr/local bash
+```
+
+### Manual Install
+
+Clone the repository:
+```bash
+git clone https://github.com/bdelespierre/mq.git
 cd mq
 ```
 
