@@ -9,7 +9,7 @@ A Bash-based MySQL/MariaDB client wrapper with argument expansion and SQL shorth
 - Smart [output format](#options-reference): `table` for terminal, `tsv` for pipes (override with `-f`)
 - [Trailing `+`](#argument-shortcuts) for vertical output (like MySQL/MariaDB's `\G`)
 - Automatic query echo to stderr for debugging (suppress with `-q`)
-- Pager support via `$PAGER` environment variable
+- [Syntax highlighting](#syntax-highlighting) with grcat (auto-detected)
 - Global and project-local [configuration files](#configuration-file)
 
 ## Installation
@@ -79,7 +79,7 @@ make uninstall PREFIX=~/.local
 mq -o database=mydb select '*' from users where name=:john
 
 # Count with comparison operator
-mq -o database=mydb select %count from users where age %gt :18
+mq -o database=mydb select %count from users where age %gt 18
 
 # Select all columns with alias
 mq -o database=mydb select %all from products where price %lte 99.99
@@ -206,6 +206,23 @@ After adding aliases, reload your shell configuration:
 
 ```bash
 source ~/.bashrc  # or source ~/.zshrc
+```
+
+## Syntax Highlighting
+
+When [grc](https://github.com/garabik/grc) is installed, mq automatically colorizes output using `grcat mq`. The config file is installed to `/usr/share/grc/mq`.
+
+Colors applied:
+- **Green**: default text
+- **Red**: table borders
+- **Yellow**: numbers, schema names
+- **Cyan**: dates, times, IP addresses
+- **Magenta**: email addresses
+- **White**: vertical format delimiters and column names
+
+To disable, set `PAGER` explicitly:
+```bash
+PAGER=cat mq select %all from users
 ```
 
 ## Running Tests
