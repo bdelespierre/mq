@@ -135,7 +135,7 @@ EOF
 
 @test "cli: loads format from config file" {
     local config=$(mktemp)
-    echo "format=table" > "$config"
+    echo "FORMAT=table" > "$config"
     # We can't easily test MySQL options without a connection,
     # but we can verify the config is parsed by checking help still works
     MYSQL_QUERYRC="$config" run mysql-query --help
@@ -145,7 +145,7 @@ EOF
 
 @test "cli: loads quiet option from config file" {
     local config=$(mktemp)
-    echo "quiet=true" > "$config"
+    echo "QUIET=1" > "$config"
     MYSQL_QUERYRC="$config" run mysql-query --help
     rm -f "$config"
     [ "$status" -eq 0 ]
@@ -155,7 +155,7 @@ EOF
     local config=$(mktemp)
     cat > "$config" <<'EOF'
 # This is a comment
-format=table
+FORMAT=table
 # Another comment
 EOF
     MYSQL_QUERYRC="$config" run mysql-query --help
@@ -167,9 +167,9 @@ EOF
     local config=$(mktemp)
     cat > "$config" <<'EOF'
 
-format=table
+FORMAT=table
 
-quiet=true
+QUIET=1
 
 EOF
     MYSQL_QUERYRC="$config" run mysql-query --help
@@ -179,9 +179,9 @@ EOF
 
 @test "cli: CLI options override config file" {
     local config=$(mktemp)
-    echo "format=table" > "$config"
+    echo "FORMAT=table" > "$config"
     # -n (dry-run) should work regardless of config
-    MYSQL_QUERYRC="$config" run mysql-query -n select 1
+    MYSQL_QUERYRC="$config" run mysql-query -q -n select 1
     rm -f "$config"
     [ "$status" -eq 0 ]
     [ "$output" = "select 1" ]

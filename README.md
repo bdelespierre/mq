@@ -9,34 +9,39 @@ A Bash-based MySQL client wrapper with argument expansion and SQL shorthand help
 - Trailing `+` for vertical output (like MySQL's `\G`)
 - Automatic query echo to stderr for debugging
 - Pager support via `$PAGER` environment variable
+- Global and project-local configuration files
 
 ## Installation
 
-1. Clone the repository:
-   ```bash
-   git clone <repository-url>
-   cd mysql-query.bash
-   ```
+Clone the repository:
 
-2. Install using make (installs to `/usr/local`):
-   ```bash
-   sudo make install
-   ```
+```bash
+git clone <repository-url>
+cd mysql-query.bash
+```
 
-   Or install to a custom location:
-   ```bash
-   make install PREFIX=~/.local
-   ```
+Install using make (installs to `/usr/local`):
 
-   Alternatively, add the `bin` directory to your PATH:
-   ```bash
-   export PATH="$PATH:$(pwd)/bin"
-   ```
+```bash
+sudo make install
+```
 
-3. Ensure MySQL client is installed:
-   ```bash
-   mysql --version
-   ```
+Or install to a custom location:
+```bash
+make install PREFIX=~/.local
+```
+
+Alternatively, add the `bin` directory to your PATH:
+
+```bash
+export PATH="$PATH:$(pwd)/bin"
+```
+
+Ensure MySQL client is installed:
+
+```bash
+mysql --version
+```
 
 ## Uninstallation
 
@@ -59,10 +64,10 @@ mysql-query -o database=mydb select '*' from users where name=:john
 mysql-query -o database=mydb select %count from users where age %gt :18
 
 # Select all columns with alias
-mysql-query -o database=mydb select %a from products where price %lte :99.99
+mysql-query -o database=mydb select %a from products where price %lte 99.99
 
 # JSON path extraction
-mysql-query -o database=mydb select %json data.user.email from users
+mysql-query -o database=mydb select %json settings.ui.dark_mode from users
 
 # Vertical output with trailing +
 mysql-query -o database=mydb select %a from users where id=:1 +
@@ -79,7 +84,8 @@ mysql-query -o database=mydb -f table select %a from users
 | Option | Description |
 |--------|-------------|
 | `-h, --help` | Show help message |
-| `-o, --option NAME=[VALUE]` | Set MySQL client option (see `mysql --help`) |
+| `-v, --version` | Show version and exit |
+| `-o, --option NAME[=VALUE]` | Set MySQL client option (see `mysql --help`) |
 | `-f, --format NAME` | Output format: `tsv` (default), `table`, `vertical`, `html`, `xml` |
 | `-q, --quiet` | Suppress query echo to stderr |
 | `-n, --dry-run` | Show query without executing |
@@ -87,26 +93,15 @@ mysql-query -o database=mydb -f table select %a from users
 
 ## Argument Shortcuts
 
-### String Values
-
-| Shorthand | Expansion | Example |
-|-----------|-----------|---------|
-| `:value` | `'value'` | `where name=:john` → `where name='john'` |
-| `%s value`, `%string value` | `'value'` | `%string john` → `'john'` |
-
-### SQL Aliases
-
 | Shorthand | Expansion |
 |-----------|-----------|
-| `%a`, `%all` | `*` |
-| `%c`, `%count` | `count(*)` |
-| `%r`, `%rand` | `rand()` |
-| `%now` | `now()` |
-
-### Comparison Operators
-
-| Shorthand | Expansion |
-|-----------|-----------|
+| `:value` `%s VALUE` `%string VALUE` | `'VALUE'` |
+| `%j PATH` `%json PATH` | `json_unquote(json_extract(...))` |
+| `%a` `%all` | `*` |
+| `%c` `%count` | `COUNT(*)` |
+| `%r` `%rand` | `RAND()` |
+| `%now` | `NOW()` |
+| `%l N` `%limit N` | `LIMIT N` |
 | `%eq` | `=` |
 | `%ne` | `<>` |
 | `%gt` | `>` |
@@ -116,36 +111,8 @@ mysql-query -o database=mydb -f table select %a from users
 | `%like` | `LIKE` |
 | `%null` | `IS NULL` |
 | `%notnull` | `IS NOT NULL` |
-
-### IN Clause
-
-| Shorthand | Expansion |
-|-----------|-----------|
 | `%in :a :b :c` | `IN ('a', 'b', 'c')` |
-
-Example: `where status %in :active :pending` → `where status IN ('active', 'pending')`
-
-### Limit Clause
-
-| Shorthand | Expansion |
-|-----------|-----------|
-| `%l N`, `%limit N` | `LIMIT N` |
-
-Example: `select %a from users %limit 10` → `select * from users LIMIT 10`
-
-### JSON Path
-
-| Shorthand | Expansion |
-|-----------|-----------|
-| `%j path`, `%json path` | `json_unquote(json_extract(...))` |
-
-Example: `%json data.user.name` → `json_unquote(json_extract(data, '$.user.name'))`
-
-### Special
-
-| Shorthand | Description |
-|-----------|-------------|
-| `+` (trailing) | Switch to vertical output format |
+| `+` (trailing) | Vertical output format |
 
 ## MySQL Options
 
@@ -167,26 +134,38 @@ mysql-query -o defaults-file=~/.my.cnf ...
 
 ## Configuration File
 
-Default options can be set in `~/.mysql-queryrc`:
+Configuration files are sourced as bash, loaded in order (later overrides earlier):
+
+1. `~/.mysql-queryrc` — Global defaults
+2. `./.mysql-queryrc` — Project-local overrides
+3. `./.mysql-queryrc.dist` — Fallback if `.mysql-queryrc` missing
+
+Example `~/.mysql-queryrc`:
 
 ```bash
-# MySQL connection options (same as command line)
-options=--database=mydb --host=localhost --user=myuser
+# MySQL client options
+MYSQL_OPTIONS+=(
+    --host=localhost
+    --user=myuser
+    --database=mydb
+)
 
 # Output format (tsv, table, vertical, html, xml)
-format=table
+FORMAT=table
 
 # Suppress query echo
-quiet=true
+QUIET=1
 ```
 
-Override the config file location with the `MYSQL_QUERYRC` environment variable:
+**Project-local configuration**: Commit `.mysql-queryrc.dist` with shared defaults to version control, add `.mysql-queryrc` to `.gitignore` for local customization.
+
+Override the global config file location with the `MYSQL_QUERYRC` environment variable:
 
 ```bash
 MYSQL_QUERYRC=/path/to/config mysql-query select %a from users
 ```
 
-Command-line options always override config file settings.
+Command-line options always override config file settings. Loaded config files are shown on stderr (use `-q` to suppress).
 
 ## Shell Aliases
 

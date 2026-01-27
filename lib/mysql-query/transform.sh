@@ -111,7 +111,7 @@ process_argument() {
     case "$arg" in
         %j|%json)
             if [[ -z "$2" ]]; then
-                echo "error: $arg requires an argument" >&2
+                >&2 echo "error: $arg requires an argument"
                 return 1
             fi
             _output=$(transform_json "$2")
@@ -119,7 +119,7 @@ process_argument() {
             ;;
         %s|%str|%string)
             if [[ -z "$2" ]]; then
-                echo "error: $arg requires an argument" >&2
+                >&2 echo "error: $arg requires an argument"
                 return 1
             fi
             _output=$(transform_string "$2")
@@ -137,7 +137,7 @@ process_argument() {
             # Collect all following :value arguments
             shift
             if [[ $# -eq 0 || "$1" != :* ]]; then
-                echo "error: %in requires at least one :value argument" >&2
+                >&2 echo "error: %in requires at least one :value argument"
                 return 1
             fi
             local -a in_values=()
@@ -153,7 +153,7 @@ process_argument() {
             ;;
         %l|%limit)
             if [[ -z "$2" ]]; then
-                echo "error: $arg requires an argument" >&2
+                >&2 echo "error: $arg requires an argument"
                 return 1
             fi
             _output="LIMIT $2"

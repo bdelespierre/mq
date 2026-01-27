@@ -1,0 +1,94 @@
+# mysql-query configuration file
+#
+# Config files are loaded in order (later overrides earlier):
+#   1. ~/.mysql-queryrc           Global defaults (copy this file there)
+#   2. ./.mysql-queryrc           Project-local overrides
+#      ./.mysql-queryrc.dist      (fallback if .mysql-queryrc missing)
+#
+# Typical workflow: commit .mysql-queryrc.dist to version control with shared
+# defaults, add .mysql-queryrc to .gitignore for local customization.
+#
+# This file is sourced as bash, so you can use any valid bash syntax:
+# conditionals, environment variables, command substitution, etc.
+
+# ------------------------------------------------------------------------------
+# MYSQL_OPTIONS - MySQL client options
+# ------------------------------------------------------------------------------
+# An array of options passed directly to the mysql client.
+# Use += to append to the defaults (recommended) or = to replace entirely.
+#
+# Common options:
+#   --database=NAME, -D NAME    Database to use
+#   --host=HOST, -h HOST        Server hostname (default: localhost)
+#   --port=PORT, -P PORT        Server port (default: 3306)
+#   --socket=PATH, -S PATH      Unix socket path
+#   --user=USER, -u USER        Username for authentication
+#   --password=PASS, -p[PASS]   Password (omit value to prompt)
+#   --protocol=PROTO            Connection protocol (tcp, socket, pipe, memory)
+#   --ssl-mode=MODE             SSL mode (DISABLED, PREFERRED, REQUIRED, etc.)
+#   --connect-timeout=SEC       Connection timeout in seconds
+#   --compress, -C              Use compression in client/server protocol
+#   --default-character-set=CS  Character set (e.g., utf8mb4)
+#
+# For the full list, see: mysql --help
+#
+# Examples:
+#   MYSQL_OPTIONS+=(--database=myapp)
+#   MYSQL_OPTIONS+=(--host=db.example.com --port=3306)
+#   MYSQL_OPTIONS+=(--user=readonly --password=secret)
+#   MYSQL_OPTIONS+=(--ssl-mode=REQUIRED)
+#
+# Using environment variables:
+#   MYSQL_OPTIONS+=(--database="${MYSQL_DATABASE:-myapp}")
+#   MYSQL_OPTIONS+=(--host="${MYSQL_HOST:-localhost}")
+#
+# Conditional configuration:
+#   if [[ "$HOSTNAME" == *prod* ]]; then
+#       MYSQL_OPTIONS+=(--host=prod-db.internal)
+#   else
+#       MYSQL_OPTIONS+=(--host=localhost)
+#   fi
+
+# MYSQL_OPTIONS+=(--database=mydb)
+# MYSQL_OPTIONS+=(--host=localhost)
+# MYSQL_OPTIONS+=(--user=myuser)
+
+# ------------------------------------------------------------------------------
+# FORMAT - Default output format
+# ------------------------------------------------------------------------------
+# Controls how query results are displayed.
+#
+# Acceptable values:
+#   tsv       Tab-separated values, no headers (default)
+#             Best for: piping to awk, cut, or other CLI tools
+#
+#   table     ASCII table with borders and column headers
+#             Best for: human-readable output in the terminal
+#
+#   vertical  One column per line (\G style)
+#             Best for: wide rows that don't fit on screen
+#
+#   html      HTML table format
+#             Best for: generating reports or web content
+#
+#   xml       XML format with row/field elements
+#             Best for: machine processing or data interchange
+#
+# Can be overridden per-query with: -f, --format
+# Can also use trailing + on query for vertical format.
+
+# FORMAT=tsv
+
+# ------------------------------------------------------------------------------
+# QUIET - Suppress query echo
+# ------------------------------------------------------------------------------
+# When set to 1, suppresses printing the query to stderr before execution.
+# By default (0), the query is displayed dimmed above the results.
+#
+# Acceptable values:
+#   0    Show query before results (default)
+#   1    Hide query, show only results
+#
+# Can be overridden per-query with: -q, --quiet
+
+# QUIET=0
