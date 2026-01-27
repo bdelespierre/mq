@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-mq.bash is a Bash CLI tool that provides a convenient wrapper around the MySQL client with argument expansion, SQL shorthand helpers, and output formatting options.
+mq.bash is a Bash CLI tool that provides a convenient wrapper around the MySQL/MariaDB client with argument expansion, SQL shorthand helpers, and output formatting options.
 
 ## Usage
 
@@ -35,7 +35,7 @@ make uninstall # Remove installed files
 
 **bin/mq** - Entry point with:
 - `usage()` - Help text
-- `apply_format()` - Converts format option to MySQL flags
+- `apply_format()` - Converts format option to MySQL/MariaDB flags
 - `execute_query()` - Runs query through mysql and pager
 - `main()` - Option parsing with getopt, orchestrates the flow
 

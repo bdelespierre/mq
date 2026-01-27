@@ -1,12 +1,13 @@
 # mq.bash
 
-A Bash-based MySQL client wrapper with argument expansion and SQL shorthand helpers.
+A Bash-based MySQL/MariaDB client wrapper with argument expansion and SQL shorthand helpers.
 
 ## Features
 
+- Query database directly from bash like: `mq select %all from users > users.tsv`
 - SQL shorthand helpers for common patterns (strings, JSON paths, operators)
-- Multiple output formats: TSV, table, vertical, HTML, XML
-- Trailing `+` for vertical output (like MySQL's `\G`)
+- Smart output format: `table` for terminal, `tsv` for pipes (override with `-f`)
+- Trailing `+` for vertical output (like MySQL/MariaDB's `\G`)
 - Automatic query echo to stderr for debugging
 - Pager support via `$PAGER` environment variable
 - Global and project-local configuration files
@@ -17,11 +18,10 @@ Clone the repository:
 
 ```bash
 git clone <repository-url>
-cd mq.bash
+cd mq
 ```
 
 Install using make (installs to `/usr/local`):
-
 ```bash
 sudo make install
 ```
@@ -32,16 +32,16 @@ make install PREFIX=~/.local
 ```
 
 Alternatively, add the `bin` directory to your PATH:
-
 ```bash
 export PATH="$PATH:$(pwd)/bin"
 ```
 
-Ensure MySQL client is installed:
-
+Ensure MySQL/MariaDB client is installed:
 ```bash
 mysql --version
 ```
+
+> **Note:** MariaDB 10.2+ is required if using the `%json` feature.
 
 ## Uninstallation
 
@@ -64,19 +64,16 @@ mq -o database=mydb select '*' from users where name=:john
 mq -o database=mydb select %count from users where age %gt :18
 
 # Select all columns with alias
-mq -o database=mydb select %a from products where price %lte 99.99
+mq -o database=mydb select %all from products where price %lte 99.99
 
 # JSON path extraction
-mq -o database=mydb select %json settings.ui.dark_mode from users
+mq -o database=mydb select %json settings.ui.dark_mode from users where id=123
 
 # Vertical output with trailing +
 mq -o database=mydb select %a from users where id=:1 +
 
 # Use with pager
 PAGER=less mq -o database=mydb select %a from large_table
-
-# Table format output
-mq -o database=mydb -f table select %a from users
 ```
 
 ## Options Reference
@@ -85,8 +82,8 @@ mq -o database=mydb -f table select %a from users
 |--------|-------------|
 | `-h, --help` | Show help message |
 | `-v, --version` | Show version and exit |
-| `-o, --option NAME[=VALUE]` | Set MySQL client option (see `mysql --help`) |
-| `-f, --format NAME` | Output format: `tsv` (default), `table`, `vertical`, `html`, `xml` |
+| `-o, --option NAME[=VALUE]` | Set MySQL/MariaDB client option (see `mysql --help`) |
+| `-f, --format NAME` | Output format: `table`, `tsv`, `vertical`, `html`, `xml`. Default: `table` (TTY) or `tsv` (pipe) |
 | `-q, --quiet` | Suppress query echo to stderr |
 | `-n, --dry-run` | Show query without executing |
 | `-i, --input FILE` | Read query from file (use `-` for stdin) |
@@ -110,9 +107,9 @@ mq -o database=mydb -f table select %a from users
 | `%in :a :b :c` | `IN ('a', 'b', 'c')` |
 | `+` (trailing) | Vertical output format |
 
-## MySQL Options
+## MySQL/MariaDB Options
 
-Pass MySQL client options with `-o`:
+Pass MySQL/MariaDB client options with `-o`:
 
 ```bash
 # Connect to specific database
@@ -139,14 +136,15 @@ Configuration files are sourced as bash, loaded in order (later overrides earlie
 Example `~/.mqrc`:
 
 ```bash
-# MySQL client options
+# MySQL/MariaDB client options
 MYSQL_OPTIONS+=(
     --host=localhost
     --user=myuser
     --database=mydb
 )
 
-# Output format (tsv, table, vertical, html, xml)
+# Output format: table, tsv, vertical, html, xml
+# Default is table (TTY) or tsv (pipe); override here:
 FORMAT=table
 
 # Suppress query echo
