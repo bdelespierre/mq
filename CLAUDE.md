@@ -18,7 +18,7 @@ bin/mq -o database=mydb select %count from users where birthdate %gt :2000-01-01
 bin/
   mq        # Main executable (usage, option parsing, main)
 lib/mq/
-  transform.sh       # Argument transformation functions
+  transform.bash       # Argument transformation functions
 tests/
   transform.bats     # BATS tests for transform functions
 ```
@@ -39,7 +39,7 @@ make uninstall # Remove installed files
 - `execute_query()` - Runs query through mysql and pager
 - `main()` - Option parsing with getopt, orchestrates the flow
 
-**lib/mq/transform.sh** - Query building:
+**lib/mq/transform.bash** - Query building:
 - `transform_json()` - `%json a.b.c` → `json_unquote(json_extract(a, '$.b.c'))`
 - `transform_string()` - Wraps value in single quotes
 - `transform_equality()` - `x=:val` → `x='val'`
