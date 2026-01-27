@@ -4,27 +4,38 @@
 #
 
 # Transform %json a.b.c to json_unquote(json_extract(a, '$.b.c'))
+# Transform %json a to json_unquote(json_extract(a, '$'))
 transform_json() {
     local arg="${1%%,}"
-    local result="json_unquote(json_extract(${arg%%.*}, '\$.${arg#*.}'))"
+    local column="${arg%%.*}"
+    local result
+    if [[ "$arg" == *"."* ]]; then
+        result="json_unquote(json_extract(${column}, '\$.${arg#*.}'))"
+    else
+        result="json_unquote(json_extract(${column}, '\$'))"
+    fi
     [[ "$1" == *, ]] && result+=","
     printf '%s' "$result"
 }
 
 # Transform value to 'value' (quoted string)
+# Escapes single quotes: ' → ''
 transform_string() {
     local arg="${1%%,}"
-    local result="'${arg}'"
+    local escaped="${arg//\'/\'\'}"
+    local result="'${escaped}'"
     [[ "$1" == *, ]] && result+=","
     printf '%s' "$result"
 }
 
 # Transform x=:value to x='value' (equality with string)
+# Escapes single quotes: ' → ''
 transform_equality() {
     local arg="${1%%,}"
     local left="${arg%%=:*}"
     local right="${arg##*=:}"
-    local result="${left}='${right}'"
+    local escaped="${right//\'/\'\'}"
+    local result="${left}='${escaped}'"
     [[ "$1" == *, ]] && result+=","
     printf '%s' "$result"
 }
@@ -32,17 +43,31 @@ transform_equality() {
 # Transform alias to its SQL equivalent
 # Returns: the SQL equivalent, or empty string if not an alias
 transform_alias() {
-    local arg="$1"
-    local result=""
-
-    case "$arg" in
-        %a|%all)   result="*" ;;
-        %c|%count) result="count(*)" ;;
-        %r|%rand)  result="rand()" ;;
+    case "$1" in
+        %a|%all)   printf '*' ;;
+        %c|%count) printf 'count(*)' ;;
+        %r|%rand)  printf 'rand()' ;;
+        %now)      printf 'now()' ;;
         *)         return 1 ;;
     esac
+}
 
-    [[ "$arg" == *, ]] && result+=","
+# Transform %in :a :b :c to IN ('a', 'b', 'c')
+# Args: values (without : prefix)
+# Output: IN ('a', 'b', 'c')
+transform_in() {
+    local result="IN ("
+    local first=1 val escaped
+    for val in "$@"; do
+        escaped="${val//\'/\'\'}"
+        if [[ $first -eq 1 ]]; then
+            first=0
+        else
+            result+=", "
+        fi
+        result+="'${escaped}'"
+    done
+    result+=")"
     printf '%s' "$result"
 }
 
@@ -50,13 +75,16 @@ transform_alias() {
 # Returns: the SQL operator, or empty string if not an operator
 transform_operator() {
     case "$1" in
-        %eq)  printf '=' ;;
-        %ne)  printf '<>' ;;
-        %gt)  printf '>' ;;
-        %gte) printf '>=' ;;
-        %lt)  printf '<' ;;
-        %lte) printf '<=' ;;
-        *)    return 1 ;;
+        %eq)      printf '=' ;;
+        %ne)      printf '<>' ;;
+        %gt)      printf '>' ;;
+        %gte)     printf '>=' ;;
+        %lt)      printf '<' ;;
+        %lte)     printf '<=' ;;
+        %like)    printf 'LIKE' ;;
+        %null)    printf 'IS NULL' ;;
+        %notnull) printf 'IS NOT NULL' ;;
+        *)        return 1 ;;
     esac
 }
 
@@ -65,32 +93,85 @@ process_argument() {
     local -n _shift_count="$2"; _shift_count=1
     shift 2
 
-    case "$1" in
+    local arg="$1"
+    local trailing_comma=""
+
+    # Handle standalone comma - pass through unchanged
+    if [[ "$arg" == "," ]]; then
+        _output=","
+        return 0
+    fi
+
+    # Extract trailing comma if present (for pattern matching)
+    if [[ "$arg" == *, ]]; then
+        trailing_comma=","
+        arg="${arg%,}"
+    fi
+
+    case "$arg" in
         %j|%json)
+            if [[ -z "$2" ]]; then
+                echo "error: $arg requires an argument" >&2
+                return 1
+            fi
             _output=$(transform_json "$2")
             _shift_count=2
             ;;
         %s|%str|%string)
+            if [[ -z "$2" ]]; then
+                echo "error: $arg requires an argument" >&2
+                return 1
+            fi
             _output=$(transform_string "$2")
             _shift_count=2
             ;;
-        %a|%all|%c|%count|%r|%rand)
-            _output=$(transform_alias "$1")
+        %a|%all|%c|%count|%r|%rand|%now)
+            _output=$(transform_alias "$arg")
+            _output+="$trailing_comma"
             ;;
-        %eq|%ne|%gt|%gte|%lt|%lte)
-            _output=$(transform_operator "$1")
+        %eq|%ne|%gt|%gte|%lt|%lte|%like|%null|%notnull)
+            _output=$(transform_operator "$arg")
+            # Operators don't preserve trailing comma (invalid SQL)
+            ;;
+        %in)
+            # Collect all following :value arguments
+            shift
+            if [[ $# -eq 0 || "$1" != :* ]]; then
+                echo "error: %in requires at least one :value argument" >&2
+                return 1
+            fi
+            local -a in_values=()
+            local val
+            while [[ $# -gt 0 && "$1" == :* ]]; do
+                val="${1:1}"   # Strip leading colon
+                val="${val%,}" # Strip trailing comma if present
+                in_values+=("$val")
+                shift
+            done
+            _output=$(transform_in "${in_values[@]}")
+            _shift_count=$((1 + ${#in_values[@]}))
+            ;;
+        %l|%limit)
+            if [[ -z "$2" ]]; then
+                echo "error: $arg requires an argument" >&2
+                return 1
+            fi
+            _output="LIMIT $2"
+            _shift_count=2
             ;;
         :*)
             # :value -> 'value'
-            _output=$(transform_string "${1:1}")
+            _output=$(transform_string "${arg:1}")
+            _output+="$trailing_comma"
             ;;
         *=:*)
             # x=:value -> x='value'
-            _output=$(transform_equality "$1")
+            _output=$(transform_equality "$arg")
+            _output+="$trailing_comma"
             ;;
         *)
-            # Pass through unchanged
-            _output="$1"
+            # Pass through unchanged (preserve trailing comma)
+            _output="$arg$trailing_comma"
             ;;
     esac
 }
@@ -114,7 +195,9 @@ build_query() {
         fi
 
         local result="" shift_count=""
-        process_argument result shift_count "$@"
+        if ! process_argument result shift_count "$@"; then
+            return 1
+        fi
         query+=("$result")
 
         shift "$shift_count"
