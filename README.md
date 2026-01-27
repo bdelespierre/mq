@@ -25,7 +25,15 @@ This installs to `~/.local/bin`. Set `MQ_INSTALL_DIR` to change the location:
 curl -fsSL https://raw.githubusercontent.com/bdelespierre/mq/master/install.sh | MQ_INSTALL_DIR=/usr/local bash
 ```
 
-### Manual Install
+Ensure MySQL/MariaDB client is installed:
+```bash
+mysql --version
+```
+
+> **Note:** MariaDB 10.2+ is required if using the `%json` feature.
+
+<details>
+<summary>Manual Install</summary>
 
 Clone the repository:
 ```bash
@@ -48,12 +56,7 @@ Alternatively, add the `bin` directory to your PATH:
 export PATH="$PATH:$(pwd)/bin"
 ```
 
-Ensure MySQL/MariaDB client is installed:
-```bash
-mysql --version
-```
-
-> **Note:** MariaDB 10.2+ is required if using the `%json` feature.
+</details>
 
 ## Uninstallation
 
