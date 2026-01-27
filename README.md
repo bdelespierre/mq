@@ -27,7 +27,7 @@ curl -fsSL https://raw.githubusercontent.com/bdelespierre/mq/master/install.sh |
 
 Ensure MySQL/MariaDB client is installed:
 ```bash
-mysql --version
+command -v mysql &>/dev/null && echo "MySQL/MariaDB client found" || echo "Please install MySQL/MariaDB client"
 ```
 
 > **Note:** MariaDB 10.2+ is required if using the `%json` feature.
