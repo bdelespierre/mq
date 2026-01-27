@@ -169,6 +169,8 @@ FORMAT=table
 QUIET=1
 ```
 
+See [.mqrc.example](.mqrc.example) for a complete annotated template.
+
 **Project-local configuration**: Commit `.mqrc.dist` with shared defaults to version control, add `.mqrc` to `.gitignore` for local customization.
 
 Override the global config file location with the `MQRC` environment variable:
