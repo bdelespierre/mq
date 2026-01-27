@@ -179,7 +179,7 @@ Override the global config file location with the `MQRC` environment variable:
 MQRC=/path/to/config mq select %a from users
 ```
 
-Command-line options always override config file settings. Loaded config files are shown on stderr (use `-q` to suppress).
+> **Note:** Command-line options always override config file settings.
 
 ## Shell Aliases
 
