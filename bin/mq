@@ -141,7 +141,17 @@ apply_format() {
 
 # Execute the query
 execute_query() {
-    local sql="$1" pager="${PAGER:-cat}"
+    local sql="$1"
+    local pager
+
+    # Determine pager: PAGER env, or grcat if available and TTY, or cat
+    if [[ -n "${PAGER:-}" ]]; then
+        pager="$PAGER"
+    elif [[ -t 1 ]] && command -v grcat &>/dev/null; then
+        pager="grcat mq"
+    else
+        pager="cat"
+    fi
 
     debug "SQL: $sql"
     debug "MySQL options: ${MYSQL_OPTIONS[*]}"
