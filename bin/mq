@@ -12,7 +12,7 @@ PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
 source "$PROJECT_ROOT/lib/mq/transform.bash"
 
 # Version
-VERSION="1.4.1"
+VERSION="1.4.2"
 
 # Global options
 declare -a MYSQL_OPTIONS=()
@@ -50,8 +50,8 @@ Options:
     -q, --quiet                Suppress query echo to stderr
     -n, --dry-run              Show query without executing
     -i, --input FILE           Read query from file (use - for stdin)
-        --color                Force colorized output (requires grcat)
-        --no-ansi              Disable colorized output
+        --color[=WHEN]         Colorize output (requires grcat): auto, always, never
+                               Default: auto (color when stdout is a TTY)
 
 Arguments:
     :VALUE             Shorthand for %string VALUE
@@ -191,7 +191,7 @@ main() {
 
     # Parse options with getopt
     local opts
-    if ! opts=$(getopt -o hvo:f:qni: --long help,version,option:,format:,quiet,dry-run,input:,color,no-ansi -n "$(basename "$0")" -- "$@"); then
+    if ! opts=$(getopt -o hvo:f:qni: --long help,version,option:,format:,quiet,dry-run,input:,color:: -n "$(basename "$0")" -- "$@"); then
         >&2 usage
         exit 1
     fi
@@ -238,14 +238,17 @@ main() {
                 shift 2
                 ;;
             --color)
-                debug "Option: --color"
-                COLOR="always"
-                shift
-                ;;
-            --no-ansi)
-                debug "Option: --no-ansi"
-                COLOR="never"
-                shift
+                # Optional argument: empty string means no value provided
+                if [[ -z "$2" ]]; then
+                    COLOR="always"
+                elif [[ "$2" =~ ^(auto|always|never)$ ]]; then
+                    COLOR="$2"
+                else
+                    >&2 echo "Invalid --color value: $2 (must be auto, always, or never)"
+                    exit 1
+                fi
+                debug "Option: --color=$COLOR"
+                shift 2
                 ;;
             --)
                 shift
