@@ -3,7 +3,6 @@
 PREFIX ?= /usr/local
 BINDIR := $(PREFIX)/bin
 LIBDIR := $(PREFIX)/lib
-GRCDIR := /usr/share/grc
 
 test:
 	@bats tests/
@@ -16,11 +15,18 @@ install:
 	@chmod +x $(BINDIR)/mq
 	@echo "Installed mq to $(BINDIR)"
 	@echo "Installed transform.bash to $(LIBDIR)/mq"
-	@(mkdir -p $(GRCDIR) && cp share/grc/mq $(GRCDIR)/mq && echo "Installed grc config to $(GRCDIR)/mq") 2>/dev/null || echo "Skipped grc config (no write access to $(GRCDIR))"
+	@if mkdir -p /usr/share/grc && cp share/grc/mq /usr/share/grc/mq 2>/dev/null; then \
+		echo "Installed grc config to /usr/share/grc/mq"; \
+	elif mkdir -p ~/.grc && cp share/grc/mq ~/.grc/mq 2>/dev/null; then \
+		echo "Installed grc config to ~/.grc/mq"; \
+	else \
+		echo "Skipped grc config (could not write to /usr/share/grc or ~/.grc)"; \
+	fi
 
 uninstall:
 	@rm -f $(BINDIR)/mq
 	@rm -rf $(LIBDIR)/mq
-	@-rm -f $(GRCDIR)/mq 2>/dev/null
+	@-rm -f /usr/share/grc/mq 2>/dev/null
+	@-rm -f ~/.grc/mq 2>/dev/null
 	@echo "Removed mq from $(BINDIR)"
 	@echo "Removed $(LIBDIR)/mq"
