@@ -209,7 +209,7 @@ After installation, reload your shell or source the completion manually:
 source ~/.local/share/bash-completion/completions/mq
 
 # If installed system-wide
-source /usr/share/bash-completion/completions/mq
+source /usr/local/share/bash-completion/completions/mq
 
 # Or source directly from repo
 source share/bash-completion/completions/mq
@@ -224,7 +224,7 @@ Completions available:
 
 ## 🌈 Syntax Highlighting (optional)
 
-When [grc](https://github.com/garabik/grc) is installed, mq automatically colorizes output using `grcat conf.mq`. The config file is installed to `/usr/share/grc/conf.mq` (system) or `~/.grc/conf.mq` (local).
+When [grc](https://github.com/garabik/grc) is installed, mq automatically colorizes output. The grc config is installed alongside mq at `$PREFIX/share/grc/conf.mq` (e.g., `~/.local/share/grc/conf.mq` for local installs).
 
 Colors applied:
 - **Green**: default text

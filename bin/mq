@@ -7,6 +7,7 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
+GRC_CONF="$PROJECT_ROOT/share/grc/conf.mq"
 
 # Source library functions
 source "$PROJECT_ROOT/lib/mq/transform.bash"
@@ -150,12 +151,12 @@ execute_query() {
     # Determine pager based on COLOR setting and PAGER env
     if [[ -n "${PAGER:-}" ]]; then
         pager="$PAGER"
-    elif [[ "$COLOR" == "always" ]] && command -v grcat &>/dev/null; then
-        pager="grcat conf.mq"
+    elif [[ "$COLOR" == "always" ]] && command -v grcat &>/dev/null && [[ -f "$GRC_CONF" ]]; then
+        pager="grcat $GRC_CONF"
     elif [[ "$COLOR" == "never" ]]; then
         pager="cat"
-    elif [[ "$COLOR" == "auto" && -t 1 ]] && command -v grcat &>/dev/null; then
-        pager="grcat conf.mq"
+    elif [[ "$COLOR" == "auto" && -t 1 ]] && command -v grcat &>/dev/null && [[ -f "$GRC_CONF" ]]; then
+        pager="grcat $GRC_CONF"
     else
         pager="cat"
     fi
