@@ -10,6 +10,7 @@ A Bash-based MySQL/MariaDB client wrapper with argument expansion and SQL shorth
 - 📊 [Trailing `+`](#-argument-shortcuts) for vertical output (like MySQL/MariaDB's `\G`)
 - 🔍 Automatic query echo to stderr for debugging (suppress with `-q`)
 - 🌈 [Syntax highlighting](#-syntax-highlighting-optional) with grcat (auto-detected)
+- 🔤 [Bash completion](#-bash-completion-optional) for options, SQL keywords, and mq tokens
 - ⚙️ Global and project-local [configuration files](#️-configuration-file-optional)
 
 ## 📦 Installation
@@ -196,6 +197,30 @@ After adding aliases, reload your shell configuration:
 ```bash
 source ~/.bashrc  # or source ~/.zshrc
 ```
+
+## 🔤 Bash Completion (optional)
+
+Bash completion is installed automatically with `make install`. It provides completion for options, formats, SQL keywords, and mq shorthand tokens.
+
+After installation, reload your shell or source the completion manually:
+
+```bash
+# If installed locally
+source ~/.local/share/bash-completion/completions/mq
+
+# If installed system-wide
+source /usr/share/bash-completion/completions/mq
+
+# Or source directly from repo
+source share/bash-completion/completions/mq
+```
+
+Completions available:
+- **Options**: `-f`, `--format`, `-o`, `--option`, `-q`, `--quiet`, etc.
+- **Formats**: `table`, `vertical`, `html`, `xml`, `tsv`
+- **MySQL options**: `database=`, `host=`, `port=`, `user=`, etc.
+- **SQL keywords**: `select`, `from`, `where`, `order`, `join`, etc.
+- **mq tokens**: `%all`, `%count`, `%rand`, `%eq`, `%gt`, `%in`, `%json`, etc.
 
 ## 🌈 Syntax Highlighting (optional)
 

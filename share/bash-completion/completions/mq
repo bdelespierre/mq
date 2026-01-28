@@ -1,0 +1,74 @@
+# Bash completion for mq - MySQL/MariaDB client wrapper
+#
+# Installation:
+#   Local:  cp share/bash-completion/completions/mq ~/.local/share/bash-completion/completions/
+#   System: sudo cp share/bash-completion/completions/mq /usr/share/bash-completion/completions/
+#
+# Or source directly: source share/bash-completion/completions/mq
+
+_mq() {
+    local cur prev words cword
+    _init_completion || return
+
+    # Options
+    local opts="-h --help -v --version -o --option -f --format -q --quiet -n --dry-run -i --input --color"
+
+    # Output formats
+    local formats="table vertical html xml tsv"
+
+    # Color values
+    local colors="auto always never"
+
+    # Common MySQL client options (for -o/--option)
+    local mysql_opts="database= host= port= user= password= socket= ssl ssl-ca= ssl-cert= ssl-key= compress protocol= default-character-set="
+
+    # SQL keywords
+    local sql_keywords="select from where order by group having limit offset distinct as and or not in is null like between join left right inner outer cross on using union all insert into values update set delete create drop alter table index show describe explain desc asc count sum avg min max"
+
+    # mq special tokens
+    local mq_tokens="%a %all %c %count %r %rand %now %eq %ne %gt %gte %lt %lte %in %s %str %string %j %json"
+
+    case "$prev" in
+        -f|--format)
+            COMPREPLY=($(compgen -W "$formats" -- "$cur"))
+            return
+            ;;
+        --color)
+            COMPREPLY=($(compgen -W "$colors" -- "$cur"))
+            return
+            ;;
+        -o|--option)
+            COMPREPLY=($(compgen -W "$mysql_opts" -- "$cur"))
+            return
+            ;;
+        -i|--input)
+            _filedir
+            return
+            ;;
+    esac
+
+    # Handle --color=value
+    if [[ "$cur" == --color=* ]]; then
+        local colorval="${cur#--color=}"
+        COMPREPLY=($(compgen -W "$colors" -- "$colorval"))
+        COMPREPLY=("${COMPREPLY[@]/#/--color=}")
+        return
+    fi
+
+    # If current word starts with -, complete options
+    if [[ "$cur" == -* ]]; then
+        COMPREPLY=($(compgen -W "$opts" -- "$cur"))
+        return
+    fi
+
+    # If current word starts with %, complete mq tokens
+    if [[ "$cur" == %* ]]; then
+        COMPREPLY=($(compgen -W "$mq_tokens" -- "$cur"))
+        return
+    fi
+
+    # Default: complete SQL keywords, mq tokens, and + (vertical format)
+    COMPREPLY=($(compgen -W "$sql_keywords $mq_tokens +" -- "$cur"))
+}
+
+complete -F _mq mq
