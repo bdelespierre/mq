@@ -21,6 +21,7 @@ QUIET=0
 DRY_RUN=0
 INPUT_FILE=""
 DEBUG="${DEBUG:-0}"
+COLOR="auto"  # auto, always, never
 
 # Default format: table for TTY, tsv for pipes
 if [[ ! -t 1 ]]; then
@@ -49,6 +50,8 @@ Options:
     -q, --quiet                Suppress query echo to stderr
     -n, --dry-run              Show query without executing
     -i, --input FILE           Read query from file (use - for stdin)
+        --color                Force colorized output (requires grcat)
+        --no-ansi              Disable colorized output
 
 Arguments:
     :VALUE             Shorthand for %string VALUE
@@ -144,10 +147,14 @@ execute_query() {
     local sql="$1"
     local pager
 
-    # Determine pager: PAGER env, or grcat if available and TTY, or cat
+    # Determine pager based on COLOR setting and PAGER env
     if [[ -n "${PAGER:-}" ]]; then
         pager="$PAGER"
-    elif [[ -t 1 ]] && command -v grcat &>/dev/null; then
+    elif [[ "$COLOR" == "always" ]] && command -v grcat &>/dev/null; then
+        pager="grcat mq"
+    elif [[ "$COLOR" == "never" ]]; then
+        pager="cat"
+    elif [[ "$COLOR" == "auto" && -t 1 ]] && command -v grcat &>/dev/null; then
         pager="grcat mq"
     else
         pager="cat"
@@ -184,7 +191,7 @@ main() {
 
     # Parse options with getopt
     local opts
-    if ! opts=$(getopt -o hvo:f:qni: --long help,version,option:,format:,quiet,dry-run,input: -n "$(basename "$0")" -- "$@"); then
+    if ! opts=$(getopt -o hvo:f:qni: --long help,version,option:,format:,quiet,dry-run,input:,color,no-ansi -n "$(basename "$0")" -- "$@"); then
         >&2 usage
         exit 1
     fi
@@ -229,6 +236,16 @@ main() {
                 debug "Option: -i $2"
                 INPUT_FILE="$2"
                 shift 2
+                ;;
+            --color)
+                debug "Option: --color"
+                COLOR="always"
+                shift
+                ;;
+            --no-ansi)
+                debug "Option: --no-ansi"
+                COLOR="never"
+                shift
                 ;;
             --)
                 shift
