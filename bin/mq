@@ -151,11 +151,11 @@ execute_query() {
     if [[ -n "${PAGER:-}" ]]; then
         pager="$PAGER"
     elif [[ "$COLOR" == "always" ]] && command -v grcat &>/dev/null; then
-        pager="grcat mq"
+        pager="grcat conf.mq"
     elif [[ "$COLOR" == "never" ]]; then
         pager="cat"
     elif [[ "$COLOR" == "auto" && -t 1 ]] && command -v grcat &>/dev/null; then
-        pager="grcat mq"
+        pager="grcat conf.mq"
     else
         pager="cat"
     fi

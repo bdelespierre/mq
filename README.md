@@ -20,18 +20,6 @@ A Bash-based MySQL/MariaDB client wrapper with argument expansion and SQL shorth
 curl -fsSL https://raw.githubusercontent.com/bdelespierre/mq/master/install.sh | bash
 ```
 
-This installs to `~/.local/bin`. Set `MQ_INSTALL_DIR` to change the location:
-```bash
-curl -fsSL https://raw.githubusercontent.com/bdelespierre/mq/master/install.sh | MQ_INSTALL_DIR=/usr/local bash
-```
-
-Ensure MySQL/MariaDB client is installed:
-```bash
-command -v mysql &>/dev/null && echo "MySQL/MariaDB client found" || echo "Please install MySQL/MariaDB client"
-```
-
-> **Note:** MariaDB 10.2+ is required if using the `%json` feature.
-
 <details>
 <summary>Manual Install</summary>
 
@@ -41,14 +29,14 @@ git clone https://github.com/bdelespierre/mq.git
 cd mq
 ```
 
-Install using make (installs to `/usr/local`):
+Install using make (installs to `~/.local`):
 ```bash
-sudo make install
+make install
 ```
 
-Or install to a custom location:
+Or install system-wide (requires sudo):
 ```bash
-make install PREFIX=~/.local
+sudo make install-system
 ```
 
 Alternatively, add the `bin` directory to your PATH:
@@ -62,12 +50,12 @@ export PATH="$PATH:$(pwd)/bin"
 <summary>Uninstallation</summary>
 
 ```bash
-sudo make uninstall
+make uninstall
 ```
 
-Or if installed with a custom prefix:
+Or if installed system-wide:
 ```bash
-make uninstall PREFIX=~/.local
+sudo make uninstall-system
 ```
 
 </details>
@@ -211,7 +199,7 @@ source ~/.bashrc  # or source ~/.zshrc
 
 ## 🌈 Syntax Highlighting (optional)
 
-When [grc](https://github.com/garabik/grc) is installed, mq automatically colorizes output using `grcat mq`. The config file is installed to `/usr/share/grc/mq`.
+When [grc](https://github.com/garabik/grc) is installed, mq automatically colorizes output using `grcat conf.mq`. The config file is installed to `/usr/share/grc/conf.mq` (system) or `~/.grc/conf.mq` (local).
 
 Colors applied:
 - **Green**: default text

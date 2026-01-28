@@ -26,9 +26,11 @@ tests/
 ## Commands
 
 ```bash
-make test      # Run tests (requires bats)
-make install   # Install to /usr/local (or PREFIX=~/.local)
-make uninstall # Remove installed files
+make test             # Run tests (requires bats)
+make install          # Install to ~/.local (default)
+make install-system   # Install to /usr/local (requires sudo)
+make uninstall        # Remove local installation
+make uninstall-system # Remove system installation
 ```
 
 ## Architecture
