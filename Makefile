@@ -19,21 +19,21 @@ install-local:
 	@echo "Installed bash completion to ~/.local/share/bash-completion/completions"
 	@echo "Installed grc config to ~/.grc/conf.mq"
 
-# System installation (/usr/local and /usr/share/grc)
+# System installation (/usr/local)
 install-system:
 	@mkdir -p /usr/local/bin
 	@mkdir -p /usr/local/lib/mq
-	@mkdir -p /usr/share/bash-completion/completions
-	@mkdir -p /usr/share/grc
+	@mkdir -p /usr/local/share/bash-completion/completions
+	@mkdir -p /usr/local/share/grc
 	@cp bin/mq /usr/local/bin/mq
 	@cp lib/mq/transform.bash /usr/local/lib/mq/transform.bash
-	@cp share/bash-completion/completions/mq /usr/share/bash-completion/completions/mq
-	@cp share/grc/conf.mq /usr/share/grc/conf.mq
+	@cp share/bash-completion/completions/mq /usr/local/share/bash-completion/completions/mq
+	@cp share/grc/conf.mq /usr/local/share/grc/conf.mq
 	@chmod +x /usr/local/bin/mq
 	@echo "Installed mq to /usr/local/bin"
 	@echo "Installed transform.bash to /usr/local/lib/mq"
-	@echo "Installed bash completion to /usr/share/bash-completion/completions"
-	@echo "Installed grc config to /usr/share/grc/conf.mq"
+	@echo "Installed bash completion to /usr/local/share/bash-completion/completions"
+	@echo "Installed grc config to /usr/local/share/grc/conf.mq"
 
 # Default install (local)
 install: install-local
@@ -53,12 +53,12 @@ uninstall-local:
 uninstall-system:
 	@rm -f /usr/local/bin/mq
 	@rm -rf /usr/local/lib/mq
-	@rm -f /usr/share/bash-completion/completions/mq
-	@rm -f /usr/share/grc/conf.mq
+	@rm -f /usr/local/share/bash-completion/completions/mq
+	@rm -f /usr/local/share/grc/conf.mq
 	@echo "Removed mq from /usr/local/bin"
 	@echo "Removed /usr/local/lib/mq"
-	@echo "Removed bash completion from /usr/share/bash-completion/completions"
-	@echo "Removed /usr/share/grc/conf.mq"
+	@echo "Removed bash completion from /usr/local/share/bash-completion/completions"
+	@echo "Removed /usr/local/share/grc/conf.mq"
 
 # Default uninstall (local)
 uninstall: uninstall-local
