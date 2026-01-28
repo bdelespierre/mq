@@ -13,7 +13,7 @@ GRC_CONF="$PROJECT_ROOT/share/grc/conf.mq"
 source "$PROJECT_ROOT/lib/mq/transform.bash"
 
 # Version
-VERSION="1.4.3"
+VERSION="1.5.0"
 
 # Global options
 declare -a MYSQL_OPTIONS=()
