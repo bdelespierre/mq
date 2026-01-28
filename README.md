@@ -105,6 +105,7 @@ PAGER=less mq -o database=mydb select %a from large_table
 | `-q, --quiet` | Suppress query echo to stderr |
 | `-n, --dry-run` | Show query without executing |
 | `-i, --input FILE` | Read query from file (use `-` for stdin) |
+| `--color[=WHEN]` | Colorize output: `auto` (default), `always`, `never`. Requires grcat |
 
 ## ⚡ Argument Shortcuts
 
@@ -220,9 +221,9 @@ Colors applied:
 - **Magenta**: email addresses
 - **White**: vertical format delimiters and column names
 
-To disable, set `PAGER` explicitly:
+To disable colorization:
 ```bash
-PAGER=cat mq select %all from users
+mq --color=never select %all from users
 ```
 
 ## 🧪 Running Tests
