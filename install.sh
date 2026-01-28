@@ -6,7 +6,6 @@
 set -euo pipefail
 
 REPO="bdelespierre/mq"
-INSTALL_DIR="${MQ_INSTALL_DIR:-$HOME/.local}"
 TMP_DIR=""
 
 info() { echo -e "\033[1;34m==>\033[0m $*"; }
@@ -41,22 +40,22 @@ EXTRACT_DIR="$TMP_DIR/mq-${LATEST_TAG#v}"
 [[ -d "$EXTRACT_DIR" ]] || error "Failed to extract archive"
 
 # Install
-info "Installing to $INSTALL_DIR..."
-make -C "$EXTRACT_DIR" install PREFIX="$INSTALL_DIR" >/dev/null
+info "Installing to ~/.local..."
+make -C "$EXTRACT_DIR" install >/dev/null
 
 # Verify installation
-if [[ -x "$INSTALL_DIR/bin/mq" ]]; then
-    info "Successfully installed mq $LATEST_TAG to $INSTALL_DIR/bin/mq"
+if [[ -x "$HOME/.local/bin/mq" ]]; then
+    info "Successfully installed mq $LATEST_TAG to ~/.local/bin/mq"
 else
     error "Installation failed"
 fi
 
 # Check if bin is in PATH
-if [[ ":$PATH:" != *":$INSTALL_DIR/bin:"* ]]; then
+if [[ ":$PATH:" != *":$HOME/.local/bin:"* ]]; then
     echo ""
     echo "Add this to your shell profile (~/.bashrc or ~/.zshrc):"
     echo ""
-    echo "    export PATH=\"\$PATH:$INSTALL_DIR/bin\""
+    echo "    export PATH=\"\$PATH:\$HOME/.local/bin\""
     echo ""
 fi
 
