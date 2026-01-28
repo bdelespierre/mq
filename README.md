@@ -1,18 +1,18 @@
-# mq
+# 🐬 mq
 
 A Bash-based MySQL/MariaDB client wrapper with argument expansion and SQL shorthand helpers.
 
-## Features
+## ✨ Features
 
-- Query database directly from Bash/Zsh: `mq select %all from users > users.tsv`
-- [SQL shorthand helpers](#argument-shortcuts) for common patterns (strings, JSON paths, operators)
-- Smart [output format](#options-reference): `table` for terminal, `tsv` for pipes (override with `-f`)
-- [Trailing `+`](#argument-shortcuts) for vertical output (like MySQL/MariaDB's `\G`)
-- Automatic query echo to stderr for debugging (suppress with `-q`)
-- [Syntax highlighting](#syntax-highlighting-optional) with grcat (auto-detected)
-- Global and project-local [configuration files](#configuration-file-optional)
+- 🚀 Query database directly from Bash/Zsh: `mq select %all from users > users.tsv`
+- ⚡ [SQL shorthand helpers](#argument-shortcuts) for common patterns (strings, JSON paths, operators)
+- 🎨 Smart [output format](#options-reference): `table` for terminal, `tsv` for pipes (override with `-f`)
+- 📊 [Trailing `+`](#argument-shortcuts) for vertical output (like MySQL/MariaDB's `\G`)
+- 🔍 Automatic query echo to stderr for debugging (suppress with `-q`)
+- 🌈 [Syntax highlighting](#syntax-highlighting-optional) with grcat (auto-detected)
+- ⚙️ Global and project-local [configuration files](#configuration-file-optional)
 
-## Installation
+## 📦 Installation
 
 ### Quick Install
 
@@ -72,7 +72,7 @@ make uninstall PREFIX=~/.local
 
 </details>
 
-## Usage
+## 🔧 Usage
 
 ```bash
 # Basic query with string shorthand (:value becomes 'value')
@@ -94,7 +94,7 @@ mq -o database=mydb select %a from users where id=:1 +
 PAGER=less mq -o database=mydb select %a from large_table
 ```
 
-## Options Reference
+## 📋 Options Reference
 
 | Option | Description |
 |--------|-------------|
@@ -106,7 +106,7 @@ PAGER=less mq -o database=mydb select %a from large_table
 | `-n, --dry-run` | Show query without executing |
 | `-i, --input FILE` | Read query from file (use `-` for stdin) |
 
-## Argument Shortcuts
+## ⚡ Argument Shortcuts
 
 | Shorthand | Expansion |
 |-----------|-----------|
@@ -125,7 +125,7 @@ PAGER=less mq -o database=mydb select %a from large_table
 | `%in :a :b :c` | `IN ('a', 'b', 'c')` |
 | `+` (trailing) | Vertical output format |
 
-## MySQL/MariaDB Options
+## 🐬 MySQL/MariaDB Options
 
 Pass MySQL/MariaDB client options with `-o`:
 
@@ -143,7 +143,7 @@ mq -o port=3307 ...
 mq -o defaults-file=~/.my.cnf ...
 ```
 
-## Configuration File (optional)
+## ⚙️ Configuration File (optional)
 
 Configuration files are sourced as bash, loaded in order (later overrides earlier):
 
@@ -181,7 +181,7 @@ MQRC=/path/to/config mq select %a from users
 
 > **Note:** Command-line options always override config file settings.
 
-## Shell Aliases (optional)
+## 🔗 Shell Aliases (optional)
 
 Create aliases in your `~/.bashrc` or `~/.zshrc` to avoid repeating connection options:
 
@@ -208,7 +208,7 @@ After adding aliases, reload your shell configuration:
 source ~/.bashrc  # or source ~/.zshrc
 ```
 
-## Syntax Highlighting (optional)
+## 🌈 Syntax Highlighting (optional)
 
 When [grc](https://github.com/garabik/grc) is installed, mq automatically colorizes output using `grcat mq`. The config file is installed to `/usr/share/grc/mq`.
 
@@ -225,7 +225,7 @@ To disable, set `PAGER` explicitly:
 PAGER=cat mq select %all from users
 ```
 
-## Running Tests
+## 🧪 Running Tests
 
 ```bash
 make test
@@ -233,6 +233,6 @@ make test
 
 Requires [bats](https://github.com/bats-core/bats-core) (Bash Automated Testing System).
 
-## License
+## 📄 License
 
 MIT
