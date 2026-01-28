@@ -5,12 +5,12 @@ A Bash-based MySQL/MariaDB client wrapper with argument expansion and SQL shorth
 ## ✨ Features
 
 - 🚀 Query database directly from Bash/Zsh: `mq select %all from users > users.tsv`
-- ⚡ [SQL shorthand helpers](#argument-shortcuts) for common patterns (strings, JSON paths, operators)
-- 🎨 Smart [output format](#options-reference): `table` for terminal, `tsv` for pipes (override with `-f`)
-- 📊 [Trailing `+`](#argument-shortcuts) for vertical output (like MySQL/MariaDB's `\G`)
+- ⚡ [SQL shorthand helpers](#-argument-shortcuts) for common patterns (strings, JSON paths, operators)
+- 🎨 Smart [output format](#-options-reference): `table` for terminal, `tsv` for pipes (override with `-f`)
+- 📊 [Trailing `+`](#-argument-shortcuts) for vertical output (like MySQL/MariaDB's `\G`)
 - 🔍 Automatic query echo to stderr for debugging (suppress with `-q`)
-- 🌈 [Syntax highlighting](#syntax-highlighting-optional) with grcat (auto-detected)
-- ⚙️ Global and project-local [configuration files](#configuration-file-optional)
+- 🌈 [Syntax highlighting](#-syntax-highlighting-optional) with grcat (auto-detected)
+- ⚙️ Global and project-local [configuration files](#️-configuration-file-optional)
 
 ## 📦 Installation
 
