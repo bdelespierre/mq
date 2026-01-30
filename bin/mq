@@ -14,7 +14,7 @@ source "$PROJECT_ROOT/lib/mq/transform.bash"
 source "$PROJECT_ROOT/lib/mq/format.bash"
 source "$PROJECT_ROOT/lib/mq/bookmark.bash"
 
-VERSION="1.5.0"
+VERSION="1.6.0"
 
 declare -a MYSQL_OPTIONS=()
 FORMAT="table"
