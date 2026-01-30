@@ -5,9 +5,10 @@ A Bash-based MySQL/MariaDB client wrapper with argument expansion and SQL shorth
 ## ✨ Features
 
 - 🚀 Query database directly from Bash/Zsh: `mq select %all from users > users.tsv`
-- ⚡ [SQL shorthand helpers](#-argument-shortcuts) for common patterns (strings, JSON paths, operators)
-- 🎨 Smart [output format](#-options-reference): `table` for terminal, `tsv` for pipes (override with `-f`)
+- ⚡ [SQL shorthand helpers](#-argument-shortcuts) for common patterns (strings, JSON paths, operators, aggregates)
+- 🎨 Smart [output format](#-options-reference): `table` for terminal, `tsv` for pipes (override with `-f csv`, `-f json`, etc.)
 - 📊 [Trailing `+`](#-argument-shortcuts) for vertical output (like MySQL/MariaDB's `\G`)
+- 🔖 [Query bookmarks](#-query-bookmarks) to save and replay frequently-used queries
 - 🔍 Automatic query echo to stderr for debugging (suppress with `-q`)
 - 🌈 [Syntax highlighting](#-syntax-highlighting-optional) with grcat (auto-detected)
 - 🔤 [Bash completion](#-bash-completion-optional) for options, SQL keywords, and mq tokens
@@ -132,17 +133,22 @@ Bookmarks are stored as plain `.sql` files in `~/.local/share/mq/queries/` (over
 | Shorthand | Expansion |
 |-----------|-----------|
 | `:value` `%s VALUE` `%string VALUE` | `'VALUE'` |
-| `%j PATH` `%json PATH` | `json_unquote(json_extract(...))` |
+| `%j PATH` `%json PATH` | `JSON_UNQUOTE(JSON_EXTRACT(...))` |
 | `%a` `%all` | `*` |
 | `%c` `%count` | `COUNT(*)` |
 | `%r` `%rand` | `RAND()` |
 | `%now` | `NOW()` |
+| `%sum COL` | `SUM(COL)` |
+| `%avg COL` | `AVG(COL)` |
+| `%min COL` | `MIN(COL)` |
+| `%max COL` | `MAX(COL)` |
 | `%eq` | `=` |
 | `%ne` | `<>` |
 | `%gt` | `>` |
 | `%gte` | `>=` |
 | `%lt` | `<` |
 | `%lte` | `<=` |
+| `%between :lo :hi` | `BETWEEN 'lo' AND 'hi'` |
 | `%in :a :b :c` | `IN ('a', 'b', 'c')` |
 | `+` (trailing) | Vertical output format |
 
