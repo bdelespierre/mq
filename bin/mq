@@ -10,6 +10,7 @@ PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
 GRC_CONF="$PROJECT_ROOT/share/grc/conf.mq"
 
 source "$PROJECT_ROOT/lib/mq/transform.bash"
+source "$PROJECT_ROOT/lib/mq/format.bash"
 
 VERSION="1.5.0"
 
@@ -20,6 +21,7 @@ DRY_RUN=0
 INPUT_FILE=""
 DEBUG="${DEBUG:-0}"
 COLOR="auto"  # auto, always, never
+FORMAT_FILTER="cat"
 
 # Default format: table for TTY, tsv for pipes
 if [[ ! -t 1 ]]; then
@@ -47,7 +49,7 @@ Options:
     -h, --help                 Show this help message and exit
     -v, --version              Show version and exit
     -o, --option NAME[=VALUE]  Set MySQL/MariaDB client option (see mysql --help)
-    -f, --format NAME          Output format: table, vertical, html, xml, or tsv
+    -f, --format NAME          Output format: table, vertical, html, xml, csv, or tsv
                                Default: table (TTY) or tsv (pipe)
     -q, --quiet                Suppress query echo to stderr
     -n, --dry-run              Show query without executing
@@ -142,6 +144,10 @@ set_format() {
         html)     set_mysql_option "html" ;;
         xml)      set_mysql_option "xml" ;;
         tsv)      set_mysql_option "silent" ;;
+        csv)
+            set_mysql_option "batch"
+            FORMAT_FILTER="tsv_to_csv"
+            ;;
         *)
             >&2 echo "Invalid format: $FORMAT"
             exit 1
@@ -212,7 +218,7 @@ execute_query() {
     fi
 
     debug "Executing: mysql ${MYSQL_OPTIONS[*]}"
-    mysql "${MYSQL_OPTIONS[@]}" <<< "$sql" | $PAGER_CMD
+    mysql "${MYSQL_OPTIONS[@]}" <<< "$sql" | $FORMAT_FILTER | $PAGER_CMD
 }
 
 main() {

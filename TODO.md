@@ -37,14 +37,6 @@ mq --save active-users select %count from users where status=:active
 mq --run active-users
 ```
 
-## CSV Output Format
-
-TSV exists but CSV (with proper RFC 4180 quoting/escaping) is missing. CSV is the lingua franca of data interchange and would make `mq` more useful for exports.
-
-```bash
-mq -f csv select %all from users > users.csv
-```
-
 ## BETWEEN Operator
 
 Given that `%gt`, `%lt`, etc. all exist, `%between` is a natural addition. It consumes two `:value` arguments.

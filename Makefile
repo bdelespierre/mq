@@ -14,6 +14,7 @@ install:
 	@mkdir -p $(PREFIX)/share/grc
 	@cp bin/mq $(PREFIX)/bin/mq
 	@cp lib/mq/transform.bash $(PREFIX)/lib/mq/transform.bash
+	@cp lib/mq/format.bash $(PREFIX)/lib/mq/format.bash
 	@cp share/bash-completion/completions/mq $(PREFIX)/share/bash-completion/completions/mq
 	@cp share/grc/conf.mq $(PREFIX)/share/grc/conf.mq
 	@chmod +x $(PREFIX)/bin/mq

@@ -187,6 +187,11 @@ EOF
     [ "$output" = "select 1" ]
 }
 
+@test "cli: -f csv is accepted as a valid format" {
+    run mq -f csv select 1
+    [[ "$output" != *"Invalid format"* ]]
+}
+
 @test "cli: missing config file is silently ignored" {
     MQRC="/nonexistent/config" run mq --help
     [ "$status" -eq 0 ]

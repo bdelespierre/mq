@@ -82,6 +82,9 @@
 #   xml       XML format with row/field elements
 #             Best for: machine processing or data interchange
 #
+#   csv       Comma-separated values with headers (RFC 4180)
+#             Best for: data interchange, spreadsheet import, exports
+#
 # Can be overridden per-query with: -f, --format
 # Can also use trailing + on query for vertical format.
 

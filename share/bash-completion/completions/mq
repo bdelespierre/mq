@@ -14,7 +14,7 @@ _mq() {
     local opts="-h --help -v --version -o --option -f --format -q --quiet -n --dry-run -i --input --color"
 
     # Output formats
-    local formats="table vertical html xml tsv"
+    local formats="table vertical html xml csv tsv"
 
     # Color values
     local colors="auto always never"
