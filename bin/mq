@@ -94,6 +94,10 @@ Configuration:
         FORMAT=table
         QUIET=1
 
+    Use a MySQL defaults file for credentials:
+        MYSQL_OPTIONS+=(--defaults-file=~/.my.cnf)
+        MYSQL_OPTIONS+=(--defaults-extra-file=.my.cnf)
+
     Override global config location with MQRC environment variable.
 
 EOF

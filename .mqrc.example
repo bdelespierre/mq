@@ -53,6 +53,14 @@
 # MYSQL_OPTIONS+=(--host=localhost)
 # MYSQL_OPTIONS+=(--user=myuser)
 
+# Using a MySQL defaults file:
+#   Instead of specifying credentials in .mqrc, you can point to an
+#   existing MySQL option file (e.g., ~/.my.cnf or a project-specific one).
+#   --defaults-file replaces all default option files:
+#     MYSQL_OPTIONS+=(--defaults-file="$HOME/.my.cnf")
+#   --defaults-extra-file loads additional options after the defaults:
+#     MYSQL_OPTIONS+=(--defaults-extra-file=".my.cnf")
+
 # ------------------------------------------------------------------------------
 # FORMAT - Default output format
 # ------------------------------------------------------------------------------
