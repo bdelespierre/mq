@@ -4,17 +4,24 @@ A Bash-based MySQL/MariaDB client wrapper with argument expansion and SQL shorth
 
 ![mq demo](demo/demo.gif)
 
-## Features
+## 🚀 Features
 
-- 🚀 Query database directly from Bash/Zsh `mq -f csv select %all from users > users.csv`
+- Query database directly from Bash/Zsh `mq -f csv select %all from users > users.csv`
 - Smart output format: `table` for terminal, `tsv` for pipes (override with `-f csv`, `-f json`, etc.)
 - Query bookmarks to save and replay frequently-used queries
 - Syntax highlighting with grcat (auto-detected)
 - Global and project-local configuration files
 
+## ⚡ Quick Install
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/bdelespierre/mq/master/install.sh | bash
+```
+
 ## Table of Contents
 
-- [Installation](#installation)
+- [Manual Installation](#manual-installation)
+- [Uninstallation](#uninstallation)
 - [Usage](#usage)
 - [Options Reference](#options-reference)
 - [Argument Shortcuts](#argument-shortcuts)
@@ -27,16 +34,7 @@ A Bash-based MySQL/MariaDB client wrapper with argument expansion and SQL shorth
 - [Running Tests](#-running-tests)
 - [License](#license)
 
-## Installation
-
-### Quick Install ⚡
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/bdelespierre/mq/master/install.sh | bash
-```
-
-<details>
-<summary>Manual Install</summary>
+## Manual Installation
 
 Clone the repository:
 ```bash
@@ -59,10 +57,7 @@ Alternatively, add the `bin` directory to your PATH:
 export PATH="$PATH:$(pwd)/bin"
 ```
 
-</details>
-
-<details>
-<summary>Uninstallation</summary>
+## Uninstallation
 
 ```bash
 make uninstall
@@ -72,8 +67,6 @@ Or if installed system-wide:
 ```bash
 sudo make uninstall-system
 ```
-
-</details>
 
 ## Usage
 
