@@ -74,6 +74,7 @@ Arguments:
         %gte           Alias of >=
         %lt            Alias of <
         %lte           Alias of <=
+        %between LO HI Alias of BETWEEN 'LO' AND 'HI'
         %in VALUES     Alias of IN (VALUES)
 
 Examples:

@@ -80,6 +80,13 @@ transform_in() {
     printf '%s' "$result"
 }
 
+# Transform %between :a :b to BETWEEN 'a' AND 'b'
+transform_between() {
+    local escaped_lo="${1//\'/\'\'}"
+    local escaped_hi="${2//\'/\'\'}"
+    printf "BETWEEN '%s' AND '%s'" "$escaped_lo" "$escaped_hi"
+}
+
 # Transform operator alias to SQL operator
 # Returns: the SQL operator, or empty string if not an operator
 transform_operator() {
@@ -146,6 +153,15 @@ process_argument() {
         %eq|%ne|%gt|%gte|%lt|%lte)
             _output=$(transform_operator "$arg")
             # Operators don't preserve trailing comma (invalid SQL)
+            ;;
+        %between)
+            shift
+            if [[ $# -lt 2 || "$1" != :* || "$2" != :* ]]; then
+                >&2 echo "error: %between requires two :value arguments"
+                return 1
+            fi
+            _output=$(transform_between "${1:1}" "${2:1}")
+            _shift_count=3
             ;;
         %in)
             # Collect all following :value arguments

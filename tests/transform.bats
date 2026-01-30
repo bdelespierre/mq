@@ -195,6 +195,20 @@ setup() {
     [ "$status" -eq 1 ]
 }
 
+# transform_between tests
+
+@test "transform_between: wraps two values" {
+    run transform_between "2024-01-01" "2024-12-31"
+    [ "$status" -eq 0 ]
+    [ "$output" = "BETWEEN '2024-01-01' AND '2024-12-31'" ]
+}
+
+@test "transform_between: escapes single quotes" {
+    run transform_between "O'Brien" "O'Malley"
+    [ "$status" -eq 0 ]
+    [ "$output" = "BETWEEN 'O''Brien' AND 'O''Malley'" ]
+}
+
 # transform_in tests
 
 @test "transform_in: single value" {
@@ -322,6 +336,27 @@ setup() {
     [ "$output" = "error: %sum requires an argument" ]
 }
 
+@test "process_argument: %between sets shift_count=3" {
+    local out="" shift_count=""
+    process_argument out shift_count %between :10 :50
+    [ "$out" = "BETWEEN '10' AND '50'" ]
+    [ "$shift_count" -eq 3 ]
+}
+
+@test "process_argument: %between without values returns error" {
+    local out="" shift_count=""
+    run bash -c 'source "$1" && process_argument out shift_count %between :10' -- "$PROJECT_ROOT/lib/mq/transform.bash"
+    [ "$status" -eq 1 ]
+    [ "$output" = "error: %between requires two :value arguments" ]
+}
+
+@test "process_argument: %between without any values returns error" {
+    local out="" shift_count=""
+    run bash -c 'source "$1" && process_argument out shift_count %between from' -- "$PROJECT_ROOT/lib/mq/transform.bash"
+    [ "$status" -eq 1 ]
+    [ "$output" = "error: %between requires two :value arguments" ]
+}
+
 # build_query tests
 
 @test "build_query: simple select" {
@@ -377,6 +412,12 @@ setup() {
     local sql="" vertical=""
     build_query sql vertical select %min price %max price from products
     [ "$sql" = "select min(price) max(price) from products" ]
+}
+
+@test "build_query: select with between" {
+    local sql="" vertical=""
+    build_query sql vertical select %a from orders where created_at %between :2024-01-01 :2024-12-31
+    [ "$sql" = "select * from orders where created_at BETWEEN '2024-01-01' AND '2024-12-31'" ]
 }
 
 @test "build_query: trailing + sets vertical=1" {
