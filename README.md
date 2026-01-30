@@ -1,22 +1,35 @@
-# 🐬 mq
+# mq
 
 A Bash-based MySQL/MariaDB client wrapper with argument expansion and SQL shorthand helpers.
 
-## ✨ Features
+![mq demo](demo/demo.gif)
 
-- 🚀 Query database directly from Bash/Zsh: `mq select %all from users > users.tsv`
-- ⚡ [SQL shorthand helpers](#-argument-shortcuts) for common patterns (strings, JSON paths, operators, aggregates)
-- 🎨 Smart [output format](#-options-reference): `table` for terminal, `tsv` for pipes (override with `-f csv`, `-f json`, etc.)
-- 📊 [Trailing `+`](#-argument-shortcuts) for vertical output (like MySQL/MariaDB's `\G`)
-- 🔖 [Query bookmarks](#-query-bookmarks) to save and replay frequently-used queries
-- 🔍 Automatic query echo to stderr for debugging (suppress with `-q`)
-- 🌈 [Syntax highlighting](#-syntax-highlighting-optional) with grcat (auto-detected)
-- 🔤 [Bash completion](#-bash-completion-optional) for options, SQL keywords, and mq tokens
-- ⚙️ Global and project-local [configuration files](#️-configuration-file-optional)
+## Features
 
-## 📦 Installation
+- 🚀 Query database directly from Bash/Zsh `mq -f csv select %all from users > users.csv`
+- Smart output format: `table` for terminal, `tsv` for pipes (override with `-f csv`, `-f json`, etc.)
+- Query bookmarks to save and replay frequently-used queries
+- Syntax highlighting with grcat (auto-detected)
+- Global and project-local configuration files
 
-### Quick Install
+## Table of Contents
+
+- [Installation](#installation)
+- [Usage](#usage)
+- [Options Reference](#options-reference)
+- [Argument Shortcuts](#argument-shortcuts)
+- [MySQL/MariaDB Options](#mysqlmariadb-options)
+- [Query Bookmarks](#query-bookmarks)
+- [Configuration File](#configuration-file)
+- [Syntax Highlighting](#syntax-highlighting)
+- [Shell Aliases](#shell-aliases)
+- [Bash Completion](#bash-completion)
+- [Running Tests](#-running-tests)
+- [License](#license)
+
+## Installation
+
+### Quick Install ⚡
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/bdelespierre/mq/master/install.sh | bash
@@ -62,7 +75,7 @@ sudo make uninstall-system
 
 </details>
 
-## 🔧 Usage
+## Usage
 
 ```bash
 # Basic query with string shorthand (:value becomes 'value')
@@ -84,7 +97,7 @@ mq -o database=mydb select %a from users where id=:1 +
 PAGER=less mq -o database=mydb select %a from large_table
 ```
 
-## 📋 Options Reference
+## Options Reference
 
 | Option | Description |
 |--------|-------------|
@@ -102,7 +115,49 @@ PAGER=less mq -o database=mydb select %a from large_table
 | `--show NAME` | Show a saved bookmark's SQL |
 | `--delete NAME` | Delete a saved bookmark |
 
-## 🔖 Query Bookmarks
+## Argument Shortcuts
+
+| Shorthand | Expansion |
+|-----------|-----------|
+| `:value` `%s VALUE` `%string VALUE` | `'VALUE'` |
+| `%j PATH` `%json PATH` | `JSON_UNQUOTE(JSON_EXTRACT(...))` |
+| `%a` `%all` | `*` |
+| `%c` `%count` | `COUNT(*)` |
+| `%r` `%rand` | `RAND()` |
+| `%now` | `NOW()` |
+| `%sum COL` | `SUM(COL)` |
+| `%avg COL` | `AVG(COL)` |
+| `%min COL` | `MIN(COL)` |
+| `%max COL` | `MAX(COL)` |
+| `%eq` | `=` |
+| `%ne` | `<>` |
+| `%gt` | `>` |
+| `%gte` | `>=` |
+| `%lt` | `<` |
+| `%lte` | `<=` |
+| `%between :lo :hi` | `BETWEEN 'lo' AND 'hi'` |
+| `%in :a :b :c` | `IN ('a', 'b', 'c')` |
+| `+` (trailing) | Vertical output format |
+
+## MySQL/MariaDB Options
+
+Pass MySQL/MariaDB client options with `-o`:
+
+```bash
+# Connect to specific database
+mq -o database=mydb ...
+
+# Connect to remote host
+mq -o host=db.example.com -o user=admin -o password=secret ...
+
+# Use specific port
+mq -o port=3307 ...
+
+# Use defaults file
+mq -o defaults-file=~/.my.cnf ...
+```
+
+## Query Bookmarks
 
 Save frequently-used queries as named bookmarks and replay them later:
 
@@ -128,49 +183,7 @@ mq --delete active-users
 
 Bookmarks are stored as plain `.sql` files in `~/.local/share/mq/queries/` (override with `MQ_QUERIES_DIR` environment variable or in your `.mqrc` config). Names may contain letters, digits, hyphens, and underscores.
 
-## ⚡ Argument Shortcuts
-
-| Shorthand | Expansion |
-|-----------|-----------|
-| `:value` `%s VALUE` `%string VALUE` | `'VALUE'` |
-| `%j PATH` `%json PATH` | `JSON_UNQUOTE(JSON_EXTRACT(...))` |
-| `%a` `%all` | `*` |
-| `%c` `%count` | `COUNT(*)` |
-| `%r` `%rand` | `RAND()` |
-| `%now` | `NOW()` |
-| `%sum COL` | `SUM(COL)` |
-| `%avg COL` | `AVG(COL)` |
-| `%min COL` | `MIN(COL)` |
-| `%max COL` | `MAX(COL)` |
-| `%eq` | `=` |
-| `%ne` | `<>` |
-| `%gt` | `>` |
-| `%gte` | `>=` |
-| `%lt` | `<` |
-| `%lte` | `<=` |
-| `%between :lo :hi` | `BETWEEN 'lo' AND 'hi'` |
-| `%in :a :b :c` | `IN ('a', 'b', 'c')` |
-| `+` (trailing) | Vertical output format |
-
-## 🐬 MySQL/MariaDB Options
-
-Pass MySQL/MariaDB client options with `-o`:
-
-```bash
-# Connect to specific database
-mq -o database=mydb ...
-
-# Connect to remote host
-mq -o host=db.example.com -o user=admin -o password=secret ...
-
-# Use specific port
-mq -o port=3307 ...
-
-# Use defaults file
-mq -o defaults-file=~/.my.cnf ...
-```
-
-## ⚙️ Configuration File (optional)
+## Configuration File
 
 Configuration files are sourced as bash, loaded in order (later overrides earlier):
 
@@ -208,7 +221,24 @@ MQRC=/path/to/config mq select %a from users
 
 > **Note:** Command-line options always override config file settings.
 
-## 🔗 Shell Aliases (optional)
+## Syntax Highlighting
+
+When [grc](https://github.com/garabik/grc) is installed, mq automatically colorizes output. The grc config is installed alongside mq at `$PREFIX/share/grc/conf.mq` (e.g., `~/.local/share/grc/conf.mq` for local installs).
+
+Colors applied:
+- **Green**: default text
+- **Red**: table borders
+- **Yellow**: numbers, schema names
+- **Cyan**: dates, times, IP addresses
+- **Magenta**: email addresses
+- **White**: vertical format delimiters and column names
+
+To disable colorization:
+```bash
+mq --color=never select %all from users
+```
+
+## Shell Aliases
 
 Create aliases in your `~/.bashrc` or `~/.zshrc` to avoid repeating connection options:
 
@@ -235,7 +265,7 @@ After adding aliases, reload your shell configuration:
 source ~/.bashrc  # or source ~/.zshrc
 ```
 
-## 🔤 Bash Completion (optional)
+## Bash Completion
 
 Bash completion is installed automatically with `make install`. It provides completion for options, formats, SQL keywords, and mq shorthand tokens.
 
@@ -259,23 +289,6 @@ Completions available:
 - **SQL keywords**: `select`, `from`, `where`, `order`, `join`, etc.
 - **mq tokens**: `%all`, `%count`, `%rand`, `%eq`, `%gt`, `%in`, `%json`, etc.
 
-## 🌈 Syntax Highlighting (optional)
-
-When [grc](https://github.com/garabik/grc) is installed, mq automatically colorizes output. The grc config is installed alongside mq at `$PREFIX/share/grc/conf.mq` (e.g., `~/.local/share/grc/conf.mq` for local installs).
-
-Colors applied:
-- **Green**: default text
-- **Red**: table borders
-- **Yellow**: numbers, schema names
-- **Cyan**: dates, times, IP addresses
-- **Magenta**: email addresses
-- **White**: vertical format delimiters and column names
-
-To disable colorization:
-```bash
-mq --color=never select %all from users
-```
-
 ## 🧪 Running Tests
 
 ```bash
@@ -284,6 +297,6 @@ make test
 
 Requires [bats](https://github.com/bats-core/bats-core) (Bash Automated Testing System).
 
-## 📄 License
+## License
 
 MIT

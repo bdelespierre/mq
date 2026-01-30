@@ -1,0 +1,2410 @@
+# The configurations that used for the recording, feel free to edit them
+config:
+
+  # Specify a command to be executed
+  # like `/bin/bash -l`, `ls`, or any other commands
+  # the default is bash for Linux
+  # or powershell.exe for Windows
+  command: bash -l
+
+  # Specify the current working directory path
+  # the default is the current working directory path
+  cwd: /home/arkad/Workspace/bdelespierre/mq
+
+  # Export additional ENV variables
+  env:
+    recording: true
+
+  # Explicitly set the number of columns
+  # or use `auto` to take the current
+  # number of columns of your shell
+  cols: 140
+
+  # Explicitly set the number of rows
+  # or use `auto` to take the current
+  # number of rows of your shell
+  rows: 25
+
+  # Amount of times to repeat GIF
+  # If value is -1, play once
+  # If value is 0, loop indefinitely
+  # If value is a positive number, loop n times
+  repeat: 0
+
+  # Quality
+  # 1 - 100
+  quality: 100
+
+  # Delay between frames in ms
+  # If the value is `auto` use the actual recording delays
+  frameDelay: auto
+
+  # Maximum delay between frames in ms
+  # Ignored if the `frameDelay` isn't set to `auto`
+  # Set to `auto` to prevent limiting the max idle time
+  maxIdleTime: 2000
+
+  # The surrounding frame box
+  # The `type` can be null, window, floating, or solid`
+  # To hide the title use the value null
+  # Don't forget to add a backgroundColor style with a null as type
+  frameBox:
+    type: solid
+    title: null
+    style: []
+
+  # Add a watermark image to the rendered gif
+  # You need to specify an absolute path for
+  # the image on your machine or a URL, and you can also
+  # add your own CSS styles
+  watermark:
+    imagePath: null
+    style:
+      position: absolute
+      right: 15px
+      bottom: 15px
+      width: 100px
+      opacity: 0.9
+
+  # Cursor style can be one of
+  # `block`, `underline`, or `bar`
+  cursorStyle: block
+
+  # Font family
+  # You can use any font that is installed on your machine
+  # in CSS-like syntax
+  fontFamily: "JetBrains Mono"
+
+  # The size of the font
+  fontSize: 15
+
+  # The height of lines
+  lineHeight: 1
+
+  # The spacing between letters
+  letterSpacing: 0
+
+  # Theme
+  theme:
+    background: "transparent"
+    foreground: "#afafaf"
+    cursor: "#c7c7c7"
+    black: "#232628"
+    red: "#fc4384"
+    green: "#b3e33b"
+    yellow: "#ffa727"
+    blue: "#75dff2"
+    magenta: "#ae89fe"
+    cyan: "#708387"
+    white: "#d5d5d0"
+    brightBlack: "#626566"
+    brightRed: "#ff7fac"
+    brightGreen: "#c8ed71"
+    brightYellow: "#ebdf86"
+    brightBlue: "#75dff2"
+    brightMagenta: "#ae89fe"
+    brightCyan: "#b1c6ca"
+    brightWhite: "#f9f9f4"
+
+# Records, feel free to edit them
+records:
+  - delay: 649
+    content: "\r\e[C\e[Csource demo.sh\r\n\e[?2004l\r\e[H\e[2J\e[3J\e[1;36m# Count active users\e[0m\r\n"
+  - delay: 803
+    content: "\e[1;32m$\e[0m m"
+  - delay: 43
+    content: q
+  - delay: 32
+    content: ' '
+  - delay: 23
+    content: '-'
+  - delay: 21
+    content: o
+  - delay: 52
+    content: ' '
+  - delay: 62
+    content: d
+  - delay: 42
+    content: a
+  - delay: 82
+    content: t
+  - delay: 52
+    content: a
+  - delay: 22
+    content: b
+  - delay: 43
+    content: a
+  - delay: 22
+    content: s
+  - delay: 72
+    content: e
+  - delay: 62
+    content: '='
+  - delay: 73
+    content: m
+  - delay: 92
+    content: q
+  - delay: 32
+    content: _
+  - delay: 72
+    content: d
+  - delay: 22
+    content: e
+  - delay: 51
+    content: m
+  - delay: 23
+    content: o
+  - delay: 52
+    content: ' '
+  - delay: 73
+    content: '-'
+  - delay: 52
+    content: q
+  - delay: 32
+    content: ' '
+  - delay: 72
+    content: s
+  - delay: 43
+    content: e
+  - delay: 62
+    content: l
+  - delay: 73
+    content: e
+  - delay: 22
+    content: c
+  - delay: 22
+    content: t
+  - delay: 63
+    content: ' '
+  - delay: 52
+    content: '%'
+  - delay: 72
+    content: c
+  - delay: 92
+    content: o
+  - delay: 63
+    content: u
+  - delay: 52
+    content: 'n'
+  - delay: 42
+    content: t
+  - delay: 73
+    content: ' '
+  - delay: 72
+    content: f
+  - delay: 63
+    content: r
+  - delay: 52
+    content: o
+  - delay: 22
+    content: m
+  - delay: 93
+    content: ' '
+  - delay: 52
+    content: u
+  - delay: 33
+    content: s
+  - delay: 62
+    content: e
+  - delay: 72
+    content: r
+  - delay: 53
+    content: s
+  - delay: 62
+    content: ' '
+  - delay: 92
+    content: w
+  - delay: 33
+    content: h
+  - delay: 42
+    content: e
+  - delay: 42
+    content: r
+  - delay: 22
+    content: e
+  - delay: 29
+    content: ' '
+  - delay: 36
+    content: s
+  - delay: 62
+    content: t
+  - delay: 43
+    content: a
+  - delay: 72
+    content: t
+  - delay: 92
+    content: u
+  - delay: 63
+    content: s
+  - delay: 62
+    content: '='
+  - delay: 63
+    content: ':'
+  - delay: 32
+    content: a
+  - delay: 42
+    content: c
+  - delay: 53
+    content: t
+  - delay: 82
+    content: i
+  - delay: 32
+    content: v
+  - delay: 82
+    content: e
+  - delay: 83
+    content: "\r\n"
+  - delay: 543
+    content: "\e[0m\e[31m+----------+\e[0m\r\n\e[0m\e[31m|\e[0m\e[32m COUNT(*) \e[0m\e[31m|\e[0m\r\n\e[0m\e[31m+----------+\e[0m\r\n\e[0m\e[31m|\e[0m\e[32m      \e[0m\e[33m 14 \e[0m\e[31m|\e[0m\r\n\e[0m\e[31m+----------+\e[0m\r\n\r\n"
+  - delay: 1502
+    content: "\e[1;36m# String values with :shorthand\e[0m\r\n"
+  - delay: 802
+    content: "\e[1;32m$\e[0m m"
+  - delay: 53
+    content: q
+  - delay: 42
+    content: ' '
+  - delay: 82
+    content: '-'
+  - delay: 23
+    content: o
+  - delay: 92
+    content: ' '
+  - delay: 52
+    content: d
+  - delay: 73
+    content: a
+  - delay: 52
+    content: t
+  - delay: 52
+    content: a
+  - delay: 33
+    content: b
+  - delay: 32
+    content: a
+  - delay: 62
+    content: s
+  - delay: 72
+    content: e
+  - delay: 43
+    content: '='
+  - delay: 32
+    content: m
+  - delay: 82
+    content: q
+  - delay: 83
+    content: _
+  - delay: 52
+    content: d
+  - delay: 72
+    content: e
+  - delay: 22
+    content: m
+  - delay: 43
+    content: o
+  - delay: 42
+    content: ' '
+  - delay: 92
+    content: '-'
+  - delay: 83
+    content: q
+  - delay: 32
+    content: ' '
+  - delay: 82
+    content: s
+  - delay: 22
+    content: e
+  - delay: 21
+    content: l
+  - delay: 31
+    content: e
+  - delay: 73
+    content: c
+  - delay: 83
+    content: t
+  - delay: 42
+    content: ' '
+  - delay: 42
+    content: 'n'
+  - delay: 42
+    content: a
+  - delay: 73
+    content: m
+  - delay: 52
+    content: e
+  - delay: 83
+    content: ','
+  - delay: 62
+    content: ' '
+  - delay: 72
+    content: e
+  - delay: 52
+    content: m
+  - delay: 23
+    content: a
+  - delay: 22
+    content: i
+  - delay: 41
+    content: l
+  - delay: 81
+    content: ' '
+  - delay: 31
+    content: f
+  - delay: 32
+    content: r
+  - delay: 32
+    content: o
+  - delay: 92
+    content: m
+  - delay: 73
+    content: ' '
+  - delay: 62
+    content: u
+  - delay: 92
+    content: s
+  - delay: 42
+    content: e
+  - delay: 43
+    content: r
+  - delay: 92
+    content: s
+  - delay: 33
+    content: ' '
+  - delay: 72
+    content: w
+  - delay: 53
+    content: h
+  - delay: 82
+    content: e
+  - delay: 52
+    content: r
+  - delay: 33
+    content: e
+  - delay: 32
+    content: ' '
+  - delay: 73
+    content: r
+  - delay: 72
+    content: o
+  - delay: 72
+    content: l
+  - delay: 23
+    content: e
+  - delay: 63
+    content: '='
+  - delay: 82
+    content: ':'
+  - delay: 22
+    content: a
+  - delay: 62
+    content: d
+  - delay: 32
+    content: m
+  - delay: 22
+    content: i
+  - delay: 22
+    content: 'n'
+  - delay: 73
+    content: "\r\n"
+  - delay: 535
+    content: "\e[0m\e[31m+--------------+--------------------+\e[0m\r\n\e[0m\e[31m|\e[0m\e[32m name         \e[0m\e[31m|\e[0m\e[32m email              \e[0m\e[31m|\e[0m\r\n\e[0m\e[31m+--------------+--------------------+\e[0m\r\n\e[0m\e[31m|\e[0m\e[32m Alice Martin \e[0m\e[31m|\e[0m\e[32m \e[0m\e[35malice@example.com\e[0m\e[32m  \e[0m\e[31m|\e[0m\r\n\e[0m\e[31m|\e[0m\e[32m Grace Kim    \e[0m\e[31m|\e[0m\e[32m \e[0m\e[35mgrace@example.com\e[0m\e[32m  \e[0m\e[31m|\e[0m\r\n\e[0m\e[31m|\e[0m\e[32m Olivia Chen  \e[0m\e[31m|\e[0m\e[32m \e[0m\e[35molivia@example.com\e[0m\e[32m \e[0m\e[31m|\e[0m\r\n\e[0m\e[31m+--------------+--------------------+\e[0m\r\n\r\n"
+  - delay: 1501
+    content: "\e[1;36m# Comparison operators: %gt %lte\e[0m\r\n"
+  - delay: 803
+    content: "\e[1;32m$\e[0m m"
+  - delay: 82
+    content: q
+  - delay: 33
+    content: ' '
+  - delay: 92
+    content: '-'
+  - delay: 72
+    content: o
+  - delay: 73
+    content: ' '
+  - delay: 92
+    content: d
+  - delay: 62
+    content: a
+  - delay: 53
+    content: t
+  - delay: 52
+    content: a
+  - delay: 42
+    content: b
+  - delay: 83
+    content: a
+  - delay: 52
+    content: s
+  - delay: 32
+    content: e
+  - delay: 61
+    content: '='
+  - delay: 22
+    content: m
+  - delay: 62
+    content: q
+  - delay: 63
+    content: _
+  - delay: 62
+    content: d
+  - delay: 62
+    content: e
+  - delay: 93
+    content: m
+  - delay: 72
+    content: o
+  - delay: 82
+    content: ' '
+  - delay: 22
+    content: '-'
+  - delay: 61
+    content: q
+  - delay: 22
+    content: ' '
+  - delay: 93
+    content: s
+  - delay: 52
+    content: e
+  - delay: 22
+    content: l
+  - delay: 93
+    content: e
+  - delay: 62
+    content: c
+  - delay: 72
+    content: t
+  - delay: 83
+    content: ' '
+  - delay: 62
+    content: 'n'
+  - delay: 33
+    content: a
+  - delay: 62
+    content: m
+  - delay: 82
+    content: e
+  - delay: 43
+    content: ','
+  - delay: 82
+    content: ' '
+  - delay: 93
+    content: a
+  - delay: 22
+    content: g
+  - delay: 63
+    content: e
+  - delay: 22
+    content: ' '
+  - delay: 32
+    content: f
+  - delay: 93
+    content: r
+  - delay: 32
+    content: o
+  - delay: 33
+    content: m
+  - delay: 72
+    content: ' '
+  - delay: 72
+    content: u
+  - delay: 83
+    content: s
+  - delay: 82
+    content: e
+  - delay: 43
+    content: r
+  - delay: 62
+    content: s
+  - delay: 42
+    content: ' '
+  - delay: 52
+    content: w
+  - delay: 53
+    content: h
+  - delay: 42
+    content: e
+  - delay: 52
+    content: r
+  - delay: 62
+    content: e
+  - delay: 83
+    content: ' '
+  - delay: 32
+    content: a
+  - delay: 53
+    content: g
+  - delay: 42
+    content: e
+  - delay: 42
+    content: ' '
+  - delay: 53
+    content: '%'
+  - delay: 82
+    content: g
+  - delay: 33
+    content: t
+  - delay: 92
+    content: ' '
+  - delay: 52
+    content: ':'
+  - delay: 92
+    content: '4'
+  - delay: 53
+    content: '0'
+  - delay: 62
+    content: "\r\n"
+  - delay: 544
+    content: "\e[0m\e[31m+---------------+------+\e[0m\r\n\e[0m\e[31m|\e[0m\e[32m name          \e[0m\e[31m|\e[0m\e[32m age  \e[0m\e[31m|\e[0m\r\n\e[0m\e[31m+---------------+------+\e[0m\r\n\e[0m\e[31m|\e[0m\e[32m Charlie Lee   \e[0m\e[31m|\e[0m\e[32m  \e[0m\e[33m 45 \e[0m\e[31m|\e[0m\r\n\e[0m\e[31m|\e[0m\e[32m Frank Brown   \e[0m\e[31m|\e[0m\e[32m  \e[0m\e[33m 55 \e[0m\e[31m|\e[0m\r\n\e[0m\e[31m|\e[0m\e[32m Henry Davis   \e[0m\e[31m|\e[0m\e[32m  \e[0m\e[33m 41 \e[0m\e[31m|\e[0m\r\n\e[0m\e[31m|\e[0m\e[32m Noah Smith    \e[0m\e[31m|\e[0m\e[32m  \e[0m\e[33m 48 \e[0m\e[31m|\e[0m\r\n\e[0m\e[31m|\e[0m\e[32m Quinn O'Brien \e[0m\e[31m|\e[0m\e[32m  \e[0m\e[33m 42 \e[0m\e[31m|\e[0m\r\n\e[0m\e[31m+---------------+------+\e[0m\r\n\r\n"
+  - delay: 1502
+    content: "\e[1;36m# IN clause\e[0m\r\n"
+  - delay: 803
+    content: "\e[1;32m$\e[0m m"
+  - delay: 42
+    content: q
+  - delay: 93
+    content: ' '
+  - delay: 52
+    content: '-'
+  - delay: 93
+    content: o
+  - delay: 82
+    content: ' '
+  - delay: 42
+    content: d
+  - delay: 52
+    content: a
+  - delay: 32
+    content: t
+  - delay: 92
+    content: a
+  - delay: 43
+    content: b
+  - delay: 22
+    content: a
+  - delay: 52
+    content: s
+  - delay: 92
+    content: e
+  - delay: 93
+    content: '='
+  - delay: 42
+    content: m
+  - delay: 53
+    content: q
+  - delay: 22
+    content: _
+  - delay: 72
+    content: d
+  - delay: 33
+    content: e
+  - delay: 72
+    content: m
+  - delay: 73
+    content: o
+  - delay: 82
+    content: ' '
+  - delay: 93
+    content: '-'
+  - delay: 32
+    content: q
+  - delay: 92
+    content: ' '
+  - delay: 82
+    content: s
+  - delay: 82
+    content: e
+  - delay: 93
+    content: l
+  - delay: 52
+    content: e
+  - delay: 93
+    content: c
+  - delay: 22
+    content: t
+  - delay: 93
+    content: ' '
+  - delay: 52
+    content: 'n'
+  - delay: 72
+    content: a
+  - delay: 53
+    content: m
+  - delay: 32
+    content: e
+  - delay: 32
+    content: ','
+  - delay: 92
+    content: ' '
+  - delay: 83
+    content: r
+  - delay: 63
+    content: o
+  - delay: 52
+    content: l
+  - delay: 52
+    content: e
+  - delay: 53
+    content: ' '
+  - delay: 32
+    content: f
+  - delay: 82
+    content: r
+  - delay: 73
+    content: o
+  - delay: 92
+    content: m
+  - delay: 22
+    content: ' '
+  - delay: 23
+    content: u
+  - delay: 82
+    content: s
+  - delay: 82
+    content: e
+  - delay: 32
+    content: r
+  - delay: 22
+    content: s
+  - delay: 73
+    content: ' '
+  - delay: 52
+    content: w
+  - delay: 93
+    content: h
+  - delay: 52
+    content: e
+  - delay: 93
+    content: r
+  - delay: 42
+    content: e
+  - delay: 92
+    content: ' '
+  - delay: 52
+    content: r
+  - delay: 62
+    content: o
+  - delay: 52
+    content: l
+  - delay: 92
+    content: e
+  - delay: 42
+    content: ' '
+  - delay: 83
+    content: '%'
+  - delay: 43
+    content: i
+  - delay: 92
+    content: 'n'
+  - delay: 52
+    content: ' '
+  - delay: 92
+    content: ':'
+  - delay: 62
+    content: a
+  - delay: 22
+    content: d
+  - delay: 22
+    content: m
+  - delay: 52
+    content: i
+  - delay: 63
+    content: 'n'
+  - delay: 22
+    content: ' '
+  - delay: 72
+    content: ':'
+  - delay: 83
+    content: e
+  - delay: 52
+    content: d
+  - delay: 72
+    content: i
+  - delay: 22
+    content: t
+  - delay: 32
+    content: o
+  - delay: 41
+    content: r
+  - delay: 44
+    content: "\r\n"
+  - delay: 540
+    content: "\e[0m\e[31m+--------------+--------+\e[0m\r\n\e[0m\e[31m|\e[0m\e[32m name         \e[0m\e[31m|\e[0m\e[32m role   \e[0m\e[31m|\e[0m\r\n\e[0m\e[31m+--------------+--------+\e[0m\r\n\e[0m\e[31m|\e[0m\e[32m Alice Martin \e[0m\e[31m|\e[0m\e[32m admin  \e[0m\e[31m|\e[0m\r\n\e[0m\e[31m|\e[0m\e[32m Bob Johnson  \e[0m\e[31m|\e[0m\e[32m editor \e[0m\e[31m|\e[0m\r\n\e[0m\e[31m|\e[0m\e[32m Diana Ross   \e[0m\e[31m|\e[0m\e[32m editor \e[0m\e[31m|\e[0m\r\n\e[0m\e[31m|\e[0m\e[32m Grace Kim    \e[0m\e[31m|\e[0m\e[32m admin  \e[0m\e[31m|\e[0m\r\n\e[0m\e[31m|\e[0m\e[32m Iris Patel   \e[0m\e[31m|\e[0m\e[32m editor \e[0m\e[31m|\e[0m\r\n\e[0m\e[31m|\e[0m\e[32m Leo Tanaka   \e[0m\e[31m|\e[0m\e[32m editor \e[0m\e[31m|\e[0m\r\n\e[0m\e[31m|\e[0m\e[32m Olivia Chen  \e[0m\e[31m|\e[0m\e[32m admin  \e[0m\e[31m|\e[0m\r\n\e[0m\e[31m|\e[0m\e[32m Ruby Sato    \e[0m\e[31m|\e[0m\e[32m editor \e[0m\e[31m|\e[0m\r\n\e[0m\e[31m+--------------+--------+\e[0m\r\n\r\n"
+  - delay: 1502
+    content: "\e[1;36m# BETWEEN operator\e[0m\r\n"
+  - delay: 802
+    content: "\e[1;32m$\e[0m m"
+  - delay: 83
+    content: q
+  - delay: 92
+    content: ' '
+  - delay: 23
+    content: '-'
+  - delay: 52
+    content: o
+  - delay: 72
+    content: ' '
+  - delay: 73
+    content: d
+  - delay: 32
+    content: a
+  - delay: 63
+    content: t
+  - delay: 72
+    content: a
+  - delay: 52
+    content: b
+  - delay: 23
+    content: a
+  - delay: 52
+    content: s
+  - delay: 32
+    content: e
+  - delay: 52
+    content: '='
+  - delay: 32
+    content: m
+  - delay: 82
+    content: q
+  - delay: 52
+    content: _
+  - delay: 22
+    content: d
+  - delay: 52
+    content: e
+  - delay: 42
+    content: m
+  - delay: 52
+    content: o
+  - delay: 83
+    content: ' '
+  - delay: 42
+    content: '-'
+  - delay: 22
+    content: q
+  - delay: 42
+    content: ' '
+  - delay: 43
+    content: s
+  - delay: 22
+    content: e
+  - delay: 92
+    content: l
+  - delay: 43
+    content: e
+  - delay: 72
+    content: c
+  - delay: 72
+    content: t
+  - delay: 93
+    content: ' '
+  - delay: 22
+    content: 'n'
+  - delay: 82
+    content: a
+  - delay: 73
+    content: m
+  - delay: 22
+    content: e
+  - delay: 22
+    content: ','
+  - delay: 53
+    content: ' '
+  - delay: 21
+    content: b
+  - delay: 81
+    content: i
+  - delay: 33
+    content: r
+  - delay: 92
+    content: t
+  - delay: 32
+    content: h
+  - delay: 42
+    content: d
+  - delay: 52
+    content: a
+  - delay: 92
+    content: t
+  - delay: 63
+    content: e
+  - delay: 82
+    content: ' '
+  - delay: 63
+    content: f
+  - delay: 42
+    content: r
+  - delay: 52
+    content: o
+  - delay: 63
+    content: m
+  - delay: 82
+    content: ' '
+  - delay: 52
+    content: u
+  - delay: 73
+    content: s
+  - delay: 72
+    content: e
+  - delay: 73
+    content: r
+  - delay: 52
+    content: s
+  - delay: 53
+    content: ' '
+  - delay: 52
+    content: w
+  - delay: 22
+    content: h
+  - delay: 63
+    content: e
+  - delay: 52
+    content: r
+  - delay: 43
+    content: e
+  - delay: 22
+    content: ' '
+  - delay: 33
+    content: b
+  - delay: 72
+    content: i
+  - delay: 52
+    content: r
+  - delay: 53
+    content: t
+  - delay: 82
+    content: h
+  - delay: 83
+    content: d
+  - delay: 22
+    content: a
+  - delay: 52
+    content: t
+  - delay: 73
+    content: e
+  - delay: 22
+    content: ' '
+  - delay: 93
+    content: '%'
+  - delay: 62
+    content: b
+  - delay: 73
+    content: e
+  - delay: 62
+    content: t
+  - delay: 92
+    content: w
+  - delay: 93
+    content: e
+  - delay: 92
+    content: e
+  - delay: 33
+    content: 'n'
+  - delay: 62
+    content: ' '
+  - delay: 32
+    content: ':'
+  - delay: 22
+    content: '1'
+  - delay: 63
+    content: '9'
+  - delay: 82
+    content: '9'
+  - delay: 92
+    content: '0'
+  - delay: 83
+    content: '-'
+  - delay: 22
+    content: '0'
+  - delay: 73
+    content: '1'
+  - delay: 42
+    content: '-'
+  - delay: 63
+    content: '0'
+  - delay: 62
+    content: '1'
+  - delay: 42
+    content: ' '
+  - delay: 83
+    content: ':'
+  - delay: 22
+    content: '2'
+  - delay: 92
+    content: '0'
+  - delay: 23
+    content: '0'
+  - delay: 42
+    content: '0'
+  - delay: 52
+    content: '-'
+  - delay: 82
+    content: '0'
+  - delay: 82
+    content: '1'
+  - delay: 42
+    content: '-'
+  - delay: 62
+    content: '0'
+  - delay: 42
+    content: '1'
+  - delay: 53
+    content: "\r\n"
+  - delay: 539
+    content: "\e[0m\e[31m+--------------+------------+\e[0m\r\n\e[0m\e[31m|\e[0m\e[32m name         \e[0m\e[31m|\e[0m\e[32m birthdate  \e[0m\e[31m|\e[0m\r\n\e[0m\e[31m+--------------+------------+\e[0m\r\n\e[0m\e[31m|\e[0m\e[32m Alice Martin \e[0m\e[31m|\e[0m\e[32m \e[0m\e[36m1993-06-15\e[0m\e[32m \e[0m\e[31m|\e[0m\r\n\e[0m\e[31m|\e[0m\e[32m Bob Johnson  \e[0m\e[31m|\e[0m\e[32m \e[0m\e[36m1997-03-22\e[0m\e[32m \e[0m\e[31m|\e[0m\r\n\e[0m\e[31m|\e[0m\e[32m Grace Kim    \e[0m\e[31m|\e[0m\e[32m \e[0m\e[36m1996-04-12\e[0m\e[32m \e[0m\e[31m|\e[0m\r\n\e[0m\e[31m|\e[0m\e[32m Iris Patel   \e[0m\e[31m|\e[0m\e[32m \e[0m\e[36m1992-09-17\e[0m\e[32m \e[0m\e[31m|\e[0m\r\n\e[0m\e[31m|\e[0m\e[32m Jack Wilson  \e[0m\e[31m|\e[0m\e[32m \e[0m\e[36m1999-05-04\e[0m\e[32m \e[0m\e[31m|\e[0m\r\n\e[0m\e[31m|\e[0m\e[32m Leo Tanaka   \e[0m\e[31m|\e[0m\e[32m \e[0m\e[36m1994-10-11\e[0m\e[32m \e[0m\e[31m|\e[0m\r\n\e[0m\e[31m|\e[0m\e[32m Olivia Chen  \e[0m\e[31m|\e[0m\e[32m \e[0m\e[36m1990-08-07\e[0m\e[32m \e[0m\e[31m|\e[0m\r\n\e[0m\e[31m|\e[0m\e[32m Paul Müller  \e[0m\e[31m|\e[0m\e[32m \e[0m\e[36m1998-12-01\e[0m\e[32m \e[0m\e[31m|\e[0m\r\n\e[0m\e[31m|\e[0m\e[32m Ruby Sato    \e[0m\e[31m|\e[0m\e[32m \e[0m\e[36m1995-11-28\e[0m\e[32m \e[0m\e[31m|\e[0m\r\n\e[0m\e[31m+--------------+------------+\e[0m\r\n\r\n"
+  - delay: 1501
+    content: "\e[1;36m# Aggregate functions\e[0m\r\n"
+  - delay: 803
+    content: "\e[1;32m$\e[0m m"
+  - delay: 73
+    content: q
+  - delay: 62
+    content: ' '
+  - delay: 32
+    content: '-'
+  - delay: 23
+    content: o
+  - delay: 32
+    content: ' '
+  - delay: 92
+    content: d
+  - delay: 72
+    content: a
+  - delay: 83
+    content: t
+  - delay: 72
+    content: a
+  - delay: 63
+    content: b
+  - delay: 42
+    content: a
+  - delay: 73
+    content: s
+  - delay: 32
+    content: e
+  - delay: 42
+    content: '='
+  - delay: 33
+    content: m
+  - delay: 72
+    content: q
+  - delay: 82
+    content: _
+  - delay: 42
+    content: d
+  - delay: 73
+    content: e
+  - delay: 62
+    content: m
+  - delay: 92
+    content: o
+  - delay: 23
+    content: ' '
+  - delay: 92
+    content: '-'
+  - delay: 73
+    content: q
+  - delay: 52
+    content: ' '
+  - delay: 33
+    content: s
+  - delay: 92
+    content: e
+  - delay: 72
+    content: l
+  - delay: 23
+    content: e
+  - delay: 22
+    content: c
+  - delay: 42
+    content: t
+  - delay: 63
+    content: ' '
+  - delay: 92
+    content: '%'
+  - delay: 51
+    content: m
+  - delay: 22
+    content: i
+  - delay: 73
+    content: 'n'
+  - delay: 72
+    content: ' '
+  - delay: 73
+    content: a
+  - delay: 22
+    content: g
+  - delay: 52
+    content: e
+  - delay: 53
+    content: ','
+  - delay: 92
+    content: ' '
+  - delay: 62
+    content: '%'
+  - delay: 93
+    content: m
+  - delay: 82
+    content: a
+  - delay: 22
+    content: x
+  - delay: 73
+    content: ' '
+  - delay: 42
+    content: a
+  - delay: 62
+    content: g
+  - delay: 41
+    content: e
+  - delay: 82
+    content: ','
+  - delay: 22
+    content: ' '
+  - delay: 42
+    content: '%'
+  - delay: 73
+    content: a
+  - delay: 52
+    content: v
+  - delay: 82
+    content: g
+  - delay: 52
+    content: ' '
+  - delay: 82
+    content: s
+  - delay: 51
+    content: c
+  - delay: 61
+    content: o
+  - delay: 93
+    content: r
+  - delay: 52
+    content: e
+  - delay: 63
+    content: ' '
+  - delay: 92
+    content: f
+  - delay: 33
+    content: r
+  - delay: 72
+    content: o
+  - delay: 32
+    content: m
+  - delay: 23
+    content: ' '
+  - delay: 42
+    content: u
+  - delay: 42
+    content: s
+  - delay: 32
+    content: e
+  - delay: 73
+    content: r
+  - delay: 62
+    content: s
+  - delay: 82
+    content: "\r\n"
+  - delay: 546
+    content: "\e[0m\e[31m+----------+----------+------------+\e[0m\r\n\e[0m\e[31m|\e[0m\e[32m MIN\e[0m\e[37m(age)\e[0m\e[32m \e[0m\e[31m|\e[0m\e[32m MAX\e[0m\e[37m(age)\e[0m\e[32m \e[0m\e[31m|\e[0m\e[32m AVG\e[0m\e[37m(score)\e[0m\e[32m \e[0m\e[31m|\e[0m\r\n\e[0m\e[31m+----------+----------+------------+\e[0m\r\n\e[0m\e[31m|\e[0m\e[32m      \e[0m\e[33m 22 \e[0m\e[31m|\e[0m\e[32m      \e[0m\e[33m 55 \e[0m\e[31m|\e[0m\e[32m \e[0m\e[33m 77.650000 \e[0m\e[31m|\e[0m\r\n\e[0m\e[31m+----------+----------+------------+\e[0m\r\n\r\n"
+  - delay: 1502
+    content: "\e[1;36m# JSON extraction\e[0m\r\n"
+  - delay: 802
+    content: "\e[1;32m$\e[0m m"
+  - delay: 53
+    content: q
+  - delay: 32
+    content: ' '
+  - delay: 22
+    content: '-'
+  - delay: 22
+    content: o
+  - delay: 72
+    content: ' '
+  - delay: 42
+    content: d
+  - delay: 22
+    content: a
+  - delay: 83
+    content: t
+  - delay: 32
+    content: a
+  - delay: 52
+    content: b
+  - delay: 82
+    content: a
+  - delay: 62
+    content: s
+  - delay: 92
+    content: e
+  - delay: 63
+    content: '='
+  - delay: 62
+    content: m
+  - delay: 42
+    content: q
+  - delay: 52
+    content: _
+  - delay: 52
+    content: d
+  - delay: 52
+    content: e
+  - delay: 82
+    content: m
+  - delay: 63
+    content: o
+  - delay: 62
+    content: ' '
+  - delay: 32
+    content: '-'
+  - delay: 73
+    content: q
+  - delay: 62
+    content: ' '
+  - delay: 92
+    content: s
+  - delay: 63
+    content: e
+  - delay: 72
+    content: l
+  - delay: 63
+    content: e
+  - delay: 42
+    content: c
+  - delay: 82
+    content: t
+  - delay: 83
+    content: ' '
+  - delay: 92
+    content: 'n'
+  - delay: 93
+    content: a
+  - delay: 82
+    content: m
+  - delay: 33
+    content: e
+  - delay: 72
+    content: ','
+  - delay: 32
+    content: ' '
+  - delay: 72
+    content: '%'
+  - delay: 22
+    content: j
+  - delay: 82
+    content: s
+  - delay: 92
+    content: o
+  - delay: 53
+    content: 'n'
+  - delay: 52
+    content: ' '
+  - delay: 42
+    content: s
+  - delay: 42
+    content: e
+  - delay: 33
+    content: t
+  - delay: 42
+    content: t
+  - delay: 52
+    content: i
+  - delay: 43
+    content: 'n'
+  - delay: 22
+    content: g
+  - delay: 72
+    content: s
+  - delay: 43
+    content: .
+  - delay: 82
+    content: t
+  - delay: 42
+    content: h
+  - delay: 53
+    content: e
+  - delay: 32
+    content: m
+  - delay: 62
+    content: e
+  - delay: 82
+    content: ' '
+  - delay: 53
+    content: a
+  - delay: 72
+    content: s
+  - delay: 92
+    content: ' '
+  - delay: 73
+    content: t
+  - delay: 32
+    content: h
+  - delay: 83
+    content: e
+  - delay: 82
+    content: m
+  - delay: 32
+    content: e
+  - delay: 32
+    content: ','
+  - delay: 92
+    content: ' '
+  - delay: 33
+    content: '%'
+  - delay: 72
+    content: j
+  - delay: 42
+    content: s
+  - delay: 33
+    content: o
+  - delay: 22
+    content: 'n'
+  - delay: 32
+    content: ' '
+  - delay: 32
+    content: s
+  - delay: 92
+    content: e
+  - delay: 63
+    content: t
+  - delay: 32
+    content: t
+  - delay: 22
+    content: i
+  - delay: 42
+    content: 'n'
+  - delay: 73
+    content: g
+  - delay: 62
+    content: s
+  - delay: 73
+    content: .
+  - delay: 92
+    content: l
+  - delay: 22
+    content: a
+  - delay: 72
+    content: 'n'
+  - delay: 72
+    content: g
+  - delay: 52
+    content: ' '
+  - delay: 92
+    content: a
+  - delay: 33
+    content: s
+  - delay: 22
+    content: ' '
+  - delay: 42
+    content: l
+  - delay: 42
+    content: a
+  - delay: 43
+    content: 'n'
+  - delay: 62
+    content: g
+  - delay: 83
+    content: ' '
+  - delay: 22
+    content: f
+  - delay: 52
+    content: r
+  - delay: 21
+    content: o
+  - delay: 83
+    content: m
+  - delay: 33
+    content: ' '
+  - delay: 82
+    content: u
+  - delay: 22
+    content: s
+  - delay: 92
+    content: e
+  - delay: 33
+    content: r
+  - delay: 92
+    content: s
+  - delay: 43
+    content: ' '
+  - delay: 22
+    content: l
+  - delay: 72
+    content: i
+  - delay: 93
+    content: m
+  - delay: 62
+    content: i
+  - delay: 83
+    content: t
+  - delay: 72
+    content: ' '
+  - delay: 32
+    content: '5'
+  - delay: 53
+    content: "\r\n"
+  - delay: 542
+    content: "\e[0m\e[31m+--------------+-------+------+\e[0m\r\n\e[0m\e[31m|\e[0m\e[32m name         \e[0m\e[31m|\e[0m\e[32m theme \e[0m\e[31m|\e[0m\e[32m lang \e[0m\e[31m|\e[0m\r\n\e[0m\e[31m+--------------+-------+------+\e[0m\r\n\e[0m\e[31m|\e[0m\e[32m Alice Martin \e[0m\e[31m|\e[0m\e[32m dark  \e[0m\e[31m|\e[0m\e[32m en   \e[0m\e[31m|\e[0m\r\n\e[0m\e[31m|\e[0m\e[32m Bob Johnson  \e[0m\e[31m|\e[0m\e[32m light \e[0m\e[31m|\e[0m\e[32m en   \e[0m\e[31m|\e[0m\r\n\e[0m\e[31m|\e[0m\e[32m Charlie Lee  \e[0m\e[31m|\e[0m\e[32m dark  \e[0m\e[31m|\e[0m\e[32m fr   \e[0m\e[31m|\e[0m\r\n\e[0m\e[31m|\e[0m\e[32m Diana Ross   \e[0m\e[31m|\e[0m\e[32m light \e[0m\e[31m|\e[0m\e[32m es   \e[0m\e[31m|\e[0m\r\n\e[0m\e[31m|\e[0m\e[32m Eve Zhang    \e[0m\e[31m|\e[0m\e[32m dark  \e[0m\e[31m|\e[0m\e[32m zh   \e[0m\e[31m|\e[0m\r\n\e[0m\e[31m+--------------+-------+------+\e[0m\r\n\r\n"
+  - delay: 2002
+    content: "\e[1;36m# Vertical output with trailing +\e[0m\r\n"
+  - delay: 803
+    content: "\e[1;32m$\e[0m m"
+  - delay: 72
+    content: q
+  - delay: 83
+    content: ' '
+  - delay: 82
+    content: '-'
+  - delay: 73
+    content: o
+  - delay: 42
+    content: ' '
+  - delay: 83
+    content: d
+  - delay: 82
+    content: a
+  - delay: 32
+    content: t
+  - delay: 52
+    content: a
+  - delay: 93
+    content: b
+  - delay: 51
+    content: a
+  - delay: 83
+    content: s
+  - delay: 92
+    content: e
+  - delay: 82
+    content: '='
+  - delay: 73
+    content: m
+  - delay: 61
+    content: q
+  - delay: 92
+    content: _
+  - delay: 42
+    content: d
+  - delay: 62
+    content: e
+  - delay: 83
+    content: m
+  - delay: 32
+    content: o
+  - delay: 52
+    content: ' '
+  - delay: 62
+    content: '-'
+  - delay: 53
+    content: q
+  - delay: 82
+    content: ' '
+  - delay: 62
+    content: s
+  - delay: 33
+    content: e
+  - delay: 22
+    content: l
+  - delay: 62
+    content: e
+  - delay: 73
+    content: c
+  - delay: 52
+    content: t
+  - delay: 62
+    content: ' '
+  - delay: 93
+    content: '%'
+  - delay: 52
+    content: a
+  - delay: 33
+    content: ' '
+  - delay: 42
+    content: f
+  - delay: 52
+    content: r
+  - delay: 63
+    content: o
+  - delay: 62
+    content: m
+  - delay: 22
+    content: ' '
+  - delay: 52
+    content: u
+  - delay: 53
+    content: s
+  - delay: 22
+    content: e
+  - delay: 72
+    content: r
+  - delay: 63
+    content: s
+  - delay: 82
+    content: ' '
+  - delay: 83
+    content: w
+  - delay: 22
+    content: h
+  - delay: 52
+    content: e
+  - delay: 43
+    content: r
+  - delay: 62
+    content: e
+  - delay: 73
+    content: ' '
+  - delay: 22
+    content: e
+  - delay: 62
+    content: m
+  - delay: 52
+    content: a
+  - delay: 83
+    content: i
+  - delay: 72
+    content: l
+  - delay: 93
+    content: '='
+  - delay: 72
+    content: ':'
+  - delay: 93
+    content: a
+  - delay: 32
+    content: l
+  - delay: 93
+    content: i
+  - delay: 92
+    content: c
+  - delay: 53
+    content: e
+  - delay: 42
+    content: '@'
+  - delay: 52
+    content: e
+  - delay: 72
+    content: x
+  - delay: 63
+    content: a
+  - delay: 92
+    content: m
+  - delay: 53
+    content: p
+  - delay: 82
+    content: l
+  - delay: 32
+    content: e
+  - delay: 93
+    content: .
+  - delay: 73
+    content: c
+  - delay: 32
+    content: o
+  - delay: 42
+    content: m
+  - delay: 73
+    content: ' '
+  - delay: 82
+    content: +
+  - delay: 33
+    content: "\r\n"
+  - delay: 546
+    content: "\e[0m\e[37m*************************** 1. row ***************************\e[0m\r\n\e[0m\e[37m        id:\e[0m\e[33m 1\e[0m\r\n\e[0m\e[37m      name:\e[0m\e[32m Alice Martin\e[0m\r\n\e[0m\e[37m     email:\e[0m\e[32m \e[0m\e[35malice@example.com\e[0m\r\n\e[0m\e[37m    status:\e[0m\e[32m active\e[0m\r\n\e[0m\e[37m      role:\e[0m\e[32m admin\e[0m\r\n\e[0m\e[37m       age:\e[0m\e[33m 32\e[0m\r\n\e[0m\e[37m     score:\e[0m\e[33m 95.50\e[0m\r\n\e[0m\e[37m  settings:\e[0m\e[32m {\"lang\": \"en\", \"theme\": \"dark\", \"notifications\": true}\e[0m\r\n\e[0m\e[37m birthdate:\e[0m\e[32m \e[0m\e[36m1993-06-15\e[0m\r\n\e[0m\e[37mcreated_at:\e[0m\e[32m \e[0m\e[36m2024-01-10\e[0m\e[32m \e[0m\e[36m08:30:00\e[0m\r\n\r\n"
+  - delay: 2002
+    content: "\e[1;36m# CSV output\e[0m\r\n"
+  - delay: 803
+    content: "\e[1;32m$\e[0m m"
+  - delay: 82
+    content: q
+  - delay: 23
+    content: ' '
+  - delay: 42
+    content: '-'
+  - delay: 92
+    content: o
+  - delay: 93
+    content: ' '
+  - delay: 22
+    content: d
+  - delay: 53
+    content: a
+  - delay: 52
+    content: t
+  - delay: 32
+    content: a
+  - delay: 52
+    content: b
+  - delay: 42
+    content: a
+  - delay: 93
+    content: s
+  - delay: 42
+    content: e
+  - delay: 83
+    content: '='
+  - delay: 72
+    content: m
+  - delay: 62
+    content: q
+  - delay: 22
+    content: _
+  - delay: 92
+    content: d
+  - delay: 43
+    content: e
+  - delay: 52
+    content: m
+  - delay: 42
+    content: o
+  - delay: 32
+    content: ' '
+  - delay: 71
+    content: '-'
+  - delay: 92
+    content: q
+  - delay: 32
+    content: ' '
+  - delay: 22
+    content: '-'
+  - delay: 52
+    content: f
+  - delay: 33
+    content: ' '
+  - delay: 82
+    content: c
+  - delay: 92
+    content: s
+  - delay: 32
+    content: v
+  - delay: 53
+    content: ' '
+  - delay: 52
+    content: s
+  - delay: 22
+    content: e
+  - delay: 53
+    content: l
+  - delay: 82
+    content: e
+  - delay: 33
+    content: c
+  - delay: 62
+    content: t
+  - delay: 42
+    content: ' '
+  - delay: 82
+    content: 'n'
+  - delay: 23
+    content: a
+  - delay: 62
+    content: m
+  - delay: 92
+    content: e
+  - delay: 23
+    content: ','
+  - delay: 52
+    content: ' '
+  - delay: 82
+    content: e
+  - delay: 82
+    content: m
+  - delay: 33
+    content: a
+  - delay: 72
+    content: i
+  - delay: 92
+    content: l
+  - delay: 72
+    content: ','
+  - delay: 93
+    content: ' '
+  - delay: 72
+    content: s
+  - delay: 83
+    content: t
+  - delay: 82
+    content: a
+  - delay: 42
+    content: t
+  - delay: 52
+    content: u
+  - delay: 42
+    content: s
+  - delay: 42
+    content: ' '
+  - delay: 62
+    content: f
+  - delay: 53
+    content: r
+  - delay: 72
+    content: o
+  - delay: 73
+    content: m
+  - delay: 52
+    content: ' '
+  - delay: 32
+    content: u
+  - delay: 72
+    content: s
+  - delay: 83
+    content: e
+  - delay: 22
+    content: r
+  - delay: 32
+    content: s
+  - delay: 53
+    content: ' '
+  - delay: 72
+    content: l
+  - delay: 53
+    content: i
+  - delay: 92
+    content: m
+  - delay: 83
+    content: i
+  - delay: 93
+    content: t
+  - delay: 92
+    content: ' '
+  - delay: 43
+    content: '5'
+  - delay: 92
+    content: "\r\n"
+  - delay: 534
+    content: "\e[0m\e[32mname,email,status\e[0m\r\n\e[0m\e[32mAlice Martin,\e[0m\e[35malice@example.com\e[0m\e[32m,active\e[0m\r\n\e[0m\e[32mBob Johnson,\e[0m\e[35mbob@example.com\e[0m\e[32m,active\e[0m\r\n\e[0m\e[32mCharlie Lee,\e[0m\e[35mcharlie@example.com\e[0m\e[32m,inactive\e[0m\r\n\e[0m\e[32mDiana Ross,\e[0m\e[35mdiana@example.com\e[0m\e[32m,active\e[0m\r\n\e[0m\e[32mEve Zhang,\e[0m\e[35meve@example.com\e[0m\e[32m,pending\e[0m\r\n\r\n"
+  - delay: 2002
+    content: "\e[1;36m# JSON output\e[0m\r\n"
+  - delay: 803
+    content: "\e[1;32m$\e[0m m"
+  - delay: 82
+    content: q
+  - delay: 33
+    content: ' '
+  - delay: 52
+    content: '-'
+  - delay: 72
+    content: o
+  - delay: 23
+    content: ' '
+  - delay: 52
+    content: d
+  - delay: 32
+    content: a
+  - delay: 32
+    content: t
+  - delay: 32
+    content: a
+  - delay: 31
+    content: b
+  - delay: 32
+    content: a
+  - delay: 32
+    content: s
+  - delay: 33
+    content: e
+  - delay: 22
+    content: '='
+  - delay: 23
+    content: m
+  - delay: 42
+    content: q
+  - delay: 42
+    content: _
+  - delay: 62
+    content: d
+  - delay: 22
+    content: e
+  - delay: 93
+    content: m
+  - delay: 42
+    content: o
+  - delay: 32
+    content: ' '
+  - delay: 82
+    content: '-'
+  - delay: 62
+    content: q
+  - delay: 92
+    content: ' '
+  - delay: 92
+    content: '-'
+  - delay: 73
+    content: f
+  - delay: 53
+    content: ' '
+  - delay: 22
+    content: j
+  - delay: 42
+    content: s
+  - delay: 72
+    content: o
+  - delay: 22
+    content: 'n'
+  - delay: 72
+    content: ' '
+  - delay: 72
+    content: s
+  - delay: 72
+    content: e
+  - delay: 72
+    content: l
+  - delay: 31
+    content: e
+  - delay: 21
+    content: c
+  - delay: 62
+    content: t
+  - delay: 23
+    content: ' '
+  - delay: 82
+    content: 'n'
+  - delay: 82
+    content: a
+  - delay: 32
+    content: m
+  - delay: 22
+    content: e
+  - delay: 33
+    content: ','
+  - delay: 52
+    content: ' '
+  - delay: 82
+    content: s
+  - delay: 73
+    content: c
+  - delay: 22
+    content: o
+  - delay: 92
+    content: r
+  - delay: 43
+    content: e
+  - delay: 32
+    content: ' '
+  - delay: 42
+    content: f
+  - delay: 53
+    content: r
+  - delay: 92
+    content: o
+  - delay: 33
+    content: m
+  - delay: 32
+    content: ' '
+  - delay: 42
+    content: u
+  - delay: 22
+    content: s
+  - delay: 42
+    content: e
+  - delay: 83
+    content: r
+  - delay: 82
+    content: s
+  - delay: 93
+    content: ' '
+  - delay: 52
+    content: l
+  - delay: 92
+    content: i
+  - delay: 42
+    content: m
+  - delay: 33
+    content: i
+  - delay: 52
+    content: t
+  - delay: 72
+    content: ' '
+  - delay: 62
+    content: '3'
+  - delay: 72
+    content: "\r\n"
+  - delay: 538
+    content: "\e[0m\e[32m[{\"name\":\"Alice Martin\",\"score\":\"95.50\"},{\"name\":\"Bob Johnson\",\"score\":\"82.30\"},{\"name\":\"Charlie Lee\",\"score\":\"67.80\"}]\e[0m\r\n\r\n"
+  - delay: 2001
+    content: "\e[1;36m# Dry-run mode (show SQL without executing)\e[0m\r\n"
+  - delay: 803
+    content: "\e[1;32m$\e[0m m"
+  - delay: 52
+    content: q
+  - delay: 73
+    content: ' '
+  - delay: 42
+    content: '-'
+  - delay: 82
+    content: 'n'
+  - delay: 73
+    content: ' '
+  - delay: 32
+    content: s
+  - delay: 83
+    content: e
+  - delay: 22
+    content: l
+  - delay: 22
+    content: e
+  - delay: 32
+    content: c
+  - delay: 92
+    content: t
+  - delay: 62
+    content: ' '
+  - delay: 22
+    content: '%'
+  - delay: 63
+    content: c
+  - delay: 62
+    content: o
+  - delay: 62
+    content: u
+  - delay: 41
+    content: 'n'
+  - delay: 72
+    content: t
+  - delay: 33
+    content: ' '
+  - delay: 42
+    content: f
+  - delay: 62
+    content: r
+  - delay: 93
+    content: o
+  - delay: 32
+    content: m
+  - delay: 72
+    content: ' '
+  - delay: 23
+    content: u
+  - delay: 22
+    content: s
+  - delay: 92
+    content: e
+  - delay: 53
+    content: r
+  - delay: 92
+    content: s
+  - delay: 92
+    content: ' '
+  - delay: 93
+    content: w
+  - delay: 42
+    content: h
+  - delay: 72
+    content: e
+  - delay: 93
+    content: r
+  - delay: 82
+    content: e
+  - delay: 42
+    content: ' '
+  - delay: 53
+    content: s
+  - delay: 72
+    content: t
+  - delay: 23
+    content: a
+  - delay: 93
+    content: t
+  - delay: 72
+    content: u
+  - delay: 93
+    content: s
+  - delay: 42
+    content: '='
+  - delay: 62
+    content: ':'
+  - delay: 52
+    content: a
+  - delay: 43
+    content: c
+  - delay: 42
+    content: t
+  - delay: 63
+    content: i
+  - delay: 62
+    content: v
+  - delay: 92
+    content: e
+  - delay: 33
+    content: ' '
+  - delay: 93
+    content: a
+  - delay: 22
+    content: 'n'
+  - delay: 82
+    content: d
+  - delay: 32
+    content: ' '
+  - delay: 73
+    content: a
+  - delay: 42
+    content: g
+  - delay: 92
+    content: e
+  - delay: 83
+    content: ' '
+  - delay: 62
+    content: '%'
+  - delay: 23
+    content: g
+  - delay: 52
+    content: t
+  - delay: 63
+    content: e
+  - delay: 22
+    content: ' '
+  - delay: 62
+    content: ':'
+  - delay: 83
+    content: '3'
+  - delay: 22
+    content: '0'
+  - delay: 53
+    content: "\r\n"
+  - delay: 524
+    content: "select COUNT(*) from users where status='active' and age >= '30'\r\n\r\n"
+  - delay: 1502
+    content: "\e[1;36m# Query bookmarks\e[0m\r\n"
+  - delay: 803
+    content: "\e[1;32m$\e[0m m"
+  - delay: 22
+    content: q
+  - delay: 22
+    content: ' '
+  - delay: 22
+    content: '-'
+  - delay: 42
+    content: o
+  - delay: 93
+    content: ' '
+  - delay: 62
+    content: d
+  - delay: 82
+    content: a
+  - delay: 93
+    content: t
+  - delay: 72
+    content: a
+  - delay: 93
+    content: b
+  - delay: 22
+    content: a
+  - delay: 93
+    content: s
+  - delay: 62
+    content: e
+  - delay: 22
+    content: '='
+  - delay: 22
+    content: m
+  - delay: 22
+    content: q
+  - delay: 53
+    content: _
+  - delay: 42
+    content: d
+  - delay: 41
+    content: e
+  - delay: 82
+    content: m
+  - delay: 33
+    content: o
+  - delay: 62
+    content: ' '
+  - delay: 92
+    content: '-'
+  - delay: 63
+    content: 'n'
+  - delay: 32
+    content: ' '
+  - delay: 93
+    content: '-'
+  - delay: 92
+    content: '-'
+  - delay: 52
+    content: s
+  - delay: 32
+    content: a
+  - delay: 42
+    content: v
+  - delay: 32
+    content: e
+  - delay: 83
+    content: ' '
+  - delay: 52
+    content: t
+  - delay: 22
+    content: o
+  - delay: 22
+    content: p
+  - delay: 52
+    content: '-'
+  - delay: 92
+    content: s
+  - delay: 23
+    content: c
+  - delay: 82
+    content: o
+  - delay: 72
+    content: r
+  - delay: 63
+    content: e
+  - delay: 72
+    content: r
+  - delay: 82
+    content: s
+  - delay: 82
+    content: ' '
+  - delay: 33
+    content: s
+  - delay: 22
+    content: e
+  - delay: 62
+    content: l
+  - delay: 63
+    content: e
+  - delay: 62
+    content: c
+  - delay: 63
+    content: t
+  - delay: 22
+    content: ' '
+  - delay: 62
+    content: 'n'
+  - delay: 83
+    content: a
+  - delay: 52
+    content: m
+  - delay: 52
+    content: e
+  - delay: 62
+    content: ','
+  - delay: 93
+    content: ' '
+  - delay: 92
+    content: s
+  - delay: 53
+    content: c
+  - delay: 82
+    content: o
+  - delay: 42
+    content: r
+  - delay: 43
+    content: e
+  - delay: 42
+    content: ' '
+  - delay: 92
+    content: f
+  - delay: 83
+    content: r
+  - delay: 92
+    content: o
+  - delay: 72
+    content: m
+  - delay: 63
+    content: ' '
+  - delay: 32
+    content: u
+  - delay: 63
+    content: s
+  - delay: 22
+    content: e
+  - delay: 92
+    content: r
+  - delay: 72
+    content: s
+  - delay: 43
+    content: ' '
+  - delay: 62
+    content: w
+  - delay: 42
+    content: h
+  - delay: 73
+    content: e
+  - delay: 52
+    content: r
+  - delay: 92
+    content: e
+  - delay: 43
+    content: ' '
+  - delay: 42
+    content: s
+  - delay: 92
+    content: c
+  - delay: 43
+    content: o
+  - delay: 52
+    content: r
+  - delay: 22
+    content: e
+  - delay: 83
+    content: ' '
+  - delay: 92
+    content: '%'
+  - delay: 73
+    content: g
+  - delay: 22
+    content: t
+  - delay: 82
+    content: e
+  - delay: 63
+    content: ' '
+  - delay: 72
+    content: ':'
+  - delay: 63
+    content: '9'
+  - delay: 62
+    content: '0'
+  - delay: 32
+    content: ' '
+  - delay: 63
+    content: o
+  - delay: 62
+    content: r
+  - delay: 22
+    content: d
+  - delay: 52
+    content: e
+  - delay: 53
+    content: r
+  - delay: 32
+    content: ' '
+  - delay: 73
+    content: b
+  - delay: 32
+    content: 'y'
+  - delay: 92
+    content: ' '
+  - delay: 83
+    content: s
+  - delay: 62
+    content: c
+  - delay: 72
+    content: o
+  - delay: 32
+    content: r
+  - delay: 42
+    content: e
+  - delay: 73
+    content: ' '
+  - delay: 32
+    content: d
+  - delay: 72
+    content: e
+  - delay: 52
+    content: s
+  - delay: 53
+    content: c
+  - delay: 92
+    content: "\r\n"
+  - delay: 525
+    content: "\e[1;34m==>\e[0m Saved bookmark 'top-scorers'\r\nselect name, score from users where score >= '90' order by score desc\r\n\r\n"
+  - delay: 1502
+    content: "\e[1;32m$\e[0m m"
+  - delay: 22
+    content: q
+  - delay: 93
+    content: ' '
+  - delay: 92
+    content: '-'
+  - delay: 72
+    content: '-'
+  - delay: 53
+    content: l
+  - delay: 42
+    content: i
+  - delay: 43
+    content: s
+  - delay: 52
+    content: t
+  - delay: 82
+    content: "\r\n"
+  - delay: 519
+    content: "top-scorers\r\n\r\n"
+  - delay: 1502
+    content: "\e[1;32m$\e[0m m"
+  - delay: 33
+    content: q
+  - delay: 82
+    content: ' '
+  - delay: 33
+    content: '-'
+  - delay: 22
+    content: '-'
+  - delay: 92
+    content: s
+  - delay: 33
+    content: h
+  - delay: 72
+    content: o
+  - delay: 83
+    content: w
+  - delay: 72
+    content: ' '
+  - delay: 63
+    content: t
+  - delay: 62
+    content: o
+  - delay: 93
+    content: p
+  - delay: 92
+    content: '-'
+  - delay: 93
+    content: s
+  - delay: 92
+    content: c
+  - delay: 53
+    content: o
+  - delay: 52
+    content: r
+  - delay: 62
+    content: e
+  - delay: 23
+    content: r
+  - delay: 82
+    content: s
+  - delay: 62
+    content: "\r\n"
+  - delay: 520
+    content: "select name, score from users where score >= '90' order by score desc\r\n\r\n"
+  - delay: 1503
+    content: "\e[1;32m$\e[0m m"
+  - delay: 82
+    content: q
+  - delay: 22
+    content: ' '
+  - delay: 41
+    content: '-'
+  - delay: 52
+    content: o
+  - delay: 92
+    content: ' '
+  - delay: 52
+    content: d
+  - delay: 52
+    content: a
+  - delay: 73
+    content: t
+  - delay: 73
+    content: a
+  - delay: 42
+    content: b
+  - delay: 62
+    content: a
+  - delay: 42
+    content: s
+  - delay: 43
+    content: e
+  - delay: 42
+    content: '='
+  - delay: 73
+    content: m
+  - delay: 92
+    content: q
+  - delay: 73
+    content: _
+  - delay: 82
+    content: d
+  - delay: 43
+    content: e
+  - delay: 82
+    content: m
+  - delay: 82
+    content: o
+  - delay: 23
+    content: ' '
+  - delay: 31
+    content: '-'
+  - delay: 72
+    content: q
+  - delay: 22
+    content: ' '
+  - delay: 62
+    content: '-'
+  - delay: 53
+    content: '-'
+  - delay: 62
+    content: r
+  - delay: 32
+    content: u
+  - delay: 33
+    content: 'n'
+  - delay: 32
+    content: ' '
+  - delay: 82
+    content: t
+  - delay: 43
+    content: o
+  - delay: 62
+    content: p
+  - delay: 52
+    content: '-'
+  - delay: 72
+    content: s
+  - delay: 63
+    content: c
+  - delay: 72
+    content: o
+  - delay: 82
+    content: r
+  - delay: 83
+    content: e
+  - delay: 92
+    content: r
+  - delay: 92
+    content: s
+  - delay: 73
+    content: "\r\n"
+  - delay: 536
+    content: "\e[0m\e[31m+--------------+-------+\e[0m\r\n\e[0m\e[31m|\e[0m\e[32m name         \e[0m\e[31m|\e[0m\e[32m score \e[0m\e[31m|\e[0m\r\n\e[0m\e[31m+--------------+-------+\e[0m\r\n\e[0m\e[31m|\e[0m\e[32m Olivia Chen  \e[0m\e[31m|\e[0m\e[33m 99.00 \e[0m\e[31m|\e[0m\r\n\e[0m\e[31m|\e[0m\e[32m Grace Kim    \e[0m\e[31m|\e[0m\e[33m 97.10 \e[0m\e[31m|\e[0m\r\n\e[0m\e[31m|\e[0m\e[32m Alice Martin \e[0m\e[31m|\e[0m\e[33m 95.50 \e[0m\e[31m|\e[0m\r\n\e[0m\e[31m|\e[0m\e[32m Ruby Sato    \e[0m\e[31m|\e[0m\e[33m 93.60 \e[0m\e[31m|\e[0m\r\n\e[0m\e[31m|\e[0m\e[32m Diana Ross   \e[0m\e[31m|\e[0m\e[33m 91.20 \e[0m\e[31m|\e[0m\r\n\e[0m\e[31m+--------------+-------+\e[0m\r\n\r\n"
+  - delay: 1502
+    content: "\e[1;32m$\e[0m m"
+  - delay: 92
+    content: q
+  - delay: 71
+    content: ' '
+  - delay: 51
+    content: '-'
+  - delay: 72
+    content: '-'
+  - delay: 82
+    content: d
+  - delay: 73
+    content: e
+  - delay: 62
+    content: l
+  - delay: 32
+    content: e
+  - delay: 62
+    content: t
+  - delay: 63
+    content: e
+  - delay: 42
+    content: ' '
+  - delay: 32
+    content: t
+  - delay: 73
+    content: o
+  - delay: 22
+    content: p
+  - delay: 62
+    content: '-'
+  - delay: 52
+    content: s
+  - delay: 82
+    content: c
+  - delay: 93
+    content: o
+  - delay: 62
+    content: r
+  - delay: 72
+    content: e
+  - delay: 33
+    content: r
+  - delay: 92
+    content: s
+  - delay: 93
+    content: "\r\n"
+  - delay: 520
+    content: "\e[1;34m==>\e[0m Deleted bookmark 'top-scorers'\r\n\r\n"
+  - delay: 1593
+    content: "\r\n"
+  - delay: 5
+    content: "bash: PAW_TITLE: unbound variable\r\n"
