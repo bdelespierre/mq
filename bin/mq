@@ -53,9 +53,8 @@ Options:
 
 Arguments:
     :VALUE             Shorthand for %string VALUE
-    %s, %string VALUE  Treat value as a string
-    %j, %json VALUE    Treat value as a JSON path
-
+    %s, %string VALUE  Alias of 'VALUE'
+    %j, %json X.Y.Z    Alias of JSON_UNQUOTE(JSON_EXTRACT(X, '$.Y.Z'))
     %a, %all           Alias of *
     %c, %count         Alias of COUNT(*)
     %r, %rand          Alias of RAND()

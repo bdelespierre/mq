@@ -70,7 +70,7 @@ setup() {
 @test "cli: --dry-run outputs query without executing" {
     run mq --dry-run select %count from users where age %gt :18
     [ "$status" -eq 0 ]
-    [ "$output" = "select count(*) from users where age > '18'" ]
+    [ "$output" = "select COUNT(*) from users where age > '18'" ]
 }
 
 @test "cli: dry-run with complex query" {
@@ -219,7 +219,7 @@ EOF
     MQ_QUERIES_DIR="$tmpdir" run mq -n --save count-active select %count from users where status=:active
     [ "$status" -eq 0 ]
     local content=$(cat "$tmpdir/count-active.sql")
-    [ "$content" = "select count(*) from users where status='active'" ]
+    [ "$content" = "select COUNT(*) from users where status='active'" ]
     rm -rf "$tmpdir"
 }
 

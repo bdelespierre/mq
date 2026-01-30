@@ -8,16 +8,16 @@ if ! declare -F error &>/dev/null; then
     source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/log.bash"
 fi
 
-# Transform %json a.b.c to json_unquote(json_extract(a, '$.b.c'))
-# Transform %json a to json_unquote(json_extract(a, '$'))
+# Transform %json a.b.c to JSON_UNQUOTE(JSON_EXTRACT(a, '$.b.c'))
+# Transform %json a to JSON_UNQUOTE(JSON_EXTRACT(a, '$'))
 transform_json() {
     local arg="${1%%,}"
     local column="${arg%%.*}"
     local result
     if [[ "$arg" == *"."* ]]; then
-        result="json_unquote(json_extract(${column}, '\$.${arg#*.}'))"
+        result="JSON_UNQUOTE(JSON_EXTRACT(${column}, '\$.${arg#*.}'))"
     else
-        result="json_unquote(json_extract(${column}, '\$'))"
+        result="JSON_UNQUOTE(JSON_EXTRACT(${column}, '\$'))"
     fi
     [[ "$1" == *, ]] && result+=","
     printf '%s' "$result"
@@ -50,16 +50,16 @@ transform_equality() {
 transform_alias() {
     case "$1" in
         %a|%all)   printf '*' ;;
-        %c|%count) printf 'count(*)' ;;
-        %r|%rand)  printf 'rand()' ;;
-        %now)      printf 'now()' ;;
+        %c|%count) printf 'COUNT(*)' ;;
+        %r|%rand)  printf 'RAND()' ;;
+        %now)      printf 'NOW()' ;;
         *)         return 1 ;;
     esac
 }
 
 # Transform aggregate function: %sum col → SUM(col)
 transform_aggregate() {
-    local func="$1"
+    local func="${1^^}"
     local arg="${2%%,}"
     local result="${func}(${arg})"
     [[ "$2" == *, ]] && result+=","

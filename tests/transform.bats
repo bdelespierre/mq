@@ -36,19 +36,19 @@ setup() {
 @test "transform_json: converts path to json_extract" {
     run transform_json "data.user.name"
     [ "$status" -eq 0 ]
-    [ "$output" = "json_unquote(json_extract(data, '\$.user.name'))" ]
+    [ "$output" = "JSON_UNQUOTE(JSON_EXTRACT(data, '\$.user.name'))" ]
 }
 
 @test "transform_json: single-level path (no dot) extracts root" {
     run transform_json "data"
     [ "$status" -eq 0 ]
-    [ "$output" = "json_unquote(json_extract(data, '\$'))" ]
+    [ "$output" = "JSON_UNQUOTE(JSON_EXTRACT(data, '\$'))" ]
 }
 
 @test "transform_json: preserves trailing comma" {
     run transform_json "data.field,"
     [ "$status" -eq 0 ]
-    [ "$output" = "json_unquote(json_extract(data, '\$.field'))," ]
+    [ "$output" = "JSON_UNQUOTE(JSON_EXTRACT(data, '\$.field'))," ]
 }
 
 # transform_equality tests
@@ -85,34 +85,34 @@ setup() {
     [ "$output" = "*" ]
 }
 
-@test "transform_alias: %c becomes count(*)" {
+@test "transform_alias: %c becomes COUNT(*)" {
     run transform_alias "%c"
     [ "$status" -eq 0 ]
-    [ "$output" = "count(*)" ]
+    [ "$output" = "COUNT(*)" ]
 }
 
-@test "transform_alias: %count becomes count(*)" {
+@test "transform_alias: %count becomes COUNT(*)" {
     run transform_alias "%count"
     [ "$status" -eq 0 ]
-    [ "$output" = "count(*)" ]
+    [ "$output" = "COUNT(*)" ]
 }
 
-@test "transform_alias: %r becomes rand()" {
+@test "transform_alias: %r becomes RAND()" {
     run transform_alias "%r"
     [ "$status" -eq 0 ]
-    [ "$output" = "rand()" ]
+    [ "$output" = "RAND()" ]
 }
 
-@test "transform_alias: %rand becomes rand()" {
+@test "transform_alias: %rand becomes RAND()" {
     run transform_alias "%rand"
     [ "$status" -eq 0 ]
-    [ "$output" = "rand()" ]
+    [ "$output" = "RAND()" ]
 }
 
-@test "transform_alias: %now becomes now()" {
+@test "transform_alias: %now becomes NOW()" {
     run transform_alias "%now"
     [ "$status" -eq 0 ]
-    [ "$output" = "now()" ]
+    [ "$output" = "NOW()" ]
 }
 
 @test "transform_alias: unknown alias returns error" {
@@ -125,31 +125,31 @@ setup() {
 @test "transform_aggregate: sum wraps column" {
     run transform_aggregate "sum" "price"
     [ "$status" -eq 0 ]
-    [ "$output" = "sum(price)" ]
+    [ "$output" = "SUM(price)" ]
 }
 
 @test "transform_aggregate: avg wraps column" {
     run transform_aggregate "avg" "rating"
     [ "$status" -eq 0 ]
-    [ "$output" = "avg(rating)" ]
+    [ "$output" = "AVG(rating)" ]
 }
 
 @test "transform_aggregate: min wraps column" {
     run transform_aggregate "min" "created_at"
     [ "$status" -eq 0 ]
-    [ "$output" = "min(created_at)" ]
+    [ "$output" = "MIN(created_at)" ]
 }
 
 @test "transform_aggregate: max wraps column" {
     run transform_aggregate "max" "price"
     [ "$status" -eq 0 ]
-    [ "$output" = "max(price)" ]
+    [ "$output" = "MAX(price)" ]
 }
 
 @test "transform_aggregate: preserves trailing comma" {
     run transform_aggregate "sum" "price,"
     [ "$status" -eq 0 ]
-    [ "$output" = "sum(price)," ]
+    [ "$output" = "SUM(price)," ]
 }
 
 # transform_operator tests
@@ -248,7 +248,7 @@ setup() {
 @test "process_argument: %json sets shift_count=2" {
     local out="" shift_count=""
     process_argument out shift_count %json data.name
-    [ "$out" = "json_unquote(json_extract(data, '\$.name'))" ]
+    [ "$out" = "JSON_UNQUOTE(JSON_EXTRACT(data, '\$.name'))" ]
     [ "$shift_count" -eq 2 ]
 }
 
@@ -304,28 +304,28 @@ setup() {
 @test "process_argument: %sum sets shift_count=2" {
     local out="" shift_count=""
     process_argument out shift_count %sum price
-    [ "$out" = "sum(price)" ]
+    [ "$out" = "SUM(price)" ]
     [ "$shift_count" -eq 2 ]
 }
 
 @test "process_argument: %avg sets shift_count=2" {
     local out="" shift_count=""
     process_argument out shift_count %avg rating
-    [ "$out" = "avg(rating)" ]
+    [ "$out" = "AVG(rating)" ]
     [ "$shift_count" -eq 2 ]
 }
 
 @test "process_argument: %min sets shift_count=2" {
     local out="" shift_count=""
     process_argument out shift_count %min created_at
-    [ "$out" = "min(created_at)" ]
+    [ "$out" = "MIN(created_at)" ]
     [ "$shift_count" -eq 2 ]
 }
 
 @test "process_argument: %max sets shift_count=2" {
     local out="" shift_count=""
     process_argument out shift_count %max price
-    [ "$out" = "max(price)" ]
+    [ "$out" = "MAX(price)" ]
     [ "$shift_count" -eq 2 ]
 }
 
@@ -381,7 +381,7 @@ setup() {
 @test "build_query: select with comparison operator" {
     local sql="" vertical=""
     build_query sql vertical select %count from users where age %gt :18
-    [ "$sql" = "select count(*) from users where age > '18'" ]
+    [ "$sql" = "select COUNT(*) from users where age > '18'" ]
 }
 
 @test "build_query: select with in operator" {
@@ -393,25 +393,25 @@ setup() {
 @test "build_query: insert with now()" {
     local sql="" vertical=""
     build_query sql vertical insert into logs set created_at %eq %now
-    [ "$sql" = "insert into logs set created_at = now()" ]
+    [ "$sql" = "insert into logs set created_at = NOW()" ]
 }
 
 @test "build_query: select with json path" {
     local sql="" vertical=""
     build_query sql vertical select %json data.user.name from users
-    [ "$sql" = "select json_unquote(json_extract(data, '\$.user.name')) from users" ]
+    [ "$sql" = "select JSON_UNQUOTE(JSON_EXTRACT(data, '\$.user.name')) from users" ]
 }
 
 @test "build_query: select with aggregate functions" {
     local sql="" vertical=""
     build_query sql vertical select %sum price from orders
-    [ "$sql" = "select sum(price) from orders" ]
+    [ "$sql" = "select SUM(price) from orders" ]
 }
 
 @test "build_query: select with multiple aggregates" {
     local sql="" vertical=""
     build_query sql vertical select %min price %max price from products
-    [ "$sql" = "select min(price) max(price) from products" ]
+    [ "$sql" = "select MIN(price) MAX(price) from products" ]
 }
 
 @test "build_query: select with between" {
@@ -547,13 +547,13 @@ setup() {
 @test "edge case: json with array index" {
     run transform_json "data.items[0].name"
     [ "$status" -eq 0 ]
-    [ "$output" = "json_unquote(json_extract(data, '\$.items[0].name'))" ]
+    [ "$output" = "JSON_UNQUOTE(JSON_EXTRACT(data, '\$.items[0].name'))" ]
 }
 
 @test "edge case: json with nested arrays" {
     run transform_json "data.a.b.c.d.e"
     [ "$status" -eq 0 ]
-    [ "$output" = "json_unquote(json_extract(data, '\$.a.b.c.d.e'))" ]
+    [ "$output" = "JSON_UNQUOTE(JSON_EXTRACT(data, '\$.a.b.c.d.e'))" ]
 }
 
 # Edge case tests: missing arguments
@@ -607,7 +607,7 @@ setup() {
 @test "comma: trailing comma on alias %count" {
     local out="" shift_count=""
     process_argument out shift_count "%count,"
-    [ "$out" = "count(*)," ]
+    [ "$out" = "COUNT(*)," ]
 }
 
 @test "comma: trailing comma on :value" {
@@ -662,7 +662,7 @@ setup() {
 @test "comma: build_query with multiple aliases and commas" {
     local sql="" vertical=""
     build_query sql vertical select %count, %now, id from users
-    [ "$sql" = "select count(*), now(), id from users" ]
+    [ "$sql" = "select COUNT(*), NOW(), id from users" ]
 }
 
 @test "comma: build_query with :value and trailing comma" {
