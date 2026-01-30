@@ -11,7 +11,7 @@ _mq() {
     _init_completion || return
 
     # Options
-    local opts="-h --help -v --version -o --option -f --format -q --quiet -n --dry-run -i --input --color"
+    local opts="-h --help -v --version -o --option -f --format -q --quiet -n --dry-run -i --input --color --save --run --list --show --delete"
 
     # Output formats
     local formats="table vertical html xml csv json tsv"
@@ -43,6 +43,15 @@ _mq() {
             ;;
         -i|--input)
             _filedir
+            return
+            ;;
+        --run|--show|--delete)
+            local queries_dir="${MQ_QUERIES_DIR:-$HOME/.local/share/mq/queries}"
+            if [[ -d "$queries_dir" ]]; then
+                local bookmarks
+                bookmarks=$(cd "$queries_dir" && compgen -f -X '!*.sql' -- "$cur" 2>/dev/null | sed 's/\.sql$//')
+                COMPREPLY=($(compgen -W "$bookmarks" -- "$cur"))
+            fi
             return
             ;;
     esac

@@ -95,6 +95,37 @@ PAGER=less mq -o database=mydb select %a from large_table
 | `-n, --dry-run` | Show query without executing |
 | `-i, --input FILE` | Read query from file (use `-` for stdin) |
 | `--color[=WHEN]` | Colorize output: `auto` (default), `always`, `never`. Requires grcat |
+| `--save NAME` | Save query as a named bookmark |
+| `--run NAME` | Run a saved bookmark |
+| `--list` | List saved bookmarks |
+| `--show NAME` | Show a saved bookmark's SQL |
+| `--delete NAME` | Delete a saved bookmark |
+
+## 🔖 Query Bookmarks
+
+Save frequently-used queries as named bookmarks and replay them later:
+
+```bash
+# Save a query (also executes it; use -n to save without executing)
+mq --save active-users -o database=mydb select %count from users where status=:active
+
+# Save without executing
+mq -n --save complex-report select %a from orders where total %gt :100
+
+# Run a saved bookmark
+mq --run active-users
+
+# List all bookmarks
+mq --list
+
+# Show a bookmark's SQL without running it
+mq --show active-users
+
+# Delete a bookmark
+mq --delete active-users
+```
+
+Bookmarks are stored as plain `.sql` files in `~/.local/share/mq/queries/` (override with `MQ_QUERIES_DIR` environment variable or in your `.mqrc` config). Names may contain letters, digits, hyphens, and underscores.
 
 ## ⚡ Argument Shortcuts
 

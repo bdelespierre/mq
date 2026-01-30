@@ -22,6 +22,8 @@ INPUT_FILE=""
 DEBUG="${DEBUG:-0}"
 COLOR="auto"  # auto, always, never
 FORMAT_FILTER="cat"
+MQ_QUERIES_DIR="${MQ_QUERIES_DIR:-$HOME/.local/share/mq/queries}"
+SAVE_BOOKMARK=""
 
 # Default format: table for TTY, tsv for pipes
 if [[ ! -t 1 ]]; then
@@ -79,8 +81,20 @@ Arguments:
         %between LO HI Alias of BETWEEN 'LO' AND 'HI'
         %in VALUES     Alias of IN (VALUES)
 
+Bookmarks:
+        --save NAME            Save query as a named bookmark
+        --run NAME             Run a saved bookmark
+        --list                 List saved bookmarks
+        --show NAME            Show a saved bookmark's SQL
+        --delete NAME          Delete a saved bookmark
+
+    Bookmarks are stored in ~/.local/share/mq/queries/ (override with MQ_QUERIES_DIR).
+    Names may contain letters, digits, hyphens, and underscores.
+
 Examples:
     $(basename "$0") -o database=mydb select %count from users where birthdate %gt :2000-01-01
+    $(basename "$0") --save active-users -n select %count from users where status=:active
+    $(basename "$0") --run active-users
     PAGER=less $(basename "$0") select %a from users where email=:john.doe@example.com +
 
 Configuration:
@@ -225,6 +239,56 @@ execute_query() {
     mysql "${MYSQL_OPTIONS[@]}" <<< "$sql" | $FORMAT_FILTER | $PAGER_CMD
 }
 
+validate_bookmark_name() {
+    local name="$1"
+    if [[ ! "$name" =~ ^[a-zA-Z0-9_-]+$ ]]; then
+        >&2 echo "Invalid bookmark name: $name (only letters, digits, - and _ allowed)"
+        exit 1
+    fi
+}
+
+save_bookmark() {
+    local name="$1" sql="$2"
+    validate_bookmark_name "$name"
+    mkdir -p "$MQ_QUERIES_DIR"
+    printf '%s\n' "$sql" > "$MQ_QUERIES_DIR/$name.sql"
+    >&2 echo "Saved bookmark '$name'"
+}
+
+list_bookmarks() {
+    if [[ ! -d "$MQ_QUERIES_DIR" ]]; then
+        return 0
+    fi
+    local f
+    for f in "$MQ_QUERIES_DIR"/*.sql; do
+        [[ -f "$f" ]] || continue
+        basename "$f" .sql
+    done
+}
+
+show_bookmark() {
+    local name="$1"
+    validate_bookmark_name "$name"
+    local file="$MQ_QUERIES_DIR/$name.sql"
+    if [[ ! -f "$file" ]]; then
+        >&2 echo "Bookmark not found: $name"
+        exit 1
+    fi
+    cat "$file"
+}
+
+delete_bookmark() {
+    local name="$1"
+    validate_bookmark_name "$name"
+    local file="$MQ_QUERIES_DIR/$name.sql"
+    if [[ ! -f "$file" ]]; then
+        >&2 echo "Bookmark not found: $name"
+        exit 1
+    fi
+    rm "$file"
+    >&2 echo "Deleted bookmark '$name'"
+}
+
 main() {
     debug "mq version $VERSION"
     debug "TTY detected: $([[ -t 1 ]] && echo "yes" || echo "no")"
@@ -233,7 +297,7 @@ main() {
     load_config
 
     local opts
-    if ! opts=$(getopt -o hvo:f:qni: --long help,version,option:,format:,quiet,dry-run,input:,color:: -n "$(basename "$0")" -- "$@"); then
+    if ! opts=$(getopt -o hvo:f:qni: --long help,version,option:,format:,quiet,dry-run,input:,color::,save:,run:,list,show:,delete: -n "$(basename "$0")" -- "$@"); then
         >&2 usage
         exit 1
     fi
@@ -279,6 +343,29 @@ main() {
                 COLOR="${2:-always}"
                 shift 2
                 ;;
+            --save)
+                debug "Option: --save $2"
+                SAVE_BOOKMARK="$2"
+                shift 2
+                ;;
+            --run)
+                debug "Option: --run $2"
+                validate_bookmark_name "$2"
+                INPUT_FILE="$MQ_QUERIES_DIR/$2.sql"
+                shift 2
+                ;;
+            --list)
+                list_bookmarks
+                exit 0
+                ;;
+            --show)
+                show_bookmark "$2"
+                exit 0
+                ;;
+            --delete)
+                delete_bookmark "$2"
+                exit 0
+                ;;
             --)
                 shift
                 break
@@ -321,6 +408,10 @@ main() {
         debug "Vertical requested: $vertical_requested"
 
         [[ "$vertical_requested" == 1 ]] && FORMAT="vertical"
+    fi
+
+    if [[ -n "$SAVE_BOOKMARK" ]]; then
+        save_bookmark "$SAVE_BOOKMARK" "$sql"
     fi
 
     set_format

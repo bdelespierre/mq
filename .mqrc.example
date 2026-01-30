@@ -106,3 +106,14 @@
 # Can be overridden per-query with: -q, --quiet
 
 # QUIET=0
+
+# ------------------------------------------------------------------------------
+# MQ_QUERIES_DIR - Bookmark storage directory
+# ------------------------------------------------------------------------------
+# Directory where named query bookmarks are stored as .sql files.
+#
+# Default: ~/.local/share/mq/queries
+#
+# Can also be set via the MQ_QUERIES_DIR environment variable.
+
+# MQ_QUERIES_DIR="$HOME/.local/share/mq/queries"

@@ -201,3 +201,130 @@ EOF
     MQRC="/nonexistent/config" run mq --help
     [ "$status" -eq 0 ]
 }
+
+# Bookmark tests
+
+@test "cli: --save creates bookmark file with correct SQL" {
+    local tmpdir=$(mktemp -d)
+    MQ_QUERIES_DIR="$tmpdir" run mq -n --save test-query select %a from users
+    [ "$status" -eq 0 ]
+    [ -f "$tmpdir/test-query.sql" ]
+    local content=$(cat "$tmpdir/test-query.sql")
+    [ "$content" = "select * from users" ]
+    rm -rf "$tmpdir"
+}
+
+@test "cli: --save with arg transformation" {
+    local tmpdir=$(mktemp -d)
+    MQ_QUERIES_DIR="$tmpdir" run mq -n --save count-active select %count from users where status=:active
+    [ "$status" -eq 0 ]
+    local content=$(cat "$tmpdir/count-active.sql")
+    [ "$content" = "select count(*) from users where status='active'" ]
+    rm -rf "$tmpdir"
+}
+
+@test "cli: --save overwrites existing bookmark" {
+    local tmpdir=$(mktemp -d)
+    mkdir -p "$tmpdir"
+    echo "SELECT 1" > "$tmpdir/my-query.sql"
+    MQ_QUERIES_DIR="$tmpdir" run mq -n --save my-query select %a from orders
+    [ "$status" -eq 0 ]
+    local content=$(cat "$tmpdir/my-query.sql")
+    [ "$content" = "select * from orders" ]
+    rm -rf "$tmpdir"
+}
+
+@test "cli: --save with invalid name fails" {
+    local tmpdir=$(mktemp -d)
+    MQ_QUERIES_DIR="$tmpdir" run mq -n --save "bad name!" select 1
+    [ "$status" -eq 1 ]
+    [[ "$output" == *"Invalid bookmark name"* ]]
+    rm -rf "$tmpdir"
+}
+
+@test "cli: --run loads bookmark with dry-run" {
+    local tmpdir=$(mktemp -d)
+    mkdir -p "$tmpdir"
+    echo "SELECT * FROM users WHERE status='active'" > "$tmpdir/active-users.sql"
+    MQ_QUERIES_DIR="$tmpdir" run mq -n --run active-users
+    [ "$status" -eq 0 ]
+    [ "$output" = "SELECT * FROM users WHERE status='active'" ]
+    rm -rf "$tmpdir"
+}
+
+@test "cli: --run with nonexistent bookmark fails" {
+    local tmpdir=$(mktemp -d)
+    MQ_QUERIES_DIR="$tmpdir" run mq -n --run nonexistent
+    [ "$status" -eq 1 ]
+    [[ "$output" == *"File not found"* ]]
+    rm -rf "$tmpdir"
+}
+
+@test "cli: --list shows saved bookmarks" {
+    local tmpdir=$(mktemp -d)
+    mkdir -p "$tmpdir"
+    echo "SELECT 1" > "$tmpdir/alpha.sql"
+    echo "SELECT 2" > "$tmpdir/beta.sql"
+    echo "SELECT 3" > "$tmpdir/gamma.sql"
+    MQ_QUERIES_DIR="$tmpdir" run mq --list
+    [ "$status" -eq 0 ]
+    [[ "$output" == *"alpha"* ]]
+    [[ "$output" == *"beta"* ]]
+    [[ "$output" == *"gamma"* ]]
+    rm -rf "$tmpdir"
+}
+
+@test "cli: --list with empty directory produces no output" {
+    local tmpdir=$(mktemp -d)
+    MQ_QUERIES_DIR="$tmpdir" run mq --list
+    [ "$status" -eq 0 ]
+    [ "$output" = "" ]
+    rm -rf "$tmpdir"
+}
+
+@test "cli: --show displays bookmark content" {
+    local tmpdir=$(mktemp -d)
+    mkdir -p "$tmpdir"
+    echo "SELECT count(*) FROM orders" > "$tmpdir/order-count.sql"
+    MQ_QUERIES_DIR="$tmpdir" run mq --show order-count
+    [ "$status" -eq 0 ]
+    [ "$output" = "SELECT count(*) FROM orders" ]
+    rm -rf "$tmpdir"
+}
+
+@test "cli: --show with nonexistent bookmark fails" {
+    local tmpdir=$(mktemp -d)
+    MQ_QUERIES_DIR="$tmpdir" run mq --show missing
+    [ "$status" -eq 1 ]
+    [[ "$output" == *"Bookmark not found"* ]]
+    rm -rf "$tmpdir"
+}
+
+@test "cli: --delete removes bookmark file" {
+    local tmpdir=$(mktemp -d)
+    mkdir -p "$tmpdir"
+    echo "SELECT 1" > "$tmpdir/old-query.sql"
+    MQ_QUERIES_DIR="$tmpdir" run mq --delete old-query
+    [ "$status" -eq 0 ]
+    [ ! -f "$tmpdir/old-query.sql" ]
+    [[ "$output" == *"Deleted bookmark"* ]]
+    rm -rf "$tmpdir"
+}
+
+@test "cli: --delete with nonexistent bookmark fails" {
+    local tmpdir=$(mktemp -d)
+    MQ_QUERIES_DIR="$tmpdir" run mq --delete missing
+    [ "$status" -eq 1 ]
+    [[ "$output" == *"Bookmark not found"* ]]
+    rm -rf "$tmpdir"
+}
+
+@test "cli: --help documents bookmark options" {
+    run mq --help
+    [ "$status" -eq 0 ]
+    [[ "$output" == *"--save"* ]]
+    [[ "$output" == *"--run"* ]]
+    [[ "$output" == *"--list"* ]]
+    [[ "$output" == *"--show"* ]]
+    [[ "$output" == *"--delete"* ]]
+}
