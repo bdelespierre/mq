@@ -274,12 +274,19 @@ EOF
     rm -rf "$tmpdir"
 }
 
-@test "cli: --list with empty directory produces no output" {
+@test "cli: --list with empty directory shows notice" {
     local tmpdir=$(mktemp -d)
     MQ_QUERIES_DIR="$tmpdir" run mq --list
     [ "$status" -eq 0 ]
-    [ "$output" = "" ]
+    [[ "$output" == *"No saved bookmarks"* ]]
+    [[ "$output" == *"--save"* ]]
     rm -rf "$tmpdir"
+}
+
+@test "cli: --list with no queries dir shows notice" {
+    MQ_QUERIES_DIR="/nonexistent/dir" run mq --list
+    [ "$status" -eq 0 ]
+    [[ "$output" == *"No saved bookmarks"* ]]
 }
 
 @test "cli: --show displays bookmark content" {

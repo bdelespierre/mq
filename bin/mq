@@ -257,13 +257,18 @@ save_bookmark() {
 
 list_bookmarks() {
     if [[ ! -d "$MQ_QUERIES_DIR" ]]; then
+        >&2 echo "No saved bookmarks. Use --save NAME to bookmark a query."
         return 0
     fi
-    local f
+    local found=0 f
     for f in "$MQ_QUERIES_DIR"/*.sql; do
         [[ -f "$f" ]] || continue
         basename "$f" .sql
+        found=1
     done
+    if [[ "$found" -eq 0 ]]; then
+        >&2 echo "No saved bookmarks. Use --save NAME to bookmark a query."
+    fi
 }
 
 show_bookmark() {
