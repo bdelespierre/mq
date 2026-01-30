@@ -3,6 +3,11 @@
 # transform.sh - Argument transformation functions for mq
 #
 
+# Source logging helpers if not already available
+if ! declare -F error &>/dev/null; then
+    source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/log.bash"
+fi
+
 # Transform %json a.b.c to json_unquote(json_extract(a, '$.b.c'))
 # Transform %json a to json_unquote(json_extract(a, '$'))
 transform_json() {
@@ -124,7 +129,7 @@ process_argument() {
     case "$arg" in
         %j|%json)
             if [[ -z "$2" ]]; then
-                >&2 echo "error: $arg requires an argument"
+                error "$arg requires an argument"
                 return 1
             fi
             _output=$(transform_json "$2")
@@ -132,7 +137,7 @@ process_argument() {
             ;;
         %s|%str|%string)
             if [[ -z "$2" ]]; then
-                >&2 echo "error: $arg requires an argument"
+                error "$arg requires an argument"
                 return 1
             fi
             _output=$(transform_string "$2")
@@ -144,7 +149,7 @@ process_argument() {
             ;;
         %sum|%avg|%min|%max)
             if [[ -z "$2" ]]; then
-                >&2 echo "error: $arg requires an argument"
+                error "$arg requires an argument"
                 return 1
             fi
             _output=$(transform_aggregate "${arg#%}" "$2")
@@ -157,7 +162,7 @@ process_argument() {
         %between)
             shift
             if [[ $# -lt 2 || "$1" != :* || "$2" != :* ]]; then
-                >&2 echo "error: %between requires two :value arguments"
+                error "%between requires two :value arguments"
                 return 1
             fi
             _output=$(transform_between "${1:1}" "${2:1}")
@@ -167,7 +172,7 @@ process_argument() {
             # Collect all following :value arguments
             shift
             if [[ $# -eq 0 || "$1" != :* ]]; then
-                >&2 echo "error: %in requires at least one :value argument"
+                error "%in requires at least one :value argument"
                 return 1
             fi
             local -a in_values=()

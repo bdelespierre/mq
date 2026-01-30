@@ -13,6 +13,7 @@ install:
 	@mkdir -p $(PREFIX)/share/bash-completion/completions
 	@mkdir -p $(PREFIX)/share/grc
 	@cp bin/mq $(PREFIX)/bin/mq
+	@cp lib/mq/log.bash $(PREFIX)/lib/mq/log.bash
 	@cp lib/mq/transform.bash $(PREFIX)/lib/mq/transform.bash
 	@cp lib/mq/format.bash $(PREFIX)/lib/mq/format.bash
 	@cp share/bash-completion/completions/mq $(PREFIX)/share/bash-completion/completions/mq

@@ -18,9 +18,14 @@ bin/mq -o database=mydb select %count from users where birthdate %gt :2000-01-01
 bin/
   mq        # Main executable (usage, option parsing, main)
 lib/mq/
+  log.bash             # Logging and message output helpers
   transform.bash       # Argument transformation functions
+  format.bash          # Output format filters (CSV, JSON)
 tests/
-  transform.bats     # BATS tests for transform functions
+  cli.bats             # CLI integration tests
+  transform.bats       # BATS tests for transform functions
+  format.bats          # BATS tests for format filters
+  log.bats             # BATS tests for logging functions
 ```
 
 ## Commands
@@ -37,9 +42,15 @@ make uninstall-system # Remove system installation
 
 **bin/mq** - Entry point with:
 - `usage()` - Help text
-- `apply_format()` - Converts format option to MySQL/MariaDB flags
+- `set_format()` - Converts format option to MySQL/MariaDB flags
 - `execute_query()` - Runs query through mysql and pager
 - `main()` - Option parsing with getopt, orchestrates the flow
+
+**lib/mq/log.bash** - Logging helpers:
+- `debug()` - Yellow `[debug]` prefix, conditional on `DEBUG=1`
+- `info()` - Blue `==>` prefix, user-facing confirmations
+- `warn()` - Yellow `warning:` prefix, suppressed by `QUIET=1`
+- `error()` - Red `error:` prefix, does NOT exit (caller controls flow)
 
 **lib/mq/transform.bash** - Query building:
 - `transform_json()` - `%json a.b.c` → `json_unquote(json_extract(a, '$.b.c'))`
@@ -50,7 +61,11 @@ make uninstall-system # Remove system installation
 - `process_argument()` - Routes argument to transformer, returns args consumed (1 or 2)
 - `build_query()` - Iterates all arguments, returns SQL string (exit 1 if trailing `+`)
 
-Output formats: `tsv` (default), `table`, `vertical`, `html`, `xml`
+**lib/mq/format.bash** - Output format filters:
+- `tsv_to_csv()` - Converts MySQL batch TSV to RFC 4180 CSV
+- `tsv_to_json()` - Converts MySQL batch TSV to JSON array of objects
+
+Output formats: `tsv` (default), `table`, `vertical`, `html`, `xml`, `csv`, `json`
 
 ## Common Usages
 
