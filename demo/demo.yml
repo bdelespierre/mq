@@ -15,16 +15,6 @@ config:
   env:
     recording: true
 
-  # Explicitly set the number of columns
-  # or use `auto` to take the current
-  # number of columns of your shell
-  cols: 140
-
-  # Explicitly set the number of rows
-  # or use `auto` to take the current
-  # number of rows of your shell
-  rows: 25
-
   # Amount of times to repeat GIF
   # If value is -1, play once
   # If value is 0, loop indefinitely
@@ -70,18 +60,11 @@ config:
   # `block`, `underline`, or `bar`
   cursorStyle: block
 
-  # Font family
-  # You can use any font that is installed on your machine
-  # in CSS-like syntax
-  fontFamily: "JetBrains Mono"
-
-  # The size of the font
-  fontSize: 15
-
-  # The height of lines
-  lineHeight: 1
-
-  # The spacing between letters
+  cols: 80
+  rows: 12
+  fontSize: 16
+  fontFamily: "JetBrains Mono, Fira Code, Meslo LG M for Powerline"
+  lineHeight: 1.2
   letterSpacing: 0
 
   # Theme
