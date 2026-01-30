@@ -21,6 +21,7 @@ lib/mq/
   log.bash             # Logging and message output helpers
   transform.bash       # Argument transformation functions
   format.bash          # Output format filters (CSV, JSON)
+  bookmark.bash        # Named query bookmark management
 tests/
   cli.bats             # CLI integration tests
   transform.bats       # BATS tests for transform functions
@@ -60,6 +61,13 @@ make uninstall-system # Remove system installation
 - `transform_operator()` - `%eq/%ne/%gt/%gte/%lt/%lte` → SQL operators
 - `process_argument()` - Routes argument to transformer, returns args consumed (1 or 2)
 - `build_query()` - Iterates all arguments, returns SQL string (exit 1 if trailing `+`)
+
+**lib/mq/bookmark.bash** - Query bookmark management:
+- `validate_bookmark_name()` - Validates bookmark name (alphanumeric, hyphens, underscores)
+- `save_bookmark()` - Saves SQL query as a named `.sql` file
+- `list_bookmarks()` - Lists all saved bookmarks
+- `show_bookmark()` - Displays a bookmark's SQL content
+- `delete_bookmark()` - Removes a saved bookmark
 
 **lib/mq/format.bash** - Output format filters:
 - `tsv_to_csv()` - Converts MySQL batch TSV to RFC 4180 CSV

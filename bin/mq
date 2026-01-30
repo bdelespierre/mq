@@ -12,6 +12,7 @@ GRC_CONF="$PROJECT_ROOT/share/grc/conf.mq"
 source "$PROJECT_ROOT/lib/mq/log.bash"
 source "$PROJECT_ROOT/lib/mq/transform.bash"
 source "$PROJECT_ROOT/lib/mq/format.bash"
+source "$PROJECT_ROOT/lib/mq/bookmark.bash"
 
 VERSION="1.5.0"
 
@@ -228,61 +229,6 @@ execute_query() {
 
     debug "Executing: mysql ${MYSQL_OPTIONS[*]}"
     mysql "${MYSQL_OPTIONS[@]}" <<< "$sql" | $FORMAT_FILTER | $PAGER_CMD
-}
-
-validate_bookmark_name() {
-    local name="$1"
-    if [[ ! "$name" =~ ^[a-zA-Z0-9_-]+$ ]]; then
-        error "Invalid bookmark name: $name (only letters, digits, - and _ allowed)"
-        exit 1
-    fi
-}
-
-save_bookmark() {
-    local name="$1" sql="$2"
-    validate_bookmark_name "$name"
-    mkdir -p "$MQ_QUERIES_DIR"
-    printf '%s\n' "$sql" > "$MQ_QUERIES_DIR/$name.sql"
-    info "Saved bookmark '$name'"
-}
-
-list_bookmarks() {
-    if [[ ! -d "$MQ_QUERIES_DIR" ]]; then
-        info "No saved bookmarks. Use --save NAME to bookmark a query."
-        return 0
-    fi
-    local found=0 f
-    for f in "$MQ_QUERIES_DIR"/*.sql; do
-        [[ -f "$f" ]] || continue
-        basename "$f" .sql
-        found=1
-    done
-    if [[ "$found" -eq 0 ]]; then
-        info "No saved bookmarks. Use --save NAME to bookmark a query."
-    fi
-}
-
-show_bookmark() {
-    local name="$1"
-    validate_bookmark_name "$name"
-    local file="$MQ_QUERIES_DIR/$name.sql"
-    if [[ ! -f "$file" ]]; then
-        error "Bookmark not found: $name"
-        exit 1
-    fi
-    cat "$file"
-}
-
-delete_bookmark() {
-    local name="$1"
-    validate_bookmark_name "$name"
-    local file="$MQ_QUERIES_DIR/$name.sql"
-    if [[ ! -f "$file" ]]; then
-        error "Bookmark not found: $name"
-        exit 1
-    fi
-    rm "$file"
-    info "Deleted bookmark '$name'"
 }
 
 main() {
