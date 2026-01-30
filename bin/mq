@@ -64,6 +64,10 @@ Arguments:
     %c, %count         Alias of COUNT(*)
     %r, %rand          Alias of RAND()
         %now           Alias of NOW()
+        %sum COLUMN    Alias of SUM(COLUMN)
+        %avg COLUMN    Alias of AVG(COLUMN)
+        %min COLUMN    Alias of MIN(COLUMN)
+        %max COLUMN    Alias of MAX(COLUMN)
         %eq            Alias of =
         %ne            Alias of <> or !=
         %gt            Alias of >

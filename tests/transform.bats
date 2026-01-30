@@ -120,6 +120,38 @@ setup() {
     [ "$status" -eq 1 ]
 }
 
+# transform_aggregate tests
+
+@test "transform_aggregate: sum wraps column" {
+    run transform_aggregate "sum" "price"
+    [ "$status" -eq 0 ]
+    [ "$output" = "sum(price)" ]
+}
+
+@test "transform_aggregate: avg wraps column" {
+    run transform_aggregate "avg" "rating"
+    [ "$status" -eq 0 ]
+    [ "$output" = "avg(rating)" ]
+}
+
+@test "transform_aggregate: min wraps column" {
+    run transform_aggregate "min" "created_at"
+    [ "$status" -eq 0 ]
+    [ "$output" = "min(created_at)" ]
+}
+
+@test "transform_aggregate: max wraps column" {
+    run transform_aggregate "max" "price"
+    [ "$status" -eq 0 ]
+    [ "$output" = "max(price)" ]
+}
+
+@test "transform_aggregate: preserves trailing comma" {
+    run transform_aggregate "sum" "price,"
+    [ "$status" -eq 0 ]
+    [ "$output" = "sum(price)," ]
+}
+
 # transform_operator tests
 
 @test "transform_operator: %eq becomes =" {
@@ -255,6 +287,41 @@ setup() {
     [ "$output" = "error: %in requires at least one :value argument" ]
 }
 
+@test "process_argument: %sum sets shift_count=2" {
+    local out="" shift_count=""
+    process_argument out shift_count %sum price
+    [ "$out" = "sum(price)" ]
+    [ "$shift_count" -eq 2 ]
+}
+
+@test "process_argument: %avg sets shift_count=2" {
+    local out="" shift_count=""
+    process_argument out shift_count %avg rating
+    [ "$out" = "avg(rating)" ]
+    [ "$shift_count" -eq 2 ]
+}
+
+@test "process_argument: %min sets shift_count=2" {
+    local out="" shift_count=""
+    process_argument out shift_count %min created_at
+    [ "$out" = "min(created_at)" ]
+    [ "$shift_count" -eq 2 ]
+}
+
+@test "process_argument: %max sets shift_count=2" {
+    local out="" shift_count=""
+    process_argument out shift_count %max price
+    [ "$out" = "max(price)" ]
+    [ "$shift_count" -eq 2 ]
+}
+
+@test "process_argument: %sum without argument returns error" {
+    local out="" shift_count=""
+    run bash -c 'source "$1" && process_argument out shift_count %sum' -- "$PROJECT_ROOT/lib/mq/transform.bash"
+    [ "$status" -eq 1 ]
+    [ "$output" = "error: %sum requires an argument" ]
+}
+
 # build_query tests
 
 @test "build_query: simple select" {
@@ -298,6 +365,18 @@ setup() {
     local sql="" vertical=""
     build_query sql vertical select %json data.user.name from users
     [ "$sql" = "select json_unquote(json_extract(data, '\$.user.name')) from users" ]
+}
+
+@test "build_query: select with aggregate functions" {
+    local sql="" vertical=""
+    build_query sql vertical select %sum price from orders
+    [ "$sql" = "select sum(price) from orders" ]
+}
+
+@test "build_query: select with multiple aggregates" {
+    local sql="" vertical=""
+    build_query sql vertical select %min price %max price from products
+    [ "$sql" = "select min(price) max(price) from products" ]
 }
 
 @test "build_query: trailing + sets vertical=1" {

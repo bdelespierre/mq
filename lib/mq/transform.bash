@@ -52,6 +52,15 @@ transform_alias() {
     esac
 }
 
+# Transform aggregate function: %sum col → SUM(col)
+transform_aggregate() {
+    local func="$1"
+    local arg="${2%%,}"
+    local result="${func}(${arg})"
+    [[ "$2" == *, ]] && result+=","
+    printf '%s' "$result"
+}
+
 # Transform %in :a :b :c to IN ('a', 'b', 'c')
 # Args: values (without : prefix)
 # Output: IN ('a', 'b', 'c')
@@ -125,6 +134,14 @@ process_argument() {
         %a|%all|%c|%count|%r|%rand|%now)
             _output=$(transform_alias "$arg")
             _output+="$trailing_comma"
+            ;;
+        %sum|%avg|%min|%max)
+            if [[ -z "$2" ]]; then
+                >&2 echo "error: $arg requires an argument"
+                return 1
+            fi
+            _output=$(transform_aggregate "${arg#%}" "$2")
+            _shift_count=2
             ;;
         %eq|%ne|%gt|%gte|%lt|%lte)
             _output=$(transform_operator "$arg")
