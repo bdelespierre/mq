@@ -192,6 +192,11 @@ EOF
     [[ "$output" != *"Invalid format"* ]]
 }
 
+@test "cli: -f json is accepted as a valid format" {
+    run mq -f json select 1
+    [[ "$output" != *"Invalid format"* ]]
+}
+
 @test "cli: missing config file is silently ignored" {
     MQRC="/nonexistent/config" run mq --help
     [ "$status" -eq 0 ]

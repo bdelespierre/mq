@@ -85,6 +85,9 @@
 #   csv       Comma-separated values with headers (RFC 4180)
 #             Best for: data interchange, spreadsheet import, exports
 #
+#   json      JSON array of objects (column names as keys)
+#             Best for: piping to jq, APIs, JSON-based workflows
+#
 # Can be overridden per-query with: -f, --format
 # Can also use trailing + on query for vertical format.
 

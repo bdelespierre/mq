@@ -49,7 +49,7 @@ Options:
     -h, --help                 Show this help message and exit
     -v, --version              Show version and exit
     -o, --option NAME[=VALUE]  Set MySQL/MariaDB client option (see mysql --help)
-    -f, --format NAME          Output format: table, vertical, html, xml, csv, or tsv
+    -f, --format NAME          Output format: table, vertical, html, xml, csv, json, or tsv
                                Default: table (TTY) or tsv (pipe)
     -q, --quiet                Suppress query echo to stderr
     -n, --dry-run              Show query without executing
@@ -147,6 +147,10 @@ set_format() {
         csv)
             set_mysql_option "batch"
             FORMAT_FILTER="tsv_to_csv"
+            ;;
+        json)
+            set_mysql_option "batch"
+            FORMAT_FILTER="tsv_to_json"
             ;;
         *)
             >&2 echo "Invalid format: $FORMAT"

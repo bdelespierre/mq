@@ -90,7 +90,7 @@ PAGER=less mq -o database=mydb select %a from large_table
 | `-h, --help` | Show help message |
 | `-v, --version` | Show version and exit |
 | `-o, --option NAME[=VALUE]` | Set MySQL/MariaDB client option (see `mysql --help`) |
-| `-f, --format NAME` | Output format: `table`, `tsv`, `vertical`, `html`, `xml`, `csv`. Default: `table` (TTY) or `tsv` (pipe) |
+| `-f, --format NAME` | Output format: `table`, `tsv`, `vertical`, `html`, `xml`, `csv`, `json`. Default: `table` (TTY) or `tsv` (pipe) |
 | `-q, --quiet` | Suppress query echo to stderr |
 | `-n, --dry-run` | Show query without executing |
 | `-i, --input FILE` | Read query from file (use `-` for stdin) |
@@ -151,7 +151,7 @@ MYSQL_OPTIONS+=(
     --database=mydb
 )
 
-# Output format: table, tsv, vertical, html, xml, csv
+# Output format: table, tsv, vertical, html, xml, csv, json
 # Default is table (TTY) or tsv (pipe); override here:
 FORMAT=table
 
@@ -217,7 +217,7 @@ source share/bash-completion/completions/mq
 
 Completions available:
 - **Options**: `-f`, `--format`, `-o`, `--option`, `-q`, `--quiet`, etc.
-- **Formats**: `table`, `vertical`, `html`, `xml`, `csv`, `tsv`
+- **Formats**: `table`, `vertical`, `html`, `xml`, `csv`, `json`, `tsv`
 - **MySQL options**: `database=`, `host=`, `port=`, `user=`, etc.
 - **SQL keywords**: `select`, `from`, `where`, `order`, `join`, etc.
 - **mq tokens**: `%all`, `%count`, `%rand`, `%eq`, `%gt`, `%in`, `%json`, etc.

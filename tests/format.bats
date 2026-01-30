@@ -96,3 +96,100 @@ setup() {
     result=$(printf '\\N\t\\N\t\\N\n' | tsv_to_csv)
     [[ "$result" == ",," ]]
 }
+
+# =============================================================================
+# tsv_to_json tests
+# =============================================================================
+
+# Basic conversion
+
+@test "tsv_to_json: single column single row" {
+    result=$(printf 'name\nAlice\n' | tsv_to_json)
+    [[ "$result" == '[{"name":"Alice"}]' ]]
+}
+
+@test "tsv_to_json: two columns single row" {
+    result=$(printf 'name\temail\nAlice\talice@test.com\n' | tsv_to_json)
+    [[ "$result" == '[{"name":"Alice","email":"alice@test.com"}]' ]]
+}
+
+@test "tsv_to_json: multiple rows" {
+    result=$(printf 'id\tname\n1\tAlice\n2\tBob\n' | tsv_to_json)
+    [[ "$result" == '[{"id":"1","name":"Alice"},{"id":"2","name":"Bob"}]' ]]
+}
+
+@test "tsv_to_json: three columns" {
+    result=$(printf 'id\tname\tage\n1\tAlice\t30\n' | tsv_to_json)
+    [[ "$result" == '[{"id":"1","name":"Alice","age":"30"}]' ]]
+}
+
+# Empty / no data
+
+@test "tsv_to_json: empty input produces empty array" {
+    result=$(printf '' | tsv_to_json)
+    [[ "$result" == '[]' ]]
+}
+
+@test "tsv_to_json: header only produces empty array" {
+    result=$(printf 'name\temail\n' | tsv_to_json)
+    [[ "$result" == '[]' ]]
+}
+
+# NULL handling
+
+@test "tsv_to_json: NULL becomes json null" {
+    result=$(printf 'name\tage\nAlice\t\\N\n' | tsv_to_json)
+    [[ "$result" == '[{"name":"Alice","age":null}]' ]]
+}
+
+@test "tsv_to_json: multiple NULLs" {
+    result=$(printf 'a\tb\tc\n\\N\t\\N\t\\N\n' | tsv_to_json)
+    [[ "$result" == '[{"a":null,"b":null,"c":null}]' ]]
+}
+
+@test "tsv_to_json: NULL in first column" {
+    result=$(printf 'name\tval\n\\N\thello\n' | tsv_to_json)
+    [[ "$result" == '[{"name":null,"val":"hello"}]' ]]
+}
+
+# JSON string escaping
+
+@test "tsv_to_json: double quote in value is escaped" {
+    result=$(printf 'val\nsay "hi"\n' | tsv_to_json)
+    [[ "$result" == '[{"val":"say \"hi\""}]' ]]
+}
+
+@test "tsv_to_json: backslash in value is escaped" {
+    result=$(printf 'path\nC:\\\\Users\n' | tsv_to_json)
+    [[ "$result" == '[{"path":"C:\\Users"}]' ]]
+}
+
+@test "tsv_to_json: newline in value is escaped" {
+    result=$(printf 'text\nline1\\nline2\n' | tsv_to_json)
+    [[ "$result" == '[{"text":"line1\nline2"}]' ]]
+}
+
+@test "tsv_to_json: tab in value is escaped" {
+    result=$(printf 'text\ncol1\\tcol2\n' | tsv_to_json)
+    [[ "$result" == '[{"text":"col1\tcol2"}]' ]]
+}
+
+# Edge cases
+
+@test "tsv_to_json: empty string value" {
+    result=$(printf 'a\tb\n\tworld\n' | tsv_to_json)
+    [[ "$result" == '[{"a":"","b":"world"}]' ]]
+}
+
+@test "tsv_to_json: values are always strings not numbers" {
+    result=$(printf 'zip\n02139\n' | tsv_to_json)
+    [[ "$result" == '[{"zip":"02139"}]' ]]
+}
+
+@test "tsv_to_json: output is valid for jq" {
+    if ! command -v jq &>/dev/null; then
+        skip "jq not installed"
+    fi
+    result=$(printf 'id\tname\n1\tAlice\n2\tBob\n' | tsv_to_json | jq -r '.[0].name')
+    [[ "$result" == "Alice" ]]
+}

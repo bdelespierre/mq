@@ -1,13 +1,5 @@
 # TODO
 
-## JSON Output Format
-
-Add `-f json` output format. The tool supports JSON extraction (`%json data.name`) but cannot output results as JSON. This would make `mq` trivially pipeable into `jq` for shell workflows. MySQL 8+ has `--json` natively, but MariaDB doesn't, so this could also serve as a polyfill by converting column names + rows into a JSON array of objects.
-
-```bash
-mq -f json select %all from users | jq '.[].email'
-```
-
 ## Additional Aggregate Shortcuts
 
 `%count` and `%rand` exist, but `%sum`, `%avg`, `%min`, and `%max` are absent. They follow the exact same alias pattern and are equally common in ad-hoc queries.
