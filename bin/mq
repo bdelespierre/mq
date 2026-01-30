@@ -9,13 +9,10 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
 GRC_CONF="$PROJECT_ROOT/share/grc/conf.mq"
 
-# Source library functions
 source "$PROJECT_ROOT/lib/mq/transform.bash"
 
-# Version
 VERSION="1.5.0"
 
-# Global options
 declare -a MYSQL_OPTIONS=()
 FORMAT="table"
 QUIET=0
@@ -29,10 +26,14 @@ if [[ ! -t 1 ]]; then
     FORMAT="tsv"
 fi
 
-# Debug helper: prints message to stderr when DEBUG=1
 debug() {
     [[ "$DEBUG" == "1" ]] && >&2 echo -e "\e[33m[debug]\e[0m $*"
     return 0
+}
+
+warn() {
+    [[ "$QUIET" == "1" ]] && return 0
+    >&2 echo -e "\e[33m$*\e[0m"
 }
 
 usage() {
@@ -94,11 +95,9 @@ Configuration:
 EOF
 }
 
-# Load configuration from ~/.mqrc and ./.mqrc
 load_config() {
     local config_file="${MQRC:-$HOME/.mqrc}"
 
-    # Global config
     if [[ -f "$config_file" ]]; then
         debug "Loading global config: $config_file"
 
@@ -108,7 +107,6 @@ load_config() {
         debug "Global config not found: $config_file"
     fi
 
-    # Project-local config (overrides/augments global)
     local local_config=""
     if [[ -f ".mqrc" ]]; then
         local_config=".mqrc"
@@ -126,60 +124,86 @@ load_config() {
     fi
 }
 
-# Apply format to MySQL options array
-apply_format() {
+set_format() {
     debug "Applying format: $FORMAT"
 
     case "$FORMAT" in
-        table)    MYSQL_OPTIONS+=("--table") ;;
-        vertical) MYSQL_OPTIONS+=("--vertical") ;;
-        html)     MYSQL_OPTIONS+=("--html") ;;
-        xml)      MYSQL_OPTIONS+=("--xml") ;;
-        tsv)      MYSQL_OPTIONS+=("--silent") ;;
+        table)    set_mysql_option "table" ;;
+        vertical) set_mysql_option "vertical" ;;
+        html)     set_mysql_option "html" ;;
+        xml)      set_mysql_option "xml" ;;
+        tsv)      set_mysql_option "silent" ;;
         *)
             >&2 echo "Invalid format: $FORMAT"
-            return 1
+            exit 1
             ;;
     esac
 }
 
-# Execute the query
+set_mysql_option() {
+    local opt="$1"
+
+    if [[ "$opt" =~ ^[^=]{2} ]]; then
+        MYSQL_OPTIONS+=("--$opt")
+    else
+        MYSQL_OPTIONS+=("-$opt")
+    fi
+}
+
+should_color() {
+    case "$COLOR" in
+        always) return 0 ;;
+        never)  return 1 ;;
+        auto)   [[ -t 1 ]]; return ;;
+        *)
+            >&2 echo "Invalid --color value: $COLOR (must be auto, always, or never)"
+            exit 1
+            ;;
+    esac
+}
+
+grc_available() {
+    if ! command -v grcat &>/dev/null; then
+        warn "grcat not found; install grc for colorized output"
+        return 1
+    fi
+
+    if [[ ! -f "$GRC_CONF" ]]; then
+        warn "grc config not found: $GRC_CONF"
+        return 1
+    fi
+}
+
+set_pager() {
+    if [[ -n "${PAGER:-}" ]]; then
+        PAGER_CMD="$PAGER"
+    elif should_color && grc_available; then
+        PAGER_CMD="grcat $GRC_CONF"
+    else
+        PAGER_CMD="cat"
+    fi
+
+    debug "PAGER: $PAGER_CMD"
+}
+
 execute_query() {
     local sql="$1"
-    local pager
-
-    # Determine pager based on COLOR setting and PAGER env
-    if [[ -n "${PAGER:-}" ]]; then
-        pager="$PAGER"
-    elif [[ "$COLOR" == "always" ]] && command -v grcat &>/dev/null && [[ -f "$GRC_CONF" ]]; then
-        pager="grcat $GRC_CONF"
-    elif [[ "$COLOR" == "never" ]]; then
-        pager="cat"
-    elif [[ "$COLOR" == "auto" && -t 1 ]] && command -v grcat &>/dev/null && [[ -f "$GRC_CONF" ]]; then
-        pager="grcat $GRC_CONF"
-    else
-        pager="cat"
-    fi
 
     debug "SQL: $sql"
     debug "MySQL options: ${MYSQL_OPTIONS[*]}"
-    debug "PAGER: $pager"
 
-    # Dry-run mode: print query and exit
     if [[ $DRY_RUN -eq 1 ]]; then
         debug "Dry-run mode: printing query without executing"
         echo "$sql"
         return 0
     fi
 
-    # Print the query to stderr (dimmed) unless quiet mode
     if [[ $QUIET -eq 0 ]]; then
         >&2 echo -e "> \e[2m$sql\e[0m"
     fi
 
-    # Execute and pipe through pager
     debug "Executing: mysql ${MYSQL_OPTIONS[*]}"
-    mysql "${MYSQL_OPTIONS[@]}" <<< "$sql" | $pager
+    mysql "${MYSQL_OPTIONS[@]}" <<< "$sql" | $PAGER_CMD
 }
 
 main() {
@@ -187,10 +211,8 @@ main() {
     debug "TTY detected: $([[ -t 1 ]] && echo "yes" || echo "no")"
     debug "Default format: $FORMAT"
 
-    # Load config file defaults (can be overridden by CLI options)
     load_config
 
-    # Parse options with getopt
     local opts
     if ! opts=$(getopt -o hvo:f:qni: --long help,version,option:,format:,quiet,dry-run,input:,color:: -n "$(basename "$0")" -- "$@"); then
         >&2 usage
@@ -210,12 +232,7 @@ main() {
                 ;;
             -o|--option)
                 debug "Option: -o $2"
-                # Handle MySQL options (convert to --name or -n format)
-                if [[ "$2" =~ ^[^=]{2} ]]; then
-                    MYSQL_OPTIONS+=("--$2")
-                else
-                    MYSQL_OPTIONS+=("-$2")
-                fi
+                set_mysql_option "$2"
                 shift 2
                 ;;
             -f|--format)
@@ -239,16 +256,8 @@ main() {
                 shift 2
                 ;;
             --color)
-                # Optional argument: empty string means no value provided
-                if [[ -z "$2" ]]; then
-                    COLOR="always"
-                elif [[ "$2" =~ ^(auto|always|never)$ ]]; then
-                    COLOR="$2"
-                else
-                    >&2 echo "Invalid --color value: $2 (must be auto, always, or never)"
-                    exit 1
-                fi
                 debug "Option: --color=$COLOR"
+                COLOR="${2:-always}"
                 shift 2
                 ;;
             --)
@@ -264,12 +273,8 @@ main() {
 
     debug "Final options: FORMAT=$FORMAT QUIET=$QUIET DRY_RUN=$DRY_RUN INPUT_FILE=$INPUT_FILE"
 
-    # Apply the selected format
-    apply_format || exit 1
+    local sql="" vertical_requested=""
 
-    local sql=""
-
-    # Read query from input file or stdin
     if [[ -n "$INPUT_FILE" ]]; then
         if [[ "$INPUT_FILE" == "-" ]]; then
             debug "Reading from stdin"
@@ -283,7 +288,6 @@ main() {
         fi
         debug "Query from file: $sql"
     else
-        # Check for query arguments
         if [[ $# -eq 0 ]]; then
             >&2 echo "No query specified"
             >&2 usage
@@ -292,17 +296,16 @@ main() {
 
         debug "Query arguments: $*"
 
-        # Build the query from arguments
-        local vertical_requested=""
         build_query sql vertical_requested "$@"
 
         debug "Built query: $sql"
         debug "Vertical requested: $vertical_requested"
 
-        [[ "$vertical_requested" == 1 ]] && MYSQL_OPTIONS+=("--vertical")
+        [[ "$vertical_requested" == 1 ]] && FORMAT="vertical"
     fi
 
-    # Execute the query
+    set_format
+    set_pager
     execute_query "$sql"
 }
 
